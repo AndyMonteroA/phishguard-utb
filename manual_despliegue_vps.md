@@ -104,7 +104,7 @@ DB_USER=phishguard
 DB_PASSWORD=TuContrasenaSegura  # La contraseña que creaste en PostgreSQL
 JWT_SECRET=UnCodigoSuperLargoYSecreto2026!  # Escribe una clave aleatoria fuerte
 JWT_EXPIRATION=24h
-FRONTEND_URL=https://tu-dominio.com  # Reemplaza con tu dominio real
+FRONTEND_URL=https://phishguardutb.online  # Tu dominio real
 GOOGLE_CLIENT_ID=568294630065-oeushgct26pbou93mc7poeh1fdj9ivu0.apps.googleusercontent.com
 ```
 *(Para guardar en `nano`, presiona `Ctrl + O`, luego `Enter` y sal con `Ctrl + X`)*.
@@ -119,7 +119,7 @@ nano .env
 
 Ingresa el siguiente contenido:
 ```env
-VITE_API_URL=https://tu-dominio.com/api
+VITE_API_URL=https://phishguardutb.online/api
 VITE_GOOGLE_CLIENT_ID=568294630065-oeushgct26pbou93mc7poeh1fdj9ivu0.apps.googleusercontent.com
 ```
 
@@ -183,7 +183,7 @@ Pega la siguiente configuración (reemplaza `tu-dominio.com` con tu dominio real
 ```nginx
 server {
     listen 80;
-    server_name tu-dominio.com www.tu-dominio.com;
+    server_name phishguardutb.online www.phishguardutb.online;
 
     # Directorio donde se compilo el frontend React
     location / {
@@ -234,7 +234,7 @@ sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
 
 # Generar e instalar el certificado en Nginx
-sudo certbot --nginx -d tu-dominio.com -d www.tu-dominio.com
+sudo certbot --nginx -d phishguardutb.online -d www.phishguardutb.online
 ```
 *(Sigue las instrucciones en pantalla, ingresa tu correo y acepta los términos. Certbot modificará la configuración de Nginx para redirigir todo el tráfico HTTP a HTTPS de manera segura de forma automática).*
 
@@ -253,5 +253,5 @@ sudo ufw enable
 
 ## ¡Despliegue Finalizado!
 Tu plataforma web ya está completamente activa y segura. 
-- Puedes acceder al sitio web desde: `https://tu-dominio.com`
-- El panel de administración está listo en: `https://tu-dominio.com/admin` (Credenciales por defecto: `admin@phishguard.utb.edu.ec` / `admin123`).
+- Puedes acceder al sitio web desde: `https://phishguardutb.online`
+- El panel de administración está listo en: `https://phishguardutb.online/admin` (Credenciales por defecto: `admin@phishguard.utb.edu.ec` / `admin123`).
