@@ -5,3 +5,5 @@ dist/
 *.log
 *.docx
 *.ps1
+manual_despliegue_vps.md
+manual_despliegue_vps.html
