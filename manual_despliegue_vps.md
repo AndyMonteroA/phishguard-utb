@@ -60,7 +60,7 @@ Dentro de la consola interactiva de PostgreSQL (`psql`), ejecuta los siguientes 
 CREATE DATABASE phishguard_utb;
 
 -- 2. Crear usuario administrador para la app
-CREATE USER phishguard WITH PASSWORD 'TuContrasenaSegura';
+CREATE USER phishguard WITH PASSWORD 'PhishGuard*UTB*2026';
 
 -- 3. Asignar privilegios completos
 GRANT ALL PRIVILEGES ON DATABASE phishguard_utb TO phishguard;
@@ -101,7 +101,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=phishguard_utb
 DB_USER=phishguard
-DB_PASSWORD=TuContrasenaSegura  # La contraseña que creaste en PostgreSQL
+DB_PASSWORD=PhishGuard*UTB*2026  # La contraseña de base de datos
 JWT_SECRET=UnCodigoSuperLargoYSecreto2026!  # Escribe una clave aleatoria fuerte
 JWT_EXPIRATION=24h
 FRONTEND_URL=https://phishguardutb.online  # Tu dominio real

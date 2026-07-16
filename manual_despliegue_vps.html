@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Despliegue en Servidor VPS — PhishGuard UTB</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+        
+        :root {
+            --primary: #1B3A6B;
+            --primary-light: #2E6DA4;
+            --success: #27AE60;
+            --warning: #F39C12;
+            --danger: #E74C3C;
+            --text-main: #2C3E50;
+            --text-muted: #7F8C8D;
+            --bg-light: #F8F9FA;
+            --border: #E2E8F0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 40px 20px;
+            background-color: #fff;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        header {
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .logo-placeholder {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(27, 58, 107, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            color: var(--primary);
+            border-left: 5px solid var(--primary-light);
+            padding-left: 15px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            page-break-after: avoid;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            color: var(--primary-light);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 15px;
+            font-size: 0.98rem;
+            color: #34495E;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--bg-light);
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 0.88rem;
+            color: var(--danger);
+            border: 1px solid var(--border);
+        }
+
+        pre {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: #1E293B;
+            color: #F8FAFC;
+            padding: 18px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            border: 1px solid #334155;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            page-break-inside: avoid;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            border-radius: 0;
+            color: inherit;
+            border: none;
+            font-size: inherit;
+        }
+
+        .alert {
+            background-color: rgba(243, 156, 18, 0.08);
+            border-left: 4px solid var(--warning);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 25px;
+            page-break-inside: avoid;
+        }
+
+        .alert-title {
+            font-weight: 700;
+            color: #B7791F;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .alert p {
+            margin-bottom: 0;
+            font-size: 0.9rem;
+            color: #744210;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 12px;
+            text-transform: uppercase;
+        }
+
+        .badge-info {
+            background-color: rgba(46, 109, 164, 0.1);
+            color: var(--primary-light);
+        }
+
+        .footer-note {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .btn-print {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            z-index: 1000;
+        }
+
+        .btn-print:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+            background-color: #219653;
+        }
+
+        @media print {
+            .btn-print {
+                display: none;
+            }
+            body {
+                padding: 0;
+                color: #000;
+            }
+            pre {
+                background-color: #f8f9fa;
+                color: #000;
+                border: 1px solid #ccc;
+            }
+            code {
+                color: #000;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="btn-print" onclick="window.print()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Guardar como PDF
+    </button>
+
+    <div class="container">
+        <header>
+            <div class="logo-placeholder">PG</div>
+            <h1>Guía de Despliegue en Servidor VPS</h1>
+            <div class="subtitle">PhishGuard UTB — Plataforma de Concientización</div>
+            <div class="meta">Universidad Técnica de Babahoyo · 6to Semestre 2026</div>
+        </header>
+
+        <p>Este documento detalla paso a paso el proceso de configuración y puesta en marcha en producción de la plataforma web <strong>PhishGuard UTB</strong> bajo tu dominio propio <strong>phishguardutb.online</strong>.</p>
+
+        <h2>Requisitos Previos</h2>
+        <ol>
+            <li>Un servidor VPS con sistema operativo <strong>Ubuntu 22.04 LTS</strong> o superior.</li>
+            <li>Acceso SSH como usuario administrador (<code>root</code>) o permisos con <code>sudo</code>.</li>
+            <li>Tu dominio <strong>phishguardutb.online</strong> apuntado en DNS a la IP pública de tu servidor.</li>
+        </ol>
+
+        <h2>Paso 1: Actualizar el Sistema y Dependencias Básicas</h2>
+        <p>Conéctate a tu VPS por SSH y ejecuta los siguientes comandos para actualizar el sistema e instalar las herramientas necesarias:</p>
+        <pre><code>sudo apt update && sudo apt upgrade -y
+sudo apt install -y git curl wget build-essential</code></pre>
+
+        <h2>Paso 2: Instalar Node.js (v20) y PM2</h2>
+        <p>Instalamos Node.js desde la fuente oficial y el gestor de procesos PM2 de forma global:</p>
+        <pre><code># Descargar e instalar Node.js
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# Instalar PM2 globalmente
+sudo npm install -g pm2</code></pre>
+
+        <h2>Paso 3: Instalar y Configurar PostgreSQL</h2>
+        <p>Instalamos el motor de base de datos PostgreSQL, creamos la base de datos y el usuario de la aplicación:</p>
+        <pre><code># Instalar PostgreSQL
+sudo apt install -y postgresql postgresql-contrib
+
+# Iniciar y habilitar el servicio
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+
+# Entrar a la consola de PostgreSQL
+sudo -i -u postgres psql</code></pre>
+        <p>Dentro de la consola interactiva de PostgreSQL (<code>psql</code>), ejecuta las siguientes sentencias SQL:</p>
+        <pre><code>-- 1. Crear base de datos
+CREATE DATABASE phishguard_utb;
+
+-- 2. Crear usuario administrador para la app
+CREATE USER phishguard WITH PASSWORD 'PhishGuard*UTB*2026';
+
+-- 3. Asignar privilegios completos
+GRANT ALL PRIVILEGES ON DATABASE phishguard_utb TO phishguard;
+
+-- 4. Salir de la consola
+\q</code></pre>
+
+        <h2>Paso 4: Clonar el Proyecto y Configurar Variables de Entorno</h2>
+        <p>Clonamos tu repositorio de GitHub en la ruta común para aplicaciones web (<code>/var/www</code>):</p>
+        <pre><code># Moverse a la carpeta www
+cd /var/www
+
+# Clonar repositorio
+sudo git clone https://github.com/AndyMonteroA/phishguard-utb.git
+sudo chown -R $USER:$USER /var/www/phishguard-utb
+cd phishguard-utb</code></pre>
+
+        <h3>1. Configurar Backend <code>.env</code></h3>
+        <pre><code>cd phishguard-backend
+cp .env.example .env
+nano .env</code></pre>
+        <p>Modifica los valores del archivo utilizando el editor:</p>
+        <pre><code>NODE_ENV=production
+PORT=5000
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=phishguard_utb
+DB_USER=phishguard
+DB_PASSWORD=PhishGuard*UTB*2026  # La contraseña de base de datos
+JWT_SECRET=UnCodigoSuperLargoYSecreto2026!  # Escribe una clave aleatoria fuerte
+JWT_EXPIRATION=24h
+FRONTEND_URL=https://phishguardutb.online
+GOOGLE_CLIENT_ID=568294630065-oeushgct26pbou93mc7poeh1fdj9ivu0.apps.googleusercontent.com</code></pre>
+
+        <h3>2. Configurar Frontend <code>.env</code></h3>
+        <pre><code>cd ../phishguard-frontend
+nano .env</code></pre>
+        <p>Ingresa el siguiente contenido:</p>
+        <pre><code>VITE_API_URL=https://phishguardutb.online/api
+VITE_GOOGLE_CLIENT_ID=568294630065-oeushgct26pbou93mc7poeh1fdj9ivu0.apps.googleusercontent.com</code></pre>
+
+        <h2>Paso 5: Instalar, Estructurar e Iniciar Backend</h2>
+        <p>Instalamos las dependencias de producción, creamos la estructura de tablas y alimentamos la base de datos con los registros del seeder:</p>
+        <pre><code>cd ../phishguard-backend
+
+# Instalar dependencias de producción
+npm install --production
+
+# Crear tablas en la base de datos automáticamente
+npm run setup
+
+# Cargar los datos iniciales (Admin, Módulos, Contenidos, Preguntas, Logros)
+npm run seed
+
+# Iniciar el backend en segundo plano con PM2
+pm2 start src/app.js --name "phishguard-api"
+
+# Configurar PM2 para inicio automático
+pm2 save
+pm2 startup</code></pre>
+
+        <h2>Paso 6: Compilar el Frontend</h2>
+        <p>Generamos los archivos estáticos listos para producción del frontend React:</p>
+        <pre><code>cd ../phishguard-frontend
+
+# Instalar todas las dependencias
+npm install
+
+# Compilar proyecto
+npm run build</code></pre>
+
+        <h2>Paso 7: Configurar Servidor Web Nginx</h2>
+        <p>Instalamos Nginx y creamos la configuración del Servidor Web para servir el Frontend y actuar como proxy inverso para la API:</p>
+        <pre><code># Instalar Nginx
+sudo apt install -y nginx
+
+# Crear archivo de configuración
+sudo nano /etc/nginx/sites-available/phishguard</code></pre>
+        <p>Pega la siguiente configuración dentro del archivo:</p>
+        <pre><code>server {
+    listen 80;
+    server_name phishguardutb.online www.phishguardutb.online;
+
+    # Directorio donde se compilo el frontend React
+    location / {
+        root /var/www/phishguard-utb/phishguard-frontend/dist;
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Redireccionar peticiones al Backend en el puerto 5000
+    location /api {
+        proxy_pass http://localhost:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}</code></pre>
+        <p>Habilitamos el archivo de configuración y reiniciamos Nginx:</p>
+        <pre><code># Crear enlace simbólico para activar el sitio
+sudo ln -s /etc/nginx/sites-available/phishguard /etc/nginx/sites-enabled/
+
+# Desactivar la configuración por defecto de Nginx
+sudo rm /etc/nginx/sites-enabled/default
+
+# Probar la sintaxis de Nginx
+sudo nginx -t
+
+# Reiniciar Nginx
+sudo systemctl restart nginx</code></pre>
+
+        <h2>Paso 8: Instalar Certificado SSL (HTTPS) Gratis</h2>
+        <div class="alert">
+            <div class="alert-title">Importante: Requisito de Seguridad</div>
+            <p>La autenticación segura de Google OAuth requiere estrictamente que la conexión se realice mediante protocolo seguro HTTPS.</p>
+        </div>
+        <p>Utilizaremos <strong>Certbot</strong> para generar de forma automatizada e instalar un certificado SSL válido de Let's Encrypt:</p>
+        <pre><code># Instalar snap y certbot
+sudo apt install snapd
+sudo snap install core; sudo snap refresh core
+sudo snap install --classic certbot
+
+# Vincular comando certbot
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
+
+# Generar e instalar el certificado en Nginx
+sudo certbot --nginx -d phishguardutb.online -d www.phishguardutb.online</code></pre>
+
+        <h2>Paso 9: Configurar el Cortafuegos (UFW)</h2>
+        <p>Aseguramos el servidor abriendo únicamente los puertos para tráfico seguro:</p>
+        <pre><code>sudo ufw allow OpenSSH
+sudo ufw allow 'Nginx Full'
+sudo ufw enable</code></pre>
+
+        <div class="footer-note">
+            <p>© 2026 PhishGuard UTB - Proyecto Intradisciplinar de Grado</p>
+            <p>Facultad de Administración, Finanzas e Informática · Sistemas de Información · UTB</p>
+        </div>
+    </div>
+
+</body>
+</html>
