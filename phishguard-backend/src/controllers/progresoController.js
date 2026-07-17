@@ -101,7 +101,7 @@ const marcarContenidoVisto = async (req, res) => {
     });
 
     // Añadir contenido visto si no estaba ya
-    let contenidosVistos = progreso.contenidos_vistos || [];
+    let contenidosVistos = [...(progreso.contenidos_vistos || [])];
     const contenidoIdInt = parseInt(contenidoId);
 
     if (!contenidosVistos.includes(contenidoIdInt)) {
@@ -116,16 +116,15 @@ const marcarContenidoVisto = async (req, res) => {
         ? Math.round((contenidosVistos.length / totalContenidos) * 100)
         : 0;
 
-      await progreso.update({
-        contenidos_vistos: contenidosVistos,
-        porcentaje_avance: Math.min(porcentaje, 100),
-        ultimo_contenido_id: contenidoIdInt,
-      });
+      progreso.contenidos_vistos = contenidosVistos;
+      progreso.porcentaje_avance = Math.min(porcentaje, 100);
+      progreso.ultimo_contenido_id = contenidoIdInt;
+      progreso.changed('contenidos_vistos', true);
+      await progreso.save();
     } else {
       // Si ya estaba visto, de todas formas actualizamos el ultimo visitado para guardar el estado de la diapositiva
-      await progreso.update({
-        ultimo_contenido_id: contenidoIdInt,
-      });
+      progreso.ultimo_contenido_id = contenidoIdInt;
+      await progreso.save();
     }
 
     res.json({
