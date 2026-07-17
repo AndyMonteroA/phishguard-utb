@@ -32,19 +32,25 @@ const obtenerProgreso = async (req, res) => {
       order: [['created_at', 'DESC']],
     });
 
-    // Calcular progreso general
+    // Calcular progreso general (promedio del porcentaje de avance de todos los módulos)
     const totalModulos = modulos.length;
     const modulosCompletados = progresos.filter((p) => p.completado).length;
+
+    let sumaPorcentajes = 0;
+    modulos.forEach(modulo => {
+      const progreso = progresos.find(p => p.modulo_id === modulo.id);
+      sumaPorcentajes += progreso ? progreso.porcentaje_avance : 0;
+    });
+
     const progresoGeneral = totalModulos > 0
-      ? Math.round((modulosCompletados / totalModulos) * 100)
+      ? Math.round(sumaPorcentajes / totalModulos)
       : 0;
 
-    // Calcular puntaje promedio
-    const quizzesAprobados = resultados.filter((r) => r.aprobado);
-    const puntajePromedio = quizzesAprobados.length > 0
+    // Calcular puntaje promedio de todos los intentos del usuario
+    const puntajePromedio = resultados.length > 0
       ? Math.round(
-          quizzesAprobados.reduce((acc, r) => acc + (r.puntaje / r.total_preguntas) * 100, 0) /
-          quizzesAprobados.length
+          resultados.reduce((acc, r) => acc + (r.puntaje / r.total_preguntas) * 100, 0) /
+          resultados.length
         )
       : 0;
 

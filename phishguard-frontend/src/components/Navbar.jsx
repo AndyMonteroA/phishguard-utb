@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FiMenu, FiX, FiLogOut, FiUser, FiShield } from 'react-icons/fi';
+import { FiMenu, FiX, FiLogOut, FiUser, FiShield, FiSun, FiMoon } from 'react-icons/fi';
 import NotificacionDropdown from './NotificacionDropdown';
 
 const Navbar = () => {
@@ -14,6 +14,19 @@ const Navbar = () => {
   const location = useLocation();
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [temaOscuro, setTemaOscuro] = useState(
+    localStorage.getItem('phishguard_theme') === 'dark'
+  );
+
+  useEffect(() => {
+    if (temaOscuro) {
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('phishguard_theme', 'dark');
+    } else {
+      document.body.classList.remove('dark-mode');
+      localStorage.setItem('phishguard_theme', 'light');
+    }
+  }, [temaOscuro]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -67,6 +80,19 @@ const Navbar = () => {
         </div>
 
         <div className="navbar-actions">
+          <button 
+            onClick={() => setTemaOscuro(!temaOscuro)}
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              padding: '6px', color: 'var(--texto-secundario)', display: 'flex', alignItems: 'center',
+              borderRadius: '50%', transition: 'background 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.04)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+            title={temaOscuro ? 'Modo Dia' : 'Modo Noche'}
+          >
+            {temaOscuro ? <FiSun size={20} /> : <FiMoon size={20} />}
+          </button>
           {estaAutenticado && (
             <>
               <NotificacionDropdown />

@@ -665,3 +665,61 @@ h4 { font-size: 1.25rem; }
     padding-top: 88px;
   }
 }
+
+/* ============================================================
+   MODO OSCURO (MODO NOCHE)
+   ============================================================ */
+body.dark-mode {
+  --gris-claro: #0a0e17;
+  --blanco: #121824;
+  --texto-principal: #f8fafc;
+  --texto-secundario: #cbd5e1;
+  --texto-terciario: #94a3b8;
+  --gris-medio: #1e293b;
+  --gris-borde: #334155;
+  --azul-light: rgba(46, 109, 164, 0.18);
+  --gradiente-card: linear-gradient(145deg, #121824 0%, #0a0e17 100%);
+  background-color: var(--gris-claro);
+  color: var(--texto-principal);
+}
+
+body.dark-mode .card {
+  background: var(--blanco);
+  border-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+  background-color: #0f172a;
+  border-color: #334155;
+  color: #f8fafc;
+}
+
+body.dark-mode input:focus,
+body.dark-mode select:focus,
+body.dark-mode textarea:focus {
+  border-color: var(--azul-claro);
+  box-shadow: 0 0 0 3px rgba(46, 109, 164, 0.25);
+}
+
+body.dark-mode .navbar {
+  background: rgba(18, 24, 36, 0.85);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .simulador-correo {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode .simulador-correo > div {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+body.dark-mode .simulador-correo span {
+  color: #cbd5e1 !important;
+}
