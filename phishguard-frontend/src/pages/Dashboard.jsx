@@ -180,10 +180,20 @@ const Dashboard = () => {
                   <div className="progress-bar-container" style={{ height: '8px', marginBottom: '8px' }}>
                     <div className="progress-bar-fill" style={{ width: `${mod.porcentaje_avance}%`, background: coloresModulo[i] || 'var(--gradiente-azul)' }}></div>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: 'var(--texto-terciario)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: 'var(--texto-terciario)', marginBottom: (!mod.completado && mod.intentos_quiz > 0) ? '8px' : '0' }}>
                     <span>{mod.porcentaje_avance}% completado</span>
                     {mod.mejor_puntaje !== null && <span>Quiz: {mod.mejor_puntaje}%</span>}
                   </div>
+                  {/* Alerta de Quiz No Aprobado */}
+                  {!mod.completado && mod.intentos_quiz > 0 && (
+                    <div style={{ 
+                      marginTop: '8px', padding: '6px 10px', background: 'rgba(231,76,60,0.08)', 
+                      borderRadius: '6px', border: '1px solid rgba(231,76,60,0.15)',
+                      fontSize: '0.75rem', color: '#E74C3C', fontWeight: 500
+                    }}>
+                      ⚠️ Quiz reprobado (Mejor nota: {mod.mejor_puntaje || 0}%). Requiere 70% para aprobar.
+                    </div>
+                  )}
                 </div>
               </Link>
             </motion.div>

@@ -41,6 +41,10 @@ const obtenerProgreso = async (req, res) => {
         .filter((r) => r.modulo_id === modulo.id && r.aprobado)
         .sort((a, b) => b.puntaje - a.puntaje)[0];
 
+      const mejorIntento = resultados
+        .filter((r) => r.modulo_id === modulo.id)
+        .sort((a, b) => b.puntaje - a.puntaje)[0];
+
       const totalLecturas = modulo.contenidos ? modulo.contenidos.length : 0;
       const lecturasVistas = progreso && progreso.contenidos_vistos ? progreso.contenidos_vistos.length : 0;
 
@@ -64,8 +68,8 @@ const obtenerProgreso = async (req, res) => {
         total_contenidos: totalLecturas,
         porcentaje_avance: completado ? 100 : porcentajeAvance,
         completado: completado,
-        mejor_puntaje: mejorResultado
-          ? Math.round((mejorResultado.puntaje / mejorResultado.total_preguntas) * 100)
+        mejor_puntaje: mejorIntento
+          ? Math.round((mejorIntento.puntaje / mejorIntento.total_preguntas) * 100)
           : null,
         intentos_quiz: resultados.filter((r) => r.modulo_id === modulo.id).length,
       };

@@ -175,11 +175,23 @@ const AdminContenidos = () => {
       let cuerpo = [];
 
       lineas.forEach(l => {
-        const lower = l.toLowerCase();
-        if (lower.startsWith('de:')) de = l.substring(3).trim();
-        else if (lower.startsWith('para:')) para = l.substring(5).trim();
-        else if (lower.startsWith('asunto:')) asunto = l.substring(7).trim();
-        else if (l.trim() !== '') cuerpo.push(l);
+        const clean = l.replace(/\*/g, '').trim();
+        const lower = clean.toLowerCase();
+        
+        if (lower.startsWith('de:')) {
+          de = clean.substring(3).trim();
+        } else if (lower.startsWith('para:')) {
+          para = clean.substring(5).trim();
+        } else if (lower.startsWith('asunto:')) {
+          asunto = clean.substring(7).trim();
+        } else if (
+          l.trim() !== '' && 
+          !lower.includes('ejemplo de correo') && 
+          !clean.startsWith('---') &&
+          !clean.startsWith('📧')
+        ) {
+          cuerpo.push(l);
+        }
       });
 
       return (
@@ -207,9 +219,21 @@ const AdminContenidos = () => {
       let mensaje = '';
       
       lineas.forEach(l => {
-        if (l.toLowerCase().startsWith('remitente:')) remitente = l.substring(10).trim();
-        else if (l.toLowerCase().startsWith('mensaje:')) mensaje = l.substring(8).trim();
-        else if (l.trim() !== '') mensaje += (mensaje ? '\n' : '') + l;
+        const clean = l.replace(/\*/g, '').trim();
+        const lower = clean.toLowerCase();
+
+        if (lower.startsWith('remitente:')) {
+          remitente = clean.substring(10).trim();
+        } else if (lower.startsWith('mensaje:')) {
+          mensaje = clean.substring(8).trim();
+        } else if (
+          l.trim() !== '' && 
+          !lower.includes('ejemplo de sms') && 
+          !clean.startsWith('---') &&
+          !clean.startsWith('💬')
+        ) {
+          mensaje += (mensaje ? '\n' : '') + l;
+        }
       });
 
       return (

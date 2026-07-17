@@ -200,9 +200,16 @@ const ModuloDetalle = () => {
   const renderContenidoEspecial = (tipo, titulo, texto) => {
     const lineas = texto.split('\n');
     
-    // Validar si parece una plantilla de correo (tiene campos De/Para/Asunto)
-    const esEmail = lineas.some(l => l.toLowerCase().startsWith('de:') || l.toLowerCase().startsWith('asunto:'));
-    const esSMS = lineas.some(l => l.toLowerCase().startsWith('remitente:') || l.toLowerCase().startsWith('sms:'));
+    // Validar si parece una plantilla de correo (tiene campos De/Para/Asunto, ignorando asteriscos de Markdown)
+    const esEmail = lineas.some(l => {
+      const clean = l.replace(/\*/g, '').toLowerCase().trim();
+      return clean.startsWith('de:') || clean.startsWith('asunto:');
+    });
+
+    const esSMS = lineas.some(l => {
+      const clean = l.replace(/\*/g, '').toLowerCase().trim();
+      return clean.startsWith('remitente:') || clean.startsWith('sms:');
+    });
 
     if (esEmail) {
       let de = 'remitente.sospechoso@seguridad-utb.com';
@@ -211,11 +218,23 @@ const ModuloDetalle = () => {
       let cuerpo = [];
 
       lineas.forEach(l => {
-        const lower = l.toLowerCase();
-        if (lower.startsWith('de:')) de = l.substring(3).trim();
-        else if (lower.startsWith('para:')) para = l.substring(5).trim();
-        else if (lower.startsWith('asunto:')) asunto = l.substring(7).trim();
-        else if (l.trim() !== '') cuerpo.push(l);
+        const clean = l.replace(/\*/g, '').trim();
+        const lower = clean.toLowerCase();
+        
+        if (lower.startsWith('de:')) {
+          de = clean.substring(3).trim();
+        } else if (lower.startsWith('para:')) {
+          para = clean.substring(5).trim();
+        } else if (lower.startsWith('asunto:')) {
+          asunto = clean.substring(7).trim();
+        } else if (
+          l.trim() !== '' && 
+          !lower.includes('ejemplo de correo') && 
+          !clean.startsWith('---') &&
+          !clean.startsWith('📧')
+        ) {
+          cuerpo.push(l);
+        }
       });
 
       return (
@@ -250,9 +269,21 @@ const ModuloDetalle = () => {
       let mensaje = '';
       
       lineas.forEach(l => {
-        if (l.toLowerCase().startsWith('remitente:')) remitente = l.substring(10).trim();
-        else if (l.toLowerCase().startsWith('mensaje:')) mensaje = l.substring(8).trim();
-        else if (l.trim() !== '') mensaje += (mensaje ? '\n' : '') + l;
+        const clean = l.replace(/\*/g, '').trim();
+        const lower = clean.toLowerCase();
+
+        if (lower.startsWith('remitente:')) {
+          remitente = clean.substring(10).trim();
+        } else if (lower.startsWith('mensaje:')) {
+          mensaje = clean.substring(8).trim();
+        } else if (
+          l.trim() !== '' && 
+          !lower.includes('ejemplo de sms') && 
+          !clean.startsWith('---') &&
+          !clean.startsWith('💬')
+        ) {
+          mensaje += (mensaje ? '\n' : '') + l;
+        }
       });
 
       return (
