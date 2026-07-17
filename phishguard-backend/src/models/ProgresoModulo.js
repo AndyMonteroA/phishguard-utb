@@ -44,6 +44,15 @@ const ProgresoModulo = sequelize.define('progreso_modulos', {
     defaultValue: [],
     comment: 'Array de IDs de contenidos vistos',
   },
+  ultimo_contenido_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'contenidos',
+      key: 'id',
+    },
+    comment: 'ID del ultimo contenido/diapositiva visitado',
+  },
   fecha_inicio: {
     type: DataTypes.DATE,
     allowNull: true,

@@ -106,6 +106,7 @@ const obtenerModulo = async (req, res) => {
                 porcentaje_avance: progreso.porcentaje_avance,
                 completado: progreso.completado,
                 contenidos_vistos: progreso.contenidos_vistos,
+                ultimo_contenido_id: progreso.ultimo_contenido_id,
               }
             : null,
         },

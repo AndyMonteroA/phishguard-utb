@@ -17,27 +17,62 @@ const ModuloDetalle = () => {
 
   useEffect(() => {
     const cargar = async () => {
-      try { const res = await api.get(`/modulos/${id}`); setModulo(res.data.data.modulo); }
-      catch (err) { console.error(err); }
-      finally { setCargando(false); }
+      try {
+        const res = await api.get(`/modulos/${id}`);
+        const modData = res.data.data.modulo;
+        setModulo(modData);
+
+        // Si el estudiante ya tiene un progreso guardado y un ultimo contenido visitado
+        if (modData.progreso?.ultimo_contenido_id && modData.contenidos) {
+          const idx = modData.contenidos.findIndex(c => c.id === modData.progreso.ultimo_contenido_id);
+          if (idx !== -1) {
+            setContenidoActual(idx);
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setCargando(false);
+      }
     };
     cargar();
   }, [id]);
 
   const marcarVisto = async (contenidoId) => {
-    try { await api.post(`/progreso/${id}/contenido/${contenidoId}`); } catch (err) { console.error(err); }
+    try {
+      await api.post(`/progreso/${id}/contenido/${contenidoId}`);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const siguiente = () => {
     if (modulo?.contenidos && contenidoActual < modulo.contenidos.length - 1) {
-      marcarVisto(modulo.contenidos[contenidoActual].id);
-      setContenidoActual(contenidoActual + 1);
+      const actualId = modulo.contenidos[contenidoActual].id;
+      marcarVisto(actualId); // Guardar progreso actual en la DB
+      
+      const sigIndex = contenidoActual + 1;
+      setContenidoActual(sigIndex);
+      
+      // Auto-guardar el slide que se acaba de abrir
+      const sigId = modulo.contenidos[sigIndex].id;
+      marcarVisto(sigId);
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const anterior = () => {
-    if (contenidoActual > 0) { setContenidoActual(contenidoActual - 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    if (contenidoActual > 0) {
+      const antIndex = contenidoActual - 1;
+      setContenidoActual(antIndex);
+      
+      // Guardar el estado del slide anterior que abrimos de nuevo
+      const antId = modulo.contenidos[antIndex].id;
+      marcarVisto(antId);
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   if (cargando) return <div className="page-wrapper"><div className="loading-screen"><div className="spinner"></div></div></div>;
@@ -49,14 +84,110 @@ const ModuloDetalle = () => {
   const tipoIcono = { ejemplo_interactivo: <FiZap size={14} />, caso_real: <FiAlertTriangle size={14} />, texto: <FiBookOpen size={14} /> };
   const tipoTexto = { ejemplo_interactivo: 'Ejemplo Interactivo', caso_real: 'Caso Real', texto: 'Lectura' };
 
-  const renderContenido = (cont) => {
-    if (!cont) return null;
+  // Parseador de Markdown personalizado para renderizar negritas (**texto**)
+  const parseMarkdown = (text) => {
+    if (!text) return '';
+    const parts = [];
+    const regexBold = /\*\*(.*?)\*\*/g;
+    let lastIndex = 0;
+    let match;
+
+    while ((match = regexBold.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push(text.substring(lastIndex, match.index));
+      }
+      parts.push(<strong key={match.index} style={{ fontWeight: 800, color: 'var(--azul-institucional)' }}>{match[1]}</strong>);
+      lastIndex = regexBold.lastIndex;
+    }
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+    return parts.length > 0 ? parts : text;
+  };
+
+  // Renderiza simulaciones de correos o SMS de forma interactiva y premium
+  const renderContenidoEspecial = (tipo, titulo, texto) => {
+    const lineas = texto.split('\n');
+    
+    // Validar si parece una plantilla de correo (tiene campos De/Para/Asunto)
+    const esEmail = lineas.some(l => l.toLowerCase().startsWith('de:') || l.toLowerCase().startsWith('asunto:'));
+    const esSMS = lineas.some(l => l.toLowerCase().startsWith('remitente:') || l.toLowerCase().startsWith('sms:'));
+
+    if (esEmail) {
+      let de = 'remitente.sospechoso@seguridad-utb.com';
+      let para = 'estudiante@utb.edu.ec';
+      let asunto = 'URGENTE: Actualizacion de credenciales';
+      let cuerpo = [];
+
+      lineas.forEach(l => {
+        const lower = l.toLowerCase();
+        if (lower.startsWith('de:')) de = l.substring(3).trim();
+        else if (lower.startsWith('para:')) para = l.substring(5).trim();
+        else if (lower.startsWith('asunto:')) asunto = l.substring(7).trim();
+        else if (l.trim() !== '') cuerpo.push(l);
+      });
+
+      return (
+        <div style={{ marginTop: '20px', border: '1px solid var(--border)', borderRadius: '12px', background: '#F8FAFC', overflow: 'hidden', boxShadow: 'var(--sombra-md)' }}>
+          {/* Header del simulador de email */}
+          <div style={{ background: '#E2E8F0', padding: '12px 20px', display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid var(--border)' }}>
+            <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#EF4444' }} />
+            <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#F59E0B' }} />
+            <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10B981' }} />
+            <span style={{ marginLeft: '12px', fontSize: '0.8rem', fontWeight: 600, color: 'var(--texto-terciario)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Simulador de Correo Seguro</span>
+          </div>
+          {/* Cabecera del correo */}
+          <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)', background: '#fff' }}>
+            <div style={{ marginBottom: '8px', fontSize: '0.88rem' }}><strong style={{ color: 'var(--texto-terciario)' }}>De:</strong> <span style={{ color: '#E74C3C', fontWeight: 600 }}>{de}</span></div>
+            <div style={{ marginBottom: '8px', fontSize: '0.88rem' }}><strong style={{ color: 'var(--texto-terciario)' }}>Para:</strong> <span style={{ color: 'var(--texto-principal)' }}>{para}</span></div>
+            <div style={{ fontSize: '0.9rem' }}><strong style={{ color: 'var(--texto-terciario)' }}>Asunto:</strong> <span style={{ fontWeight: 700, color: 'var(--azul-institucional)' }}>{asunto}</span></div>
+          </div>
+          {/* Cuerpo del correo */}
+          <div style={{ padding: '24px 20px', background: '#fff', fontSize: '0.98rem', minHeight: '150px', lineHeight: 1.7 }}>
+            {cuerpo.map((parrafo, i) => (
+              <p key={i} style={{ marginBottom: '14px', color: '#334155' }}>
+                {parseMarkdown(parrafo)}
+              </p>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    if (esSMS) {
+      let remitente = 'Banco UTB';
+      let mensaje = '';
+      
+      lineas.forEach(l => {
+        if (l.toLowerCase().startsWith('remitente:')) remitente = l.substring(10).trim();
+        else if (l.toLowerCase().startsWith('mensaje:')) mensaje = l.substring(8).trim();
+        else if (l.trim() !== '') mensaje += (mensaje ? '\n' : '') + l;
+      });
+
+      return (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+          <div style={{ width: '100%', maxWidth: '360px', background: '#000', borderRadius: '36px', padding: '14px 10px', boxShadow: 'var(--sombra-lg)', border: '4px solid #333' }}>
+            <div style={{ width: '110px', height: '18px', background: '#333', margin: '0 auto 12px auto', borderRadius: '10px' }} />
+            <div style={{ background: '#1C1C1E', borderRadius: '24px', padding: '16px', minHeight: '300px', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.85rem', marginBottom: '20px', borderBottom: '1px solid #2C2C2E', paddingBottom: '10px' }}>
+                <div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{remitente}</div>
+                <span style={{ color: '#8E8E93', fontSize: '0.75rem' }}>SMS de texto hoy</span>
+              </div>
+              <div style={{ background: '#262629', color: '#fff', padding: '12px 16px', borderRadius: '18px', alignSelf: 'flex-start', maxWidth: '85%', fontSize: '0.9rem', lineHeight: 1.5 }}>
+                {parseMarkdown(mensaje)}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Renderizado estándar si no coincide con simuladores
     return (
       <div style={{ lineHeight: 1.8, fontSize: '1rem', color: 'var(--texto-principal)' }}>
-        {cont.contenido.split('\n').map((parrafo, i) => {
-          if (parrafo.startsWith('**') && parrafo.endsWith('**')) return <h4 key={i} style={{ marginTop: '20px', marginBottom: '8px', color: 'var(--azul-institucional)' }}>{parrafo.replace(/\*\*/g, '')}</h4>;
+        {lineas.map((parrafo, i) => {
           if (parrafo.trim() === '') return <br key={i} />;
-          return <p key={i} style={{ marginBottom: '10px' }}>{parrafo}</p>;
+          return <p key={i} style={{ marginBottom: '14px' }}>{parseMarkdown(parrafo)}</p>;
         })}
       </div>
     );
@@ -95,7 +226,7 @@ const ModuloDetalle = () => {
               </span>
             </div>
             <h2 style={{ fontSize: '1.4rem', marginBottom: '20px', color: 'var(--azul-institucional)' }}>{contenido.titulo}</h2>
-            {renderContenido(contenido)}
+            {renderContenidoEspecial(contenido.tipo, contenido.titulo, contenido.contenido)}
           </motion.div>
         )}
 

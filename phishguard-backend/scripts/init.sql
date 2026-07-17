@@ -124,6 +124,7 @@ CREATE TABLE IF NOT EXISTS progreso_modulos (
   completado BOOLEAN DEFAULT FALSE,
   porcentaje_avance INTEGER DEFAULT 0 CHECK (porcentaje_avance >= 0 AND porcentaje_avance <= 100),
   contenidos_vistos JSONB DEFAULT '[]'::jsonb,
+  ultimo_contenido_id INTEGER REFERENCES contenidos(id) ON DELETE SET NULL,
   fecha_inicio TIMESTAMP WITH TIME ZONE,
   fecha_completado TIMESTAMP WITH TIME ZONE,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),

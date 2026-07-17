@@ -119,6 +119,12 @@ const marcarContenidoVisto = async (req, res) => {
       await progreso.update({
         contenidos_vistos: contenidosVistos,
         porcentaje_avance: Math.min(porcentaje, 100),
+        ultimo_contenido_id: contenidoIdInt,
+      });
+    } else {
+      // Si ya estaba visto, de todas formas actualizamos el ultimo visitado para guardar el estado de la diapositiva
+      await progreso.update({
+        ultimo_contenido_id: contenidoIdInt,
       });
     }
 
@@ -128,6 +134,7 @@ const marcarContenidoVisto = async (req, res) => {
       data: {
         contenidos_vistos: contenidosVistos,
         porcentaje_avance: progreso.porcentaje_avance,
+        ultimo_contenido_id: contenidoIdInt,
       },
     });
   } catch (error) {
