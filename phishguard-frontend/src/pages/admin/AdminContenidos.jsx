@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 import { 
   FiPlus, FiEdit3, FiTrash2, FiArrowLeft, FiBookOpen, FiZap, 
   FiAlertTriangle, FiBold, FiItalic, FiUnderline, FiList, 
-  FiMail, FiMessageSquare, FiYoutube, FiImage, FiFileText, FiUpload, FiEye 
+  FiMail, FiMessageSquare, FiYoutube, FiImage, FiFileText, FiUpload, FiEye, FiSearch 
 } from 'react-icons/fi';
 
 const AdminContenidos = () => {
@@ -138,10 +138,6 @@ const AdminContenidos = () => {
     const text = form.contenido;
     if (!text) return <p style={{ color: 'var(--texto-terciario)', fontStyle: 'italic' }}>Escribe contenido para ver la previsualización...</p>;
 
-    const lineas = text.split('\n');
-    const esEmail = lineas.some(l => l.toLowerCase().startsWith('de:') || l.toLowerCase().startsWith('asunto:'));
-    const esSMS = lineas.some(l => l.toLowerCase().startsWith('remitente:') || l.toLowerCase().startsWith('mensaje:'));
-
     // Parsear Markdown simple para la vista previa
     const parsePreview = (txtLine) => {
       // Videos, PDFs, Imagenes
@@ -161,12 +157,57 @@ const AdminContenidos = () => {
         .replace(/\*(.*?)\*/g, '<em style="font-style: italic">$1</em>')
         .replace(/<u>(.*?)<\/u>/g, '<u style="text-decoration: underline">$1</u>');
 
+      // Emojis a SVGs
+      const warningSvg = '<span class="icon-svg-wrapper warning-svg" style="display: inline-flex; align-items: center; color: #E67E22; margin-right: 4px; vertical-align: middle;"><svg stroke="currentColor" fill="none" stroke-width="2.5" viewBox="0 0 24 24" height="15" width="15" xmlns="http://www.w3.org/2000/svg"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></span>';
+      const emailSvg = '<span class="icon-svg-wrapper email-svg" style="display: inline-flex; align-items: center; color: #2E6DA4; margin-right: 4px; vertical-align: middle;"><svg stroke="currentColor" fill="none" stroke-width="2.5" viewBox="0 0 24 24" height="15" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></span>';
+      const searchSvg = '<span class="icon-svg-wrapper search-svg" style="display: inline-flex; align-items: center; color: #27AE60; margin-right: 4px; vertical-align: middle;"><svg stroke="currentColor" fill="none" stroke-width="2.5" viewBox="0 0 24 24" height="15" width="15" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>';
+      const chatSvg = '<span class="icon-svg-wrapper chat-svg" style="display: inline-flex; align-items: center; color: #9B59B6; margin-right: 4px; vertical-align: middle;"><svg stroke="currentColor" fill="none" stroke-width="2.5" viewBox="0 0 24 24" height="15" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></span>';
+
+      parsed = parsed
+        .replace(/⚠️/g, warningSvg)
+        .replace(/📧/g, emailSvg)
+        .replace(/🔍/g, searchSvg)
+        .replace(/💬/g, chatSvg);
+
       if (txtLine.trim().startsWith('- ')) {
         return <ul style={{ paddingLeft: '20px', listStyleType: 'disc', margin: 0 }}><li dangerouslySetInnerHTML={{ __html: parsed.substring(2) }} /></ul>;
       }
 
-      return <p style={{ marginBottom: '14px', color: '#334155' }} dangerouslySetInnerHTML={{ __html: parsed }} />;
+      return <p style={{ marginBottom: '14px', color: 'var(--texto-secundario)' }} dangerouslySetInnerHTML={{ __html: parsed }} />;
     };
+
+    // 1. Separar las Señales de Alerta
+    let textoModulo = text;
+    let textoAlertas = "";
+    
+    const alertasIndex = text.search(/SEÑALES DE ALERTA|Señales de alerta|Señales de Alerta/i);
+    if (alertasIndex !== -1) {
+      const preText = text.substring(0, alertasIndex);
+      const postText = text.substring(alertasIndex);
+      
+      const lineasPre = preText.split('\n');
+      while (lineasPre.length > 0 && (
+        lineasPre[lineasPre.length - 1].trim() === '---' ||
+        lineasPre[lineasPre.length - 1].trim() === ''
+      )) {
+        lineasPre.pop();
+      }
+      textoModulo = lineasPre.join('\n');
+      textoAlertas = postText;
+    }
+
+    const lineas = textoModulo.split('\n');
+    const esEmail = lineas.some(l => {
+      const clean = l.replace(/\*/g, '').toLowerCase().trim();
+      return clean.startsWith('de:') || clean.startsWith('asunto:');
+    });
+
+    const esSMS = lineas.some(l => {
+      const clean = l.replace(/\*/g, '').toLowerCase().trim();
+      return clean.startsWith('remitente:') || clean.startsWith('sms:');
+    });
+
+    let elementoSimulado = null;
 
     if (esEmail) {
       let de = 'remitente.sospechoso@seguridad-utb.com';
@@ -194,8 +235,8 @@ const AdminContenidos = () => {
         }
       });
 
-      return (
-        <div style={{ border: '1px solid var(--border)', borderRadius: '12px', background: '#F8FAFC', overflow: 'hidden', textAlign: 'left', boxShadow: 'var(--sombra-md)' }}>
+      elementoSimulado = (
+        <div style={{ border: '1px solid var(--border)', borderRadius: '12px', background: '#F8FAFC', overflow: 'hidden', textAlign: 'left', boxShadow: 'var(--sombra-md)' }} className="simulador-correo">
           <div style={{ background: '#E2E8F0', padding: '12px 20px', fontSize: '0.8rem', fontWeight: 600, color: 'var(--texto-terciario)', display: 'flex', gap: '8px', borderBottom: '1px solid var(--border)' }}>
             <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#EF4444' }} />
             <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#F59E0B' }} />
@@ -212,11 +253,10 @@ const AdminContenidos = () => {
           </div>
         </div>
       );
-    }
-
-    if (esSMS) {
+    } else if (esSMS) {
       let remitente = 'Banco UTB';
       let mensaje = '';
+      let cuerpo = [];
       
       lineas.forEach(l => {
         const clean = l.replace(/\*/g, '').trim();
@@ -226,17 +266,18 @@ const AdminContenidos = () => {
           remitente = clean.substring(10).trim();
         } else if (lower.startsWith('mensaje:')) {
           mensaje = clean.substring(8).trim();
+          cuerpo.push(mensaje);
         } else if (
           l.trim() !== '' && 
           !lower.includes('ejemplo de sms') && 
           !clean.startsWith('---') &&
           !clean.startsWith('💬')
         ) {
-          mensaje += (mensaje ? '\n' : '') + l;
+          cuerpo.push(l);
         }
       });
 
-      return (
+      elementoSimulado = (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <div style={{ width: '100%', maxWidth: '360px', background: '#000', borderRadius: '36px', padding: '14px 10px', boxShadow: 'var(--sombra-lg)', border: '4px solid #333' }}>
             <div style={{ width: '110px', height: '18px', background: '#333', margin: '0 auto 12px auto', borderRadius: '10px' }} />
@@ -246,17 +287,43 @@ const AdminContenidos = () => {
                 <span style={{ color: '#8E8E93', fontSize: '0.75rem' }}>SMS de texto hoy</span>
               </div>
               <div style={{ background: '#262629', color: '#fff', padding: '12px 16px', borderRadius: '18px', alignSelf: 'flex-start', maxWidth: '85%', fontSize: '0.9rem', lineHeight: 1.5 }}>
-                {parsePreview(mensaje)}
+                {cuerpo.map((p, idx) => <div key={idx}>{parsePreview(p)}</div>)}
               </div>
             </div>
           </div>
         </div>
       );
+    } else {
+      elementoSimulado = (
+        <div style={{ textAlign: 'left', lineHeight: 1.8, fontSize: '1.02rem', color: 'var(--texto-principal)' }}>
+          {lineas.map((linea, idx) => <div key={idx}>{parsePreview(linea)}</div>)}
+        </div>
+      );
     }
 
     return (
-      <div style={{ textAlign: 'left', lineHeight: 1.8, fontSize: '1.02rem', color: 'var(--texto-principal)' }}>
-        {lineas.map((linea, idx) => <div key={idx}>{parsePreview(linea)}</div>)}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        {elementoSimulado}
+        
+        {textoAlertas && (
+          <div style={{ 
+            background: 'var(--azul-light)', 
+            padding: '20px', 
+            borderRadius: '12px', 
+            border: '1px solid var(--border)',
+            boxShadow: 'var(--sombra-sm)',
+            textAlign: 'left'
+          }}>
+            {textoAlertas.split('\n').map((linea, idx) => {
+              if (linea.trim() === '') return <br key={idx} />;
+              return (
+                <div key={idx} style={{ color: 'var(--texto-secundario)', fontSize: '0.95rem', lineHeight: 1.7 }}>
+                  {parsePreview(linea)}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     );
   };
@@ -332,7 +399,14 @@ const AdminContenidos = () => {
                   
                   <div style={{ width: '1px', background: '#cbd5e1', margin: '0 4px' }} />
                   
-                  <button type="button" onClick={() => insertarFormato('De: remitente.falso@bancario-seguro.com\nPara: estudiante.utb@utb.edu.ec\nAsunto: URGENTE: Bloqueo de cuenta\n\nEstimado usuario, se ha detectado un acceso no autorizado. Para evitar el bloqueo definitivo, verifique sus datos aqui: **http://enlace-phishing-utb.com**')} className="btn btn-sm btn-secondary" title="Simular Correo de Phishing" style={{ display: 'inline-flex', gap: '4px', padding: '6px 10px', fontSize: '0.8rem' }}><FiMail /> Email</button>
+                  <button type="button" onClick={() => insertarFormato('⚠️ ')} className="btn btn-sm btn-secondary" title="Insertar Icono Alerta" style={{ display: 'inline-flex', gap: '4px', padding: '6px 10px', fontSize: '0.8rem' }}><FiAlertTriangle /> + Alerta</button>
+                  <button type="button" onClick={() => insertarFormato('📧 ')} className="btn btn-sm btn-secondary" title="Insertar Icono Correo" style={{ display: 'inline-flex', gap: '4px', padding: '6px 10px', fontSize: '0.8rem' }}><FiMail /> + Correo</button>
+                  <button type="button" onClick={() => insertarFormato('🔍 ')} className="btn btn-sm btn-secondary" title="Insertar Icono Lupa" style={{ display: 'inline-flex', gap: '4px', padding: '6px 10px', fontSize: '0.8rem' }}><FiSearch /> + Lupa</button>
+                  <button type="button" onClick={() => insertarFormato('💬 ')} className="btn btn-sm btn-secondary" title="Insertar Icono Mensaje" style={{ display: 'inline-flex', gap: '4px', padding: '6px 10px', fontSize: '0.8rem' }}><FiMessageSquare /> + SMS</button>
+                  
+                  <div style={{ width: '1px', background: '#cbd5e1', margin: '0 4px' }} />
+                  
+                  <button type="button" onClick={() => insertarFormato('De: remitente.falso@bancario-seguro.com\nPara: estudiante.utb@utb.edu.ec\nAsunto: ⚠️ URGENTE: Bloqueo de cuenta\n\nEstimado usuario, se ha detectado un acceso no autorizado. Para evitar el bloqueo definitivo, verifique sus datos aqui: **http://enlace-phishing-utb.com**\n\n---\n\n🔍 SEÑALES DE ALERTA:\n- El remitente no es el dominio oficial.\n- Hay errores ortograficos y urgencia.')} className="btn btn-sm btn-secondary" title="Simular Correo de Phishing" style={{ display: 'inline-flex', gap: '4px', padding: '6px 10px', fontSize: '0.8rem' }}><FiMail /> Email</button>
                   <button type="button" onClick={() => insertarFormato('Remitente: SOPORTE UTB\nMensaje: Tu clave caduca hoy. Actualiza ahora ingresando a este enlace: http://utb-acceso-seguro.info')} className="btn btn-sm btn-secondary" title="Simular SMS de texto" style={{ display: 'inline-flex', gap: '4px', padding: '6px 10px', fontSize: '0.8rem' }}><FiMessageSquare /> SMS</button>
                   
                   <div style={{ width: '1px', background: '#cbd5e1', margin: '0 4px' }} />

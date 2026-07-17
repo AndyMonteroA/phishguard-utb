@@ -168,14 +168,13 @@ const ModuloDetalle = () => {
     }
 
     // 4. Formatear Negrita, Cursiva, Subrayado y elementos de lista en linea
-    let result = [];
     let segment = text;
 
     // Remplazar listas completas de linea
     if (segment.trim().startsWith('- ')) {
       return (
         <ul style={{ paddingLeft: '20px', marginBottom: '12px', listStyleType: 'disc' }}>
-          <li style={{ color: '#334155' }}>
+          <li style={{ color: 'var(--texto-secundario)' }}>
             {parseMarkdown(segment.trim().substring(2))}
           </li>
         </ul>
@@ -183,7 +182,6 @@ const ModuloDetalle = () => {
     }
 
     // Remplazar formatos basicos en linea (Negrita, Cursiva, Subrayado)
-    // Parseador inline
     const regexBold = /\*\*(.*?)\*\*/g;
     const regexItalic = /\*(.*?)\*/g;
     const regexUnderline = /<u>(.*?)<\/u>/g;
@@ -193,12 +191,45 @@ const ModuloDetalle = () => {
       .replace(regexItalic, '<em style="font-style: italic">$1</em>')
       .replace(regexUnderline, '<u style="text-decoration: underline">$1</u>');
 
+    // Reemplazar emojis nativos por SVGs vectoriales elegantes
+    const warningSvg = '<span class="icon-svg-wrapper warning-svg" style="display: inline-flex; align-items: center; color: #E67E22; margin-right: 4px; vertical-align: middle;"><svg stroke="currentColor" fill="none" stroke-width="2.5" viewBox="0 0 24 24" height="15" width="15" xmlns="http://www.w3.org/2000/svg"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></span>';
+    const emailSvg = '<span class="icon-svg-wrapper email-svg" style="display: inline-flex; align-items: center; color: #2E6DA4; margin-right: 4px; vertical-align: middle;"><svg stroke="currentColor" fill="none" stroke-width="2.5" viewBox="0 0 24 24" height="15" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></span>';
+    const searchSvg = '<span class="icon-svg-wrapper search-svg" style="display: inline-flex; align-items: center; color: #27AE60; margin-right: 4px; vertical-align: middle;"><svg stroke="currentColor" fill="none" stroke-width="2.5" viewBox="0 0 24 24" height="15" width="15" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>';
+    const chatSvg = '<span class="icon-svg-wrapper chat-svg" style="display: inline-flex; align-items: center; color: #9B59B6; margin-right: 4px; vertical-align: middle;"><svg stroke="currentColor" fill="none" stroke-width="2.5" viewBox="0 0 24 24" height="15" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></span>';
+
+    parsedHtml = parsedHtml
+      .replace(/⚠️/g, warningSvg)
+      .replace(/📧/g, emailSvg)
+      .replace(/🔍/g, searchSvg)
+      .replace(/💬/g, chatSvg);
+
     return <span dangerouslySetInnerHTML={{ __html: parsedHtml }} />;
   };
 
   // Renderiza simulaciones de correos o SMS de forma interactiva y premium
   const renderContenidoEspecial = (tipo, titulo, texto) => {
-    const lineas = texto.split('\n');
+    // 1. Separar las Señales de Alerta de la simulación del correo/SMS
+    let textoModulo = texto;
+    let textoAlertas = "";
+    
+    const alertasIndex = texto.search(/SEÑALES DE ALERTA|Señales de alerta|Señales de Alerta/i);
+    if (alertasIndex !== -1) {
+      const preText = texto.substring(0, alertasIndex);
+      const postText = texto.substring(alertasIndex);
+      
+      // Limpiar el separador "---" que suele estar al final de preText
+      const lineasPre = preText.split('\n');
+      while (lineasPre.length > 0 && (
+        lineasPre[lineasPre.length - 1].trim() === '---' ||
+        lineasPre[lineasPre.length - 1].trim() === ''
+      )) {
+        lineasPre.pop();
+      }
+      textoModulo = lineasPre.join('\n');
+      textoAlertas = postText;
+    }
+
+    const lineas = textoModulo.split('\n');
     
     // Validar si parece una plantilla de correo (tiene campos De/Para/Asunto, ignorando asteriscos de Markdown)
     const esEmail = lineas.some(l => {
@@ -210,6 +241,8 @@ const ModuloDetalle = () => {
       const clean = l.replace(/\*/g, '').toLowerCase().trim();
       return clean.startsWith('remitente:') || clean.startsWith('sms:');
     });
+
+    let elementoSimulado = null;
 
     if (esEmail) {
       let de = 'remitente.sospechoso@seguridad-utb.com';
@@ -237,8 +270,8 @@ const ModuloDetalle = () => {
         }
       });
 
-      return (
-        <div style={{ marginTop: '20px', border: '1px solid var(--border)', borderRadius: '12px', background: '#F8FAFC', overflow: 'hidden', boxShadow: 'var(--sombra-md)' }}>
+      elementoSimulado = (
+        <div style={{ marginTop: '20px', border: '1px solid var(--border)', borderRadius: '12px', background: '#F8FAFC', overflow: 'hidden', boxShadow: 'var(--sombra-md)' }} className="simulador-correo">
           {/* Header del simulador de email */}
           <div style={{ background: '#E2E8F0', padding: '12px 20px', display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid var(--border)' }}>
             <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#EF4444' }} />
@@ -255,16 +288,14 @@ const ModuloDetalle = () => {
           {/* Cuerpo del correo */}
           <div style={{ padding: '24px 20px', background: '#fff', fontSize: '0.98rem', minHeight: '150px', lineHeight: 1.7 }}>
             {cuerpo.map((parrafo, i) => (
-              <p key={i} style={{ marginBottom: '14px', color: '#334155' }}>
+              <p key={i} style={{ marginBottom: '14px', color: 'var(--texto-secundario)' }}>
                 {parseMarkdown(parrafo)}
               </p>
             ))}
           </div>
         </div>
       );
-    }
-
-    if (esSMS) {
+    } else if (esSMS) {
       let remitente = 'Banco UTB';
       let mensaje = '';
       
@@ -286,7 +317,7 @@ const ModuloDetalle = () => {
         }
       });
 
-      return (
+      elementoSimulado = (
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
           <div style={{ width: '100%', maxWidth: '360px', background: '#000', borderRadius: '36px', padding: '14px 10px', boxShadow: 'var(--sombra-lg)', border: '4px solid #333' }}>
             <div style={{ width: '110px', height: '18px', background: '#333', margin: '0 auto 12px auto', borderRadius: '10px' }} />
@@ -302,15 +333,40 @@ const ModuloDetalle = () => {
           </div>
         </div>
       );
+    } else {
+      elementoSimulado = (
+        <div style={{ lineHeight: 1.8, fontSize: '1.02rem', color: 'var(--texto-principal)' }}>
+          {lineas.map((parrafo, i) => {
+            if (parrafo.trim() === '') return <br key={i} />;
+            return <p key={i} style={{ marginBottom: '14px', color: 'var(--texto-secundario)' }}>{parseMarkdown(parrafo)}</p>;
+          })}
+        </div>
+      );
     }
 
-    // Renderizado estándar si no coincide con simuladores
+    // Retornar el elemento simulado + la caja de alertas externa (si aplica)
     return (
-      <div style={{ lineHeight: 1.8, fontSize: '1.02rem', color: 'var(--texto-principal)' }}>
-        {lineas.map((parrafo, i) => {
-          if (parrafo.trim() === '') return <br key={i} />;
-          return <p key={i} style={{ marginBottom: '14px' }}>{parseMarkdown(parrafo)}</p>;
-        })}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        {elementoSimulado}
+        
+        {textoAlertas && (
+          <div style={{ 
+            background: 'var(--azul-light)', 
+            padding: '24px', 
+            borderRadius: '12px', 
+            border: '1px solid var(--border)',
+            boxShadow: 'var(--sombra-sm)'
+          }}>
+            {textoAlertas.split('\n').map((linea, idx) => {
+              if (linea.trim() === '') return <br key={idx} />;
+              return (
+                <div key={idx} style={{ color: 'var(--texto-secundario)', fontSize: '0.95rem', lineHeight: 1.7 }}>
+                  {parseMarkdown(linea)}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     );
   };
