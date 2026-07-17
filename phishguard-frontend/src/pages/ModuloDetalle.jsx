@@ -6,13 +6,14 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../services/api';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiArrowRight, FiEdit3, FiBookOpen, FiAlertTriangle, FiZap } from 'react-icons/fi';
+import { FiArrowLeft, FiArrowRight, FiEdit3, FiBookOpen, FiAlertTriangle, FiZap, FiFileText, FiDownload, FiPlay } from 'react-icons/fi';
 import { DynamicIcon } from '../components/IconMap';
 
 const ModuloDetalle = () => {
   const { id } = useParams();
   const [modulo, setModulo] = useState(null);
   const [contenidoActual, setContenidoActual] = useState(0);
+  const [maxIndexVisitado, setMaxIndexVisitado] = useState(0); // Rastrear el slide maximo visitado
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
@@ -27,6 +28,7 @@ const ModuloDetalle = () => {
           const idx = modData.contenidos.findIndex(c => c.id === modData.progreso.ultimo_contenido_id);
           if (idx !== -1) {
             setContenidoActual(idx);
+            setMaxIndexVisitado(idx); // Guardar que ya llego hasta este slide
           }
         }
       } catch (err) {
@@ -48,15 +50,15 @@ const ModuloDetalle = () => {
 
   const siguiente = () => {
     if (modulo?.contenidos && contenidoActual < modulo.contenidos.length - 1) {
-      const actualId = modulo.contenidos[contenidoActual].id;
-      marcarVisto(actualId); // Guardar progreso actual en la DB
-      
       const sigIndex = contenidoActual + 1;
       setContenidoActual(sigIndex);
       
-      // Auto-guardar el slide que se acaba de abrir
-      const sigId = modulo.contenidos[sigIndex].id;
-      marcarVisto(sigId);
+      // Solo guardar en base de datos si el nuevo indice es mayor al maximo alcanzado
+      if (sigIndex > maxIndexVisitado) {
+        setMaxIndexVisitado(sigIndex);
+        const sigId = modulo.contenidos[sigIndex].id;
+        marcarVisto(sigId); // Guardar en DB el nuevo maximo alcanzado
+      }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -66,11 +68,7 @@ const ModuloDetalle = () => {
     if (contenidoActual > 0) {
       const antIndex = contenidoActual - 1;
       setContenidoActual(antIndex);
-      
-      // Guardar el estado del slide anterior que abrimos de nuevo
-      const antId = modulo.contenidos[antIndex].id;
-      marcarVisto(antId);
-
+      // NO modificamos maxIndexVisitado ni marcamos en DB al ir hacia atras
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
@@ -84,25 +82,112 @@ const ModuloDetalle = () => {
   const tipoIcono = { ejemplo_interactivo: <FiZap size={14} />, caso_real: <FiAlertTriangle size={14} />, texto: <FiBookOpen size={14} /> };
   const tipoTexto = { ejemplo_interactivo: 'Ejemplo Interactivo', caso_real: 'Caso Real', texto: 'Lectura' };
 
-  // Parseador de Markdown personalizado para renderizar negritas (**texto**)
+  // Parseador de formato avanzado (soporta negritas, cursivas, subrayados, listas, videos, imagenes y PDFs)
   const parseMarkdown = (text) => {
     if (!text) return '';
-    const parts = [];
-    const regexBold = /\*\*(.*?)\*\*/g;
-    let lastIndex = 0;
-    let match;
-
-    while ((match = regexBold.exec(text)) !== null) {
-      if (match.index > lastIndex) {
-        parts.push(text.substring(lastIndex, match.index));
+    
+    // 1. Detectar videos [video](url)
+    const regexVideo = /\[video\]\((.*?)\)/g;
+    let matchVideo = regexVideo.exec(text);
+    if (matchVideo) {
+      const url = matchVideo[1];
+      // Intentar extraer ID de YouTube
+      let videoId = '';
+      if (url.includes('youtube.com') || url.includes('youtu.be')) {
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        if (match && match[2].length === 11) {
+          videoId = match[2];
+        }
       }
-      parts.push(<strong key={match.index} style={{ fontWeight: 800, color: 'var(--azul-institucional)' }}>{match[1]}</strong>);
-      lastIndex = regexBold.lastIndex;
+      return (
+        <div style={{ marginTop: '16px', marginBottom: '16px' }}>
+          {videoId ? (
+            <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: '12px', boxShadow: 'var(--sombra-md)' }}>
+              <iframe
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
+                src={`https://www.youtube.com/embed/${videoId}`}
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          ) : (
+            <a href={url} target="_blank" rel="noopener noreferrer" className="btn btn-secondary" style={{ gap: '8px', display: 'inline-flex', alignItems: 'center' }}>
+              <FiPlay /> Ver Video Instructivo
+            </a>
+          )}
+        </div>
+      );
     }
-    if (lastIndex < text.length) {
-      parts.push(text.substring(lastIndex));
+
+    // 2. Detectar PDFs [pdf](url)
+    const regexPdf = /\[pdf\]\((.*?)\)/g;
+    let matchPdf = regexPdf.exec(text);
+    if (matchPdf) {
+      const url = matchPdf[1];
+      const nombreArchivo = url.substring(url.lastIndexOf('/') + 1) || 'documento_soporte.pdf';
+      return (
+        <div style={{ 
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', 
+          background: 'var(--bg-light)', padding: '16px 20px', borderRadius: '12px',
+          border: '1px solid var(--border)', marginTop: '16px', marginBottom: '16px', flexWrap: 'wrap', gap: '12px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'rgba(231,76,60,0.1)', color: '#E74C3C', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>
+              <FiFileText />
+            </div>
+            <div>
+              <div style={{ fontWeight: 600, fontSize: '0.92rem' }}>{nombreArchivo}</div>
+              <span style={{ fontSize: '0.78rem', color: 'var(--texto-terciario)' }}>Documento PDF Instructivo</span>
+            </div>
+          </div>
+          <a href={url} target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-primary" style={{ gap: '6px' }}>
+            <FiDownload /> Descargar PDF
+          </a>
+        </div>
+      );
     }
-    return parts.length > 0 ? parts : text;
+
+    // 3. Detectar imagenes [imagen](url)
+    const regexImg = /\[imagen\]\((.*?)\)/g;
+    let matchImg = regexImg.exec(text);
+    if (matchImg) {
+      const url = matchImg[1];
+      return (
+        <div style={{ marginTop: '16px', marginBottom: '16px', textAlign: 'center' }}>
+          <img src={url} alt="Recurso educativo" style={{ maxWidth: '100%', height: 'auto', borderRadius: '12px', boxShadow: 'var(--sombra-md)', border: '1px solid var(--border)' }} />
+        </div>
+      );
+    }
+
+    // 4. Formatear Negrita, Cursiva, Subrayado y elementos de lista en linea
+    let result = [];
+    let segment = text;
+
+    // Remplazar listas completas de linea
+    if (segment.trim().startsWith('- ')) {
+      return (
+        <ul style={{ paddingLeft: '20px', marginBottom: '12px', listStyleType: 'disc' }}>
+          <li style={{ color: '#334155' }}>
+            {parseMarkdown(segment.trim().substring(2))}
+          </li>
+        </ul>
+      );
+    }
+
+    // Remplazar formatos basicos en linea (Negrita, Cursiva, Subrayado)
+    // Parseador inline
+    const regexBold = /\*\*(.*?)\*\*/g;
+    const regexItalic = /\*(.*?)\*/g;
+    const regexUnderline = /<u>(.*?)<\/u>/g;
+
+    let parsedHtml = text
+      .replace(regexBold, '<strong style="font-weight: 800; color: var(--azul-institucional)">$1</strong>')
+      .replace(regexItalic, '<em style="font-style: italic">$1</em>')
+      .replace(regexUnderline, '<u style="text-decoration: underline">$1</u>');
+
+    return <span dangerouslySetInnerHTML={{ __html: parsedHtml }} />;
   };
 
   // Renderiza simulaciones de correos o SMS de forma interactiva y premium
@@ -184,7 +269,7 @@ const ModuloDetalle = () => {
 
     // Renderizado estándar si no coincide con simuladores
     return (
-      <div style={{ lineHeight: 1.8, fontSize: '1rem', color: 'var(--texto-principal)' }}>
+      <div style={{ lineHeight: 1.8, fontSize: '1.02rem', color: 'var(--texto-principal)' }}>
         {lineas.map((parrafo, i) => {
           if (parrafo.trim() === '') return <br key={i} />;
           return <p key={i} style={{ marginBottom: '14px' }}>{parseMarkdown(parrafo)}</p>;
