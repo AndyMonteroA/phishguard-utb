@@ -24,6 +24,7 @@ import Quiz from './pages/Quiz';
 import MiProgreso from './pages/MiProgreso';
 import Certificado from './pages/Certificado';
 import Logros from './pages/Logros';
+import MiPerfil from './pages/MiPerfil';
 
 // Paginas de admin
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -65,6 +66,7 @@ const AppContent = () => {
         <Route path="/mi-progreso" element={<ProtectedRoute><MiProgreso /></ProtectedRoute>} />
         <Route path="/certificado" element={<ProtectedRoute><Certificado /></ProtectedRoute>} />
         <Route path="/logros" element={<ProtectedRoute><Logros /></ProtectedRoute>} />
+        <Route path="/mi-perfil" element={<ProtectedRoute><MiPerfil /></ProtectedRoute>} />
 
         {/* Rutas de admin */}
         <Route path="/admin" element={<ProtectedRoute requiereAdmin><AdminDashboard /></ProtectedRoute>} />

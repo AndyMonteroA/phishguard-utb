@@ -11,18 +11,53 @@ import { FiBookOpen, FiAward, FiTrendingUp, FiCheckCircle, FiArrowRight } from '
 import { DynamicIcon } from '../components/IconMap';
 
 const Dashboard = () => {
-  const { usuario } = useAuth();
+  const { usuario, actualizarUsuario } = useAuth();
   const [progreso, setProgreso] = useState(null);
   const [cargando, setCargando] = useState(true);
 
+  // Estados para el modal de completado de registro de Google
+  const [mostrarModalCompletar, setMostrarModalCompletar] = useState(false);
+  const [formCompletar, setFormCompletar] = useState({ semestre: '', genero: '', usa_correo_institucional: false });
+  const [cargandoCompletar, setCargandoCompletar] = useState(false);
+
   useEffect(() => {
+    // Si no tiene semestre configurado, mostramos el modal para completarlo obligatoriamente
+    if (usuario && usuario.semestre === null) {
+      setMostrarModalCompletar(true);
+    }
+
     const cargar = async () => {
       try { const res = await api.get('/progreso'); setProgreso(res.data.data); }
       catch (err) { console.error(err); }
       finally { setCargando(false); }
     };
     cargar();
-  }, []);
+  }, [usuario]);
+
+  const handleCompletarSubmit = async (e) => {
+    e.preventDefault();
+    if (!formCompletar.semestre || !formCompletar.genero) {
+      toast.error('Por favor, selecciona tu semestre y genero');
+      return;
+    }
+    setCargandoCompletar(true);
+    try {
+      const res = await api.put('/auth/perfil', {
+        nombre: usuario.nombre,
+        apellido: usuario.apellido,
+        semestre: parseInt(formCompletar.semestre),
+        genero: formCompletar.genero,
+        usa_correo_institucional: formCompletar.usa_correo_institucional
+      });
+      actualizarUsuario(res.data.data.usuario);
+      setMostrarModalCompletar(false);
+      window.location.reload();
+    } catch (err) {
+      toast.error('Error al guardar datos del perfil');
+    } finally {
+      setCargandoCompletar(false);
+    }
+  };
 
   if (cargando) return <div className="page-wrapper"><div className="loading-screen"><div className="spinner"></div><p>Cargando tu dashboard...</p></div></div>;
 
@@ -31,6 +66,54 @@ const Dashboard = () => {
   return (
     <div className="page-wrapper">
       <div className="container">
+        {/* Modal de Completar Registro (Obligatorio) */}
+        {mostrarModalCompletar && (
+          <div style={{
+            position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+            background: 'rgba(27, 58, 107, 0.7)', backdropFilter: 'blur(8px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10000,
+            padding: '20px'
+          }}>
+            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+              className="card" style={{ padding: '32px', maxWidth: '440px', width: '100%', textAlign: 'center', borderTop: '4px solid var(--azul-institucional)' }}>
+              <h2 style={{ fontSize: '1.4rem', marginBottom: '8px', color: 'var(--azul-institucional)' }}>¡Completa tu Registro!</h2>
+              <p style={{ color: 'var(--texto-secundario)', fontSize: '0.88rem', marginBottom: '24px' }}>
+                Antes de iniciar tus modulos de concientizacion, necesitamos algunos detalles de tu perfil estudiantil.
+              </p>
+              <form onSubmit={handleCompletarSubmit} style={{ textAlign: 'left' }}>
+                <div className="form-group" style={{ marginBottom: '16px' }}>
+                  <label className="form-label">Semestre</label>
+                  <select className="form-select" value={formCompletar.semestre}
+                    onChange={(e) => setFormCompletar({...formCompletar, semestre: e.target.value})} required>
+                    <option value="">Selecciona tu semestre...</option>
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map(s => (
+                      <option key={s} value={s}>{s}° Semestre</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-group" style={{ marginBottom: '16px' }}>
+                  <label className="form-label">Genero</label>
+                  <select className="form-select" value={formCompletar.genero}
+                    onChange={(e) => setFormCompletar({...formCompletar, genero: e.target.value})} required>
+                    <option value="">Selecciona tu genero...</option>
+                    <option value="masculino">Masculino</option>
+                    <option value="femenino">Femenino</option>
+                    <option value="prefiero_no_indicar">Prefiero no indicar</option>
+                  </select>
+                </div>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.85rem', color: 'var(--texto-secundario)', marginBottom: '24px' }}>
+                  <input type="checkbox" checked={formCompletar.usa_correo_institucional}
+                    onChange={(e) => setFormCompletar({...formCompletar, usa_correo_institucional: e.target.checked})} />
+                  ¿Utilizas correo electronico institucional UTB?
+                </label>
+                <button type="submit" className="btn btn-primary btn-full" disabled={cargandoCompletar}>
+                  {cargandoCompletar ? 'Guardando...' : 'Comenzar Aprendizaje'}
+                </button>
+              </form>
+            </motion.div>
+          </div>
+        )}
+
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: '32px' }}>
           <h1 style={{ fontSize: '1.8rem', marginBottom: '8px' }}>
             Hola, <span className="text-gradient">{usuario?.nombre}</span>!

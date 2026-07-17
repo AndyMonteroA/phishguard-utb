@@ -131,7 +131,7 @@ const NotificacionDropdown = () => {
                       {notif.mensaje}
                     </p>
                     <span style={{ fontSize: '0.7rem', color: 'var(--texto-terciario)' }}>
-                      {new Date(notif.created_at).toLocaleDateString('es-EC')}
+                      {new Date(notif.createdAt || notif.created_at).toLocaleDateString('es-EC')}
                     </span>
                   </div>
                   {!notif.leida && (

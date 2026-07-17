@@ -120,7 +120,7 @@ const Registro = () => {
                 <label className="form-label">Semestre</label>
                 <select name="semestre" className="form-select" value={form.semestre} onChange={handleChange}>
                   <option value="">Seleccionar...</option>
-                  {[1,2,3,4,5,6,7,8,9,10].map(s => <option key={s} value={s}>{s} Semestre</option>)}
+                  {[1,2,3,4,5,6,7,8].map(s => <option key={s} value={s}>{s} Semestre</option>)}
                 </select>
               </div>
               <div className="form-group" style={{ marginBottom: '12px' }}>

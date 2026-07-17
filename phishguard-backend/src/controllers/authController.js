@@ -137,13 +137,15 @@ const obtenerPerfil = async (req, res) => {
 // PUT /api/auth/perfil
 const actualizarPerfil = async (req, res) => {
   try {
-    const { nombre, apellido, semestre } = req.body;
+    const { nombre, apellido, semestre, genero, usa_correo_institucional } = req.body;
     const usuario = await Usuario.findByPk(req.usuarioId);
 
     await usuario.update({
       nombre: nombre || usuario.nombre,
       apellido: apellido || usuario.apellido,
-      semestre: semestre || usuario.semestre,
+      semestre: semestre !== undefined ? semestre : usuario.semestre,
+      genero: genero !== undefined ? genero : usuario.genero,
+      usa_correo_institucional: usa_correo_institucional !== undefined ? usa_correo_institucional : usuario.usa_correo_institucional,
     });
 
     res.json({

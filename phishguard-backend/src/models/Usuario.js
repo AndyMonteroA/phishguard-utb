@@ -53,7 +53,7 @@ const Usuario = sequelize.define('usuarios', {
     allowNull: true,
     validate: {
       min: 1,
-      max: 10,
+      max: 8,
     },
   },
   genero: {
