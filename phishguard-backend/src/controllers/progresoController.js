@@ -24,7 +24,6 @@ const obtenerProgreso = async (req, res) => {
 
     const progresos = await ProgresoModulo.findAll({
       where: { usuario_id: usuarioId },
-      include: [{ model: Modulo, as: 'modulo', attributes: ['titulo', 'icono'] }],
     });
 
     const resultados = await ResultadoQuiz.findAll({
@@ -32,16 +31,48 @@ const obtenerProgreso = async (req, res) => {
       order: [['created_at', 'DESC']],
     });
 
-    // Calcular progreso general (promedio del porcentaje de avance de todos los módulos)
-    const totalModulos = modulos.length;
-    const modulosCompletados = progresos.filter((p) => p.completado).length;
-
+    // Calcular progreso detallado por módulo de forma dinámica
     let sumaPorcentajes = 0;
-    modulos.forEach(modulo => {
-      const progreso = progresos.find(p => p.modulo_id === modulo.id);
-      sumaPorcentajes += progreso ? progreso.porcentaje_avance : 0;
+    let modulosCompletadosCount = 0;
+
+    const detalleModulos = modulos.map((modulo) => {
+      const progreso = progresos.find((p) => p.modulo_id === modulo.id);
+      const mejorResultado = resultados
+        .filter((r) => r.modulo_id === modulo.id && r.aprobado)
+        .sort((a, b) => b.puntaje - a.puntaje)[0];
+
+      const totalLecturas = modulo.contenidos ? modulo.contenidos.length : 0;
+      const lecturasVistas = progreso && progreso.contenidos_vistos ? progreso.contenidos_vistos.length : 0;
+
+      // El progreso de las lecturas representa hasta el 80% del módulo
+      const porcentajeLecturas = totalLecturas > 0
+        ? Math.round((lecturasVistas / totalLecturas) * 80)
+        : 0;
+
+      // El quiz aprobado representa el 20% restante del módulo
+      const tieneQuizAprobado = mejorResultado ? true : false;
+      const porcentajeAvance = porcentajeLecturas + (tieneQuizAprobado ? 20 : 0);
+      const completado = tieneQuizAprobado && porcentajeLecturas >= 78; // 78% o más (equivale a haber leído todo)
+
+      sumaPorcentajes += completado ? 100 : porcentajeAvance;
+      if (completado) modulosCompletadosCount++;
+
+      return {
+        modulo_id: modulo.id,
+        titulo: modulo.titulo,
+        icono: modulo.icono,
+        total_contenidos: totalLecturas,
+        porcentaje_avance: completado ? 100 : porcentajeAvance,
+        completado: completado,
+        mejor_puntaje: mejorResultado
+          ? Math.round((mejorResultado.puntaje / mejorResultado.total_preguntas) * 100)
+          : null,
+        intentos_quiz: resultados.filter((r) => r.modulo_id === modulo.id).length,
+      };
     });
 
+    // Calcular progreso general como promedio real
+    const totalModulos = modulos.length;
     const progresoGeneral = totalModulos > 0
       ? Math.round(sumaPorcentajes / totalModulos)
       : 0;
@@ -54,31 +85,11 @@ const obtenerProgreso = async (req, res) => {
         )
       : 0;
 
-    const detalleModulos = modulos.map((modulo) => {
-      const progreso = progresos.find((p) => p.modulo_id === modulo.id);
-      const mejorResultado = resultados
-        .filter((r) => r.modulo_id === modulo.id && r.aprobado)
-        .sort((a, b) => b.puntaje - a.puntaje)[0];
-
-      return {
-        modulo_id: modulo.id,
-        titulo: modulo.titulo,
-        icono: modulo.icono,
-        total_contenidos: modulo.contenidos ? modulo.contenidos.length : 0,
-        porcentaje_avance: progreso ? progreso.porcentaje_avance : 0,
-        completado: progreso ? progreso.completado : false,
-        mejor_puntaje: mejorResultado
-          ? Math.round((mejorResultado.puntaje / mejorResultado.total_preguntas) * 100)
-          : null,
-        intentos_quiz: resultados.filter((r) => r.modulo_id === modulo.id).length,
-      };
-    });
-
     res.json({
       success: true,
       data: {
         progreso_general: progresoGeneral,
-        modulos_completados: modulosCompletados,
+        modulos_completados: modulosCompletadosCount,
         total_modulos: totalModulos,
         puntaje_promedio: puntajePromedio,
         total_quizzes: resultados.length,
@@ -113,18 +124,31 @@ const marcarContenidoVisto = async (req, res) => {
     if (!contenidosVistos.includes(contenidoIdInt)) {
       contenidosVistos.push(contenidoIdInt);
 
-      // Calcular porcentaje
+      // Calcular porcentaje de lecturas (hasta el 80% del progreso total)
       const totalContenidos = await Contenido.count({
         where: { modulo_id: parseInt(moduloId), activo: true },
       });
 
-      const porcentaje = totalContenidos > 0
-        ? Math.round((contenidosVistos.length / totalContenidos) * 100)
+      const porcentajeLecturas = totalContenidos > 0
+        ? Math.round((contenidosVistos.length / totalContenidos) * 80)
         : 0;
 
+      // Verificar si ya tiene el quiz aprobado para este módulo
+      const quizAprobado = await ResultadoQuiz.findOne({
+        where: { usuario_id: usuarioId, modulo_id: parseInt(moduloId), aprobado: true },
+      });
+
+      const porcentajeTotal = porcentajeLecturas + (quizAprobado ? 20 : 0);
+      const esCompletado = quizAprobado && porcentajeLecturas >= 78;
+
       progreso.contenidos_vistos = contenidosVistos;
-      progreso.porcentaje_avance = Math.min(porcentaje, 100);
+      progreso.porcentaje_avance = Math.min(esCompletado ? 100 : porcentajeTotal, 100);
       progreso.ultimo_contenido_id = contenidoIdInt;
+      progreso.completado = esCompletado;
+      if (esCompletado && !progreso.fecha_completado) {
+        progreso.fecha_completado = new Date();
+      }
+      
       progreso.changed('contenidos_vistos', true);
       await progreso.save();
     } else {

@@ -165,7 +165,7 @@ const AdminContenidos = () => {
         return <ul style={{ paddingLeft: '20px', listStyleType: 'disc', margin: 0 }}><li dangerouslySetInnerHTML={{ __html: parsed.substring(2) }} /></ul>;
       }
 
-      return <p style={{ margin: '0 0 8px 0' }} dangerouslySetInnerHTML={{ __html: parsed }} />;
+      return <p style={{ marginBottom: '14px', color: '#334155' }} dangerouslySetInnerHTML={{ __html: parsed }} />;
     };
 
     if (esEmail) {
@@ -183,14 +183,19 @@ const AdminContenidos = () => {
       });
 
       return (
-        <div style={{ border: '1px solid var(--border)', borderRadius: '12px', background: '#F8FAFC', overflow: 'hidden', textAlign: 'left' }}>
-          <div style={{ background: '#E2E8F0', padding: '10px 16px', fontSize: '0.78rem', fontWeight: 600, color: 'var(--texto-terciario)' }}>Simulador de Correo Seguro</div>
-          <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)', background: '#fff', fontSize: '0.82rem' }}>
-            <div><strong>De:</strong> <span style={{ color: '#E74C3C' }}>{de}</span></div>
-            <div><strong>Para:</strong> <span>{para}</span></div>
+        <div style={{ border: '1px solid var(--border)', borderRadius: '12px', background: '#F8FAFC', overflow: 'hidden', textAlign: 'left', boxShadow: 'var(--sombra-md)' }}>
+          <div style={{ background: '#E2E8F0', padding: '12px 20px', fontSize: '0.8rem', fontWeight: 600, color: 'var(--texto-terciario)', display: 'flex', gap: '8px', borderBottom: '1px solid var(--border)' }}>
+            <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#EF4444' }} />
+            <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#F59E0B' }} />
+            <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10B981' }} />
+            <span style={{ marginLeft: '12px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Simulador de Correo Seguro</span>
+          </div>
+          <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)', background: '#fff', fontSize: '0.88rem' }}>
+            <div style={{ marginBottom: '8px' }}><strong>De:</strong> <span style={{ color: '#E74C3C', fontWeight: 600 }}>{de}</span></div>
+            <div style={{ marginBottom: '8px' }}><strong>Para:</strong> <span>{para}</span></div>
             <div><strong>Asunto:</strong> <span style={{ fontWeight: 700, color: 'var(--azul-institucional)' }}>{asunto}</span></div>
           </div>
-          <div style={{ padding: '16px', background: '#fff', fontSize: '0.9rem', minHeight: '100px', lineHeight: 1.5 }}>
+          <div style={{ padding: '24px 20px', background: '#fff', fontSize: '0.98rem', minHeight: '150px', lineHeight: 1.7 }}>
             {cuerpo.map((p, idx) => <div key={idx}>{parsePreview(p)}</div>)}
           </div>
         </div>
@@ -209,13 +214,16 @@ const AdminContenidos = () => {
 
       return (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <div style={{ width: '100%', maxWidth: '280px', background: '#1C1C1E', borderRadius: '20px', padding: '12px', color: '#fff', textAlign: 'left' }}>
-            <div style={{ textAlign: 'center', fontSize: '0.8rem', color: '#8E8E93', borderBottom: '1px solid #2C2C2E', paddingBottom: '6px', marginBottom: '12px' }}>
-              <div style={{ fontWeight: 600, color: '#fff' }}>{remitente}</div>
-              <span>SMS de texto</span>
-            </div>
-            <div style={{ background: '#262629', padding: '8px 12px', borderRadius: '12px', fontSize: '0.85rem', width: 'fit-content', maxWidth: '90%' }}>
-              {parsePreview(mensaje)}
+          <div style={{ width: '100%', maxWidth: '360px', background: '#000', borderRadius: '36px', padding: '14px 10px', boxShadow: 'var(--sombra-lg)', border: '4px solid #333' }}>
+            <div style={{ width: '110px', height: '18px', background: '#333', margin: '0 auto 12px auto', borderRadius: '10px' }} />
+            <div style={{ background: '#1C1C1E', borderRadius: '24px', padding: '16px', minHeight: '300px', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.85rem', marginBottom: '20px', borderBottom: '1px solid #2C2C2E', paddingBottom: '10px' }}>
+                <div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{remitente}</div>
+                <span style={{ color: '#8E8E93', fontSize: '0.75rem' }}>SMS de texto hoy</span>
+              </div>
+              <div style={{ background: '#262629', color: '#fff', padding: '12px 16px', borderRadius: '18px', alignSelf: 'flex-start', maxWidth: '85%', fontSize: '0.9rem', lineHeight: 1.5 }}>
+                {parsePreview(mensaje)}
+              </div>
             </div>
           </div>
         </div>
@@ -223,7 +231,7 @@ const AdminContenidos = () => {
     }
 
     return (
-      <div style={{ textAlign: 'left', lineHeight: 1.6, fontSize: '0.95rem' }}>
+      <div style={{ textAlign: 'left', lineHeight: 1.8, fontSize: '1.02rem', color: 'var(--texto-principal)' }}>
         {lineas.map((linea, idx) => <div key={idx}>{parsePreview(linea)}</div>)}
       </div>
     );
