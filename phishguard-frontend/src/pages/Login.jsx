@@ -146,7 +146,7 @@ const Login = () => {
                 style={{
                   borderRadius: '12px',
                   padding: '12px 16px',
-                  border: '1.5px solid var(--border)',
+                  border: '1.5px solid #cbd5e1',
                   fontSize: '0.95rem',
                   transition: 'all 0.2s'
                 }}
@@ -169,7 +169,7 @@ const Login = () => {
                 style={{
                   borderRadius: '12px',
                   padding: '12px 16px',
-                  border: '1.5px solid var(--border)',
+                  border: '1.5px solid #cbd5e1',
                   fontSize: '0.95rem',
                   transition: 'all 0.2s'
                 }}

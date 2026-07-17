@@ -42,7 +42,7 @@ const validarRegistro = [
     .isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres'),
   body('semestre')
     .optional()
-    .isInt({ min: 1, max: 10 }).withMessage('El semestre debe estar entre 1 y 10'),
+    .isInt({ min: 1, max: 8 }).withMessage('El semestre debe estar entre 1 y 8'),
   body('genero')
     .optional()
     .isIn(['masculino', 'femenino', 'prefiero_no_indicar']).withMessage('Género no válido'),

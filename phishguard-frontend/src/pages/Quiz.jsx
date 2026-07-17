@@ -46,7 +46,7 @@ const Quiz = () => {
     clearInterval(timer.current);
     try {
       const data = preguntas.map(p => ({ pregunta_id: p.id, respuesta: respuestas[p.id] }));
-      const res = await api.post(`/quiz/${moduloId}`, { respuestas: data, tiempo_empleado: tiempo });
+      const res = await api.post(`/quiz/${moduloId}/submit`, { respuestas: data, tiempo_empleado: tiempo });
       setResultado(res.data.data);
       toast.success(res.data.message);
     } catch (err) { toast.error('Error al enviar'); }
