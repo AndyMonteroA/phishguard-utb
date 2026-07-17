@@ -21,6 +21,12 @@ const ModuloDetalle = () => {
       try {
         const res = await api.get(`/modulos/${id}`);
         const modData = res.data.data.modulo;
+
+        // Ordenar contenidos ascendentemente por su número de orden
+        if (modData.contenidos) {
+          modData.contenidos.sort((a, b) => a.orden - b.orden);
+        }
+        
         setModulo(modData);
 
         // Si el estudiante ya tiene un progreso guardado y un ultimo contenido visitado

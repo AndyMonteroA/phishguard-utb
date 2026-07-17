@@ -1,5 +1,5 @@
 // ============================================================
-// PhishGuard UTB - Admin: Gestion de Contenidos
+// PhishGuard UTB - Admin: Gestion de Contenidos (Visual Rich Toolbar & File Uploader)
 // ============================================================
 
 import { useState, useEffect, useRef } from 'react';
@@ -7,7 +7,11 @@ import { useParams, Link } from 'react-router-dom';
 import api from '../../services/api';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { FiPlus, FiEdit3, FiTrash2, FiArrowLeft, FiBookOpen, FiZap, FiAlertTriangle, FiBold, FiItalic, FiUnderline, FiList, FiMail, FiMessageSquare, FiYoutube, FiImage, FiFileText } from 'react-icons/fi';
+import { 
+  FiPlus, FiEdit3, FiTrash2, FiArrowLeft, FiBookOpen, FiZap, 
+  FiAlertTriangle, FiBold, FiItalic, FiUnderline, FiList, 
+  FiMail, FiMessageSquare, FiYoutube, FiImage, FiFileText, FiUpload, FiEye 
+} from 'react-icons/fi';
 
 const AdminContenidos = () => {
   const { moduloId } = useParams();
@@ -16,7 +20,12 @@ const AdminContenidos = () => {
   const [cargando, setCargando] = useState(true);
   const [editando, setEditando] = useState(null);
   const [form, setForm] = useState({ titulo: '', tipo: 'texto', contenido: '', orden: 1 });
+  const [subiendo, setSubiendo] = useState(false);
+  
+  // Referencias
   const textareaRef = useRef(null);
+  const fileInputRef = useRef(null);
+  const fileTypeRef = useRef('imagen'); // imagen o pdf
 
   useEffect(() => { cargar(); }, [moduloId]);
 
@@ -26,7 +35,10 @@ const AdminContenidos = () => {
         api.get(`/contenidos/${moduloId}`),
         api.get(`/modulos/${moduloId}`).catch(() => null),
       ]);
-      setContenidos(contRes.data.data.contenidos);
+      const contData = contRes.data.data.contenidos;
+      // Ordenar por defecto en el listado del admin para consistencia
+      contData.sort((a, b) => a.orden - b.orden);
+      setContenidos(contData);
       if (modRes) setModulo(modRes.data.data.modulo);
     } catch (err) { console.error(err); }
     finally { setCargando(false); }
@@ -34,6 +46,10 @@ const AdminContenidos = () => {
 
   const guardar = async (e) => {
     e.preventDefault();
+    if (!form.contenido.trim()) {
+      toast.error('El contenido educativo es obligatorio');
+      return;
+    }
     try {
       if (editando) {
         await api.put(`/contenidos/${editando}`, form);
@@ -49,7 +65,7 @@ const AdminContenidos = () => {
   };
 
   const eliminar = async (id) => {
-    if (!window.confirm('Eliminar este contenido?')) return;
+    if (!window.confirm('¿Eliminar este contenido?')) return;
     try { await api.delete(`/contenidos/${id}`); toast.success('Eliminado'); cargar(); }
     catch (err) { toast.error('Error'); }
   };
@@ -60,7 +76,7 @@ const AdminContenidos = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Funcion para insertar formato en la posicion del cursor
+  // Insertar tags de formato enriquecido
   const insertarFormato = (inicioTag, finTag = '') => {
     const txt = textareaRef.current;
     if (!txt) return;
@@ -70,17 +86,147 @@ const AdminContenidos = () => {
     const textVal = form.contenido;
     const selected = textVal.substring(start, end);
     
-    // Si no hay seleccion, usamos un marcador de posicion
     const replacement = inicioTag + (selected || 'texto') + finTag;
-    
     const nuevoContenido = textVal.substring(0, start) + replacement + textVal.substring(end);
+    
     setForm({ ...form, contenido: nuevoContenido });
 
-    // Devolver el foco e insertar cursor
     setTimeout(() => {
       txt.focus();
       txt.setSelectionRange(start + inicioTag.length, start + inicioTag.length + (selected || 'texto').length);
     }, 50);
+  };
+
+  // Manejar click de subida (abre selector de archivos)
+  const abrirSubidor = (tipo) => {
+    fileTypeRef.current = tipo;
+    fileInputRef.current.click();
+  };
+
+  // Subir archivo al backend
+  const handleSubidaArchivo = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('archivo', file);
+    setSubiendo(true);
+
+    try {
+      const res = await api.post('/admin/subir', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      
+      const fileUrl = res.data.url;
+      // Insertar el tag correspondiente
+      if (fileTypeRef.current === 'imagen') {
+        insertarFormato(`[imagen](${fileUrl})`, '');
+      } else {
+        insertarFormato(`[pdf](${fileUrl})`, '');
+      }
+      toast.success('Archivo subido e insertado correctamente');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Error al subir archivo');
+    } finally {
+      setSubiendo(false);
+      e.target.value = ''; // Limpiar input
+    }
+  };
+
+  // Renderizar la previsualización en tiempo real (Live Preview)
+  const renderLivePreview = () => {
+    const text = form.contenido;
+    if (!text) return <p style={{ color: 'var(--texto-terciario)', fontStyle: 'italic' }}>Escribe contenido para ver la previsualización...</p>;
+
+    const lineas = text.split('\n');
+    const esEmail = lineas.some(l => l.toLowerCase().startsWith('de:') || l.toLowerCase().startsWith('asunto:'));
+    const esSMS = lineas.some(l => l.toLowerCase().startsWith('remitente:') || l.toLowerCase().startsWith('mensaje:'));
+
+    // Parsear Markdown simple para la vista previa
+    const parsePreview = (txtLine) => {
+      // Videos, PDFs, Imagenes
+      if (txtLine.includes('[video](')) {
+        return <div style={{ border: '1px dashed #cbd5e1', padding: '12px', borderRadius: '8px', background: '#f8fafc', color: 'var(--azul-institucional)', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px' }}><FiYoutube /> [Reproductor de Video YouTube Embebido]</div>;
+      }
+      if (txtLine.includes('[pdf](')) {
+        return <div style={{ border: '1px solid #cbd5e1', padding: '12px', borderRadius: '8px', background: '#fff', color: '#E74C3C', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px' }}><FiFileText /> [Tarjeta de Descarga de PDF]</div>;
+      }
+      if (txtLine.includes('[imagen](')) {
+        return <div style={{ border: '1px dashed #cbd5e1', padding: '12px', borderRadius: '8px', background: '#f8fafc', color: '#27AE60', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px' }}><FiImage /> [Imagen Ilustrativa Cargada]</div>;
+      }
+
+      // Reemplazo inline para vista previa
+      let parsed = txtLine
+        .replace(/\*\*(.*?)\*\*/g, '<strong style="font-weight: 800; color: var(--azul-institucional)">$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em style="font-style: italic">$1</em>')
+        .replace(/<u>(.*?)<\/u>/g, '<u style="text-decoration: underline">$1</u>');
+
+      if (txtLine.trim().startsWith('- ')) {
+        return <ul style={{ paddingLeft: '20px', listStyleType: 'disc', margin: 0 }}><li dangerouslySetInnerHTML={{ __html: parsed.substring(2) }} /></ul>;
+      }
+
+      return <p style={{ margin: '0 0 8px 0' }} dangerouslySetInnerHTML={{ __html: parsed }} />;
+    };
+
+    if (esEmail) {
+      let de = 'remitente.sospechoso@seguridad-utb.com';
+      let para = 'estudiante@utb.edu.ec';
+      let asunto = 'URGENTE: Actualizacion de credenciales';
+      let cuerpo = [];
+
+      lineas.forEach(l => {
+        const lower = l.toLowerCase();
+        if (lower.startsWith('de:')) de = l.substring(3).trim();
+        else if (lower.startsWith('para:')) para = l.substring(5).trim();
+        else if (lower.startsWith('asunto:')) asunto = l.substring(7).trim();
+        else if (l.trim() !== '') cuerpo.push(l);
+      });
+
+      return (
+        <div style={{ border: '1px solid var(--border)', borderRadius: '12px', background: '#F8FAFC', overflow: 'hidden', textAlign: 'left' }}>
+          <div style={{ background: '#E2E8F0', padding: '10px 16px', fontSize: '0.78rem', fontWeight: 600, color: 'var(--texto-terciario)' }}>Simulador de Correo Seguro</div>
+          <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)', background: '#fff', fontSize: '0.82rem' }}>
+            <div><strong>De:</strong> <span style={{ color: '#E74C3C' }}>{de}</span></div>
+            <div><strong>Para:</strong> <span>{para}</span></div>
+            <div><strong>Asunto:</strong> <span style={{ fontWeight: 700, color: 'var(--azul-institucional)' }}>{asunto}</span></div>
+          </div>
+          <div style={{ padding: '16px', background: '#fff', fontSize: '0.9rem', minHeight: '100px', lineHeight: 1.5 }}>
+            {cuerpo.map((p, idx) => <div key={idx}>{parsePreview(p)}</div>)}
+          </div>
+        </div>
+      );
+    }
+
+    if (esSMS) {
+      let remitente = 'Banco UTB';
+      let mensaje = '';
+      
+      lineas.forEach(l => {
+        if (l.toLowerCase().startsWith('remitente:')) remitente = l.substring(10).trim();
+        else if (l.toLowerCase().startsWith('mensaje:')) mensaje = l.substring(8).trim();
+        else if (l.trim() !== '') mensaje += (mensaje ? '\n' : '') + l;
+      });
+
+      return (
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div style={{ width: '100%', maxWidth: '280px', background: '#1C1C1E', borderRadius: '20px', padding: '12px', color: '#fff', textAlign: 'left' }}>
+            <div style={{ textAlign: 'center', fontSize: '0.8rem', color: '#8E8E93', borderBottom: '1px solid #2C2C2E', paddingBottom: '6px', marginBottom: '12px' }}>
+              <div style={{ fontWeight: 600, color: '#fff' }}>{remitente}</div>
+              <span>SMS de texto</span>
+            </div>
+            <div style={{ background: '#262629', padding: '8px 12px', borderRadius: '12px', fontSize: '0.85rem', width: 'fit-content', maxWidth: '90%' }}>
+              {parsePreview(mensaje)}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div style={{ textAlign: 'left', lineHeight: 1.6, fontSize: '0.95rem' }}>
+        {lineas.map((linea, idx) => <div key={idx}>{parsePreview(linea)}</div>)}
+      </div>
+    );
   };
 
   const tipoIcono = { 
@@ -94,86 +240,125 @@ const AdminContenidos = () => {
   return (
     <div className="page-wrapper">
       <div className="container">
+        
+        {/* Input de tipo file oculto para Multer */}
+        <input 
+          type="file" 
+          ref={fileInputRef} 
+          style={{ display: 'none' }} 
+          onChange={handleSubidaArchivo}
+          accept={fileTypeRef.current === 'imagen' ? 'image/*' : 'application/pdf'}
+        />
+
         <Link to="/admin/modulos" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: 'var(--texto-terciario)', fontSize: '0.9rem', marginBottom: '20px' }}>
           <FiArrowLeft /> Volver a Modulos
         </Link>
         <h1 style={{ marginBottom: '8px' }}>Contenidos: {modulo?.titulo || `Modulo ${moduloId}`}</h1>
         <p style={{ color: 'var(--texto-terciario)', marginBottom: '32px' }}>{contenidos.length} secciones de contenido</p>
 
-        <div className="card" style={{ padding: '28px', marginBottom: '32px' }}>
-          <h3 style={{ marginBottom: '16px' }}>{editando ? 'Editar Contenido' : 'Agregar Contenido'}</h3>
-          <form onSubmit={guardar}>
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '16px' }}>
-              <div className="form-group">
-                <label className="form-label">Titulo</label>
-                <input type="text" className="form-input" value={form.titulo} onChange={(e) => setForm({...form, titulo: e.target.value})} required />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Tipo</label>
-                <select className="form-select" value={form.tipo} onChange={(e) => setForm({...form, tipo: e.target.value})}>
-                  <option value="texto">Lectura</option>
-                  <option value="ejemplo_interactivo">Ejemplo Interactivo</option>
-                  <option value="caso_real">Caso Real</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label className="form-label">Orden</label>
-                <input type="number" className="form-input" min="1" value={form.orden} onChange={(e) => setForm({...form, orden: parseInt(e.target.value)})} />
-              </div>
-            </div>
-
-            <div className="form-group" style={{ marginTop: '16px' }}>
-              <label className="form-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span>Contenido Educativo</span>
-                <span style={{ fontSize: '0.78rem', color: 'var(--texto-terciario)', fontWeight: 400 }}>Puedes dar formato usando la barra de abajo</span>
-              </label>
-              
-              {/* Barra de herramientas para formato enriquecido */}
-              <div style={{ 
-                display: 'flex', gap: '6px', background: 'var(--gris-claro)', 
-                padding: '8px 12px', border: '1px solid var(--border)', 
-                borderBottom: 'none', borderRadius: '8px 8px 0 0', flexWrap: 'wrap'
-              }}>
-                <button type="button" onClick={() => insertarFormato('**', '**')} className="btn btn-sm btn-secondary" title="Negrita" style={{ padding: '6px 10px' }}><FiBold /></button>
-                <button type="button" onClick={() => insertarFormato('*', '*')} className="btn btn-sm btn-secondary" title="Cursiva" style={{ padding: '6px 10px' }}><FiItalic /></button>
-                <button type="button" onClick={() => insertarFormato('<u>', '</u>')} className="btn btn-sm btn-secondary" title="Subrayado" style={{ padding: '6px 10px' }}><FiUnderline /></button>
-                <button type="button" onClick={() => insertarFormato('\n- ')} className="btn btn-sm btn-secondary" title="Lista" style={{ padding: '6px 10px' }}><FiList /></button>
-                
-                <div style={{ width: '1px', background: 'var(--border)', margin: '0 4px' }} />
-                
-                <button type="button" onClick={() => insertarFormato('De: remitente@falso.com\nPara: victima@utb.edu.ec\nAsunto: URGENTE: Cambia tu clave\n\nEste es el cuerpo del correo falso...')} className="btn btn-sm btn-secondary" title="Simular Correo de Phishing" style={{ display: 'inline-flex', gap: '4px', padding: '6px 10px', fontSize: '0.8rem' }}><FiMail /> Email</button>
-                <button type="button" onClick={() => insertarFormato('Remitente: BANCO UTB\nMensaje: Tu cuenta ha sido bloqueada. Ingresa aqui para reactivarla: http://enlace.com')} className="btn btn-sm btn-secondary" title="Simular SMS de texto" style={{ display: 'inline-flex', gap: '4px', padding: '6px 10px', fontSize: '0.8rem' }}><FiMessageSquare /> SMS</button>
-                
-                <div style={{ width: '1px', background: 'var(--border)', margin: '0 4px' }} />
-                
-                <button type="button" onClick={() => insertarFormato('[video](', ')')} className="btn btn-sm btn-secondary" title="Insertar Video de YouTube" style={{ display: 'inline-flex', gap: '4px', padding: '6px 10px', fontSize: '0.8rem' }}><FiYoutube /> Video</button>
-                <button type="button" onClick={() => insertarFormato('[imagen](', ')')} className="btn btn-sm btn-secondary" title="Insertar Imagen URL" style={{ display: 'inline-flex', gap: '4px', padding: '6px 10px', fontSize: '0.8rem' }}><FiImage /> Imagen</button>
-                <button type="button" onClick={() => insertarFormato('[pdf](', ')')} className="btn btn-sm btn-secondary" title="Insertar Enlace PDF" style={{ display: 'inline-flex', gap: '4px', padding: '6px 10px', fontSize: '0.8rem' }}><FiFileText /> PDF</button>
+        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '32px', alignItems: 'start', marginBottom: '32px' }}>
+          
+          {/* Formulario de Contenido */}
+          <div className="card" style={{ padding: '28px' }}>
+            <h3 style={{ marginBottom: '16px' }}>{editando ? 'Editar Contenido' : 'Agregar Contenido'}</h3>
+            <form onSubmit={guardar}>
+              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                <div className="form-group">
+                  <label className="form-label">Titulo</label>
+                  <input type="text" className="form-input" value={form.titulo} onChange={(e) => setForm({...form, titulo: e.target.value})} required style={{ borderRadius: '8px', padding: '10px 14px', border: '1.5px solid #cbd5e1' }} />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Tipo</label>
+                  <select className="form-select" value={form.tipo} onChange={(e) => setForm({...form, tipo: e.target.value})} style={{ borderRadius: '8px', padding: '10px 14px', border: '1.5px solid #cbd5e1' }}>
+                    <option value="texto">Lectura</option>
+                    <option value="ejemplo_interactivo">Ejemplo Interactivo</option>
+                    <option value="caso_real">Caso Real</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Orden</label>
+                  <input type="number" className="form-input" min="1" value={form.orden} onChange={(e) => setForm({...form, orden: parseInt(e.target.value)})} style={{ borderRadius: '8px', padding: '10px 14px', border: '1.5px solid #cbd5e1' }} />
+                </div>
               </div>
 
-              <textarea 
-                ref={textareaRef}
-                className="form-input" 
-                rows={12} 
-                value={form.contenido} 
-                onChange={(e) => setForm({...form, contenido: e.target.value})} 
-                required
-                placeholder="Escribe el contenido educativo aqui..." 
-                style={{ 
-                  fontFamily: 'inherit', 
-                  lineHeight: 1.6, 
-                  borderRadius: '0 0 8px 8px',
-                  borderTop: 'none'
-                }} 
-              />
+              <div className="form-group">
+                <label className="form-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span>Contenido Educativo</span>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--texto-terciario)', fontWeight: 400 }}>Edición enriquecida</span>
+                </label>
+                
+                {/* Barra de herramientas para formato enriquecido */}
+                <div style={{ 
+                  display: 'flex', gap: '6px', background: '#F8FAFC', 
+                  padding: '8px 12px', border: '1.5px solid #cbd5e1', 
+                  borderBottom: 'none', borderRadius: '8px 8px 0 0', flexWrap: 'wrap'
+                }}>
+                  <button type="button" onClick={() => insertarFormato('**', '**')} className="btn btn-sm btn-secondary" title="Negrita" style={{ padding: '6px 10px' }}><FiBold /></button>
+                  <button type="button" onClick={() => insertarFormato('*', '*')} className="btn btn-sm btn-secondary" title="Cursiva" style={{ padding: '6px 10px' }}><FiItalic /></button>
+                  <button type="button" onClick={() => insertarFormato('<u>', '</u>')} className="btn btn-sm btn-secondary" title="Subrayado" style={{ padding: '6px 10px' }}><FiUnderline /></button>
+                  <button type="button" onClick={() => insertarFormato('\n- ')} className="btn btn-sm btn-secondary" title="Lista" style={{ padding: '6px 10px' }}><FiList /></button>
+                  
+                  <div style={{ width: '1px', background: '#cbd5e1', margin: '0 4px' }} />
+                  
+                  <button type="button" onClick={() => insertarFormato('De: remitente.falso@bancario-seguro.com\nPara: estudiante.utb@utb.edu.ec\nAsunto: URGENTE: Bloqueo de cuenta\n\nEstimado usuario, se ha detectado un acceso no autorizado. Para evitar el bloqueo definitivo, verifique sus datos aqui: **http://enlace-phishing-utb.com**')} className="btn btn-sm btn-secondary" title="Simular Correo de Phishing" style={{ display: 'inline-flex', gap: '4px', padding: '6px 10px', fontSize: '0.8rem' }}><FiMail /> Email</button>
+                  <button type="button" onClick={() => insertarFormato('Remitente: SOPORTE UTB\nMensaje: Tu clave caduca hoy. Actualiza ahora ingresando a este enlace: http://utb-acceso-seguro.info')} className="btn btn-sm btn-secondary" title="Simular SMS de texto" style={{ display: 'inline-flex', gap: '4px', padding: '6px 10px', fontSize: '0.8rem' }}><FiMessageSquare /> SMS</button>
+                  
+                  <div style={{ width: '1px', background: '#cbd5e1', margin: '0 4px' }} />
+                  
+                  <button type="button" onClick={() => {
+                    const url = prompt('Ingrese URL de YouTube:');
+                    if (url) insertarFormato(`[video](${url})`, '');
+                  }} className="btn btn-sm btn-secondary" title="Insertar Video de YouTube" style={{ display: 'inline-flex', gap: '4px', padding: '6px 10px', fontSize: '0.8rem' }}><FiYoutube /> Video</button>
+                  
+                  <button type="button" onClick={() => abrirSubidor('imagen')} className="btn btn-sm btn-secondary" title="Subir Imagen desde PC" style={{ display: 'inline-flex', gap: '4px', padding: '6px 10px', fontSize: '0.8rem' }}>
+                    <FiImage /> {subiendo && fileTypeRef.current === 'imagen' ? '...' : '+ Imagen'}
+                  </button>
+                  
+                  <button type="button" onClick={() => abrirSubidor('pdf')} className="btn btn-sm btn-secondary" title="Subir PDF desde PC" style={{ display: 'inline-flex', gap: '4px', padding: '6px 10px', fontSize: '0.8rem' }}>
+                    <FiFileText /> {subiendo && fileTypeRef.current === 'pdf' ? '...' : '+ PDF'}
+                  </button>
+                </div>
+
+                <textarea 
+                  ref={textareaRef}
+                  className="form-input" 
+                  rows={14} 
+                  value={form.contenido} 
+                  onChange={(e) => setForm({...form, contenido: e.target.value})} 
+                  required
+                  placeholder="Escribe el contenido educativo aqui. Usa la barra para simular correos, SMS o subir PDFs e imágenes..." 
+                  style={{ 
+                    fontFamily: 'inherit', 
+                    lineHeight: 1.6, 
+                    borderRadius: '0 0 8px 8px',
+                    borderTop: 'none',
+                    border: '1.5px solid #cbd5e1'
+                  }} 
+                />
+              </div>
+              <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
+                <button type="submit" className="btn btn-primary" disabled={subiendo}><FiPlus /> {editando ? 'Actualizar' : 'Agregar'}</button>
+                {editando && <button type="button" onClick={() => { setEditando(null); setForm({ titulo: '', tipo: 'texto', contenido: '', orden: contenidos.length + 1 }); }} className="btn btn-secondary">Cancelar</button>}
+              </div>
+            </form>
+          </div>
+
+          {/* Tarjeta de Previsualización en Tiempo Real (Live Preview) */}
+          <div className="card" style={{ padding: '28px', borderTop: '4px solid var(--azul-claro)', position: 'sticky', top: '100px' }}>
+            <h3 style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '1.1rem' }}>
+              <FiEye /> Vista Previa del Estudiante
+            </h3>
+            <div style={{ 
+              background: '#F8FAFC', padding: '20px', borderRadius: '12px', 
+              border: '1px solid var(--border)', minHeight: '300px', maxHeight: '500px', overflowY: 'auto' 
+            }}>
+              {renderLivePreview()}
             </div>
-            <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
-              <button type="submit" className="btn btn-primary"><FiPlus /> {editando ? 'Actualizar' : 'Agregar'}</button>
-              {editando && <button type="button" onClick={() => { setEditando(null); setForm({ titulo: '', tipo: 'texto', contenido: '', orden: contenidos.length + 1 }); }} className="btn btn-secondary">Cancelar</button>}
-            </div>
-          </form>
+          </div>
         </div>
 
+        {/* Listado de Contenidos Existentes */}
+        <h3 style={{ marginBottom: '16px' }}>Listado de Secciones</h3>
         {contenidos.map((c, i) => (
           <motion.div key={c.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
             className="card" style={{ padding: '20px', marginBottom: '12px' }}>

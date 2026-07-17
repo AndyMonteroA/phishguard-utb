@@ -70,10 +70,27 @@ const Navbar = () => {
           {estaAutenticado && (
             <>
               <NotificacionDropdown />
-              <span style={{ fontSize: '0.85rem', color: 'var(--texto-terciario)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Link 
+                to={esAdmin ? "/admin" : "/mi-perfil"} 
+                style={{ 
+                  fontSize: '0.85rem', 
+                  color: 'var(--texto-secundario)', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '4px',
+                  textDecoration: 'none',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  padding: '4px 8px',
+                  borderRadius: '6px',
+                  transition: 'background 0.2s'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.04)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+              >
                 {esAdmin ? <FiShield size={14}/> : <FiUser size={14}/>}
                 {usuario?.nombre}
-              </span>
+              </Link>
               <button onClick={handleLogout} className="btn btn-sm btn-secondary" style={{ gap: '4px' }}>
                 <FiLogOut size={14} />
                 Salir
