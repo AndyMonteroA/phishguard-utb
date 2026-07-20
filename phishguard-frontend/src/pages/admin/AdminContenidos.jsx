@@ -355,13 +355,13 @@ const AdminContenidos = () => {
         <h1 style={{ marginBottom: '8px' }}>Contenidos: {modulo?.titulo || `Modulo ${moduloId}`}</h1>
         <p style={{ color: 'var(--texto-terciario)', marginBottom: '32px' }}>{contenidos.length} secciones de contenido</p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '32px', alignItems: 'start', marginBottom: '32px' }}>
+        <div className="admin-grid-2col" style={{ marginBottom: '32px' }}>
           
           {/* Formulario de Contenido */}
           <div className="card" style={{ padding: '28px' }}>
             <h3 style={{ marginBottom: '16px' }}>{editando ? 'Editar Contenido' : 'Agregar Contenido'}</h3>
             <form onSubmit={guardar}>
-              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+              <div className="admin-form-grid">
                 <div className="form-group">
                   <label className="form-label">Titulo</label>
                   <input type="text" className="form-input" value={form.titulo} onChange={(e) => setForm({...form, titulo: e.target.value})} required style={{ borderRadius: '8px', padding: '10px 14px', border: '1.5px solid #cbd5e1' }} />
@@ -390,7 +390,8 @@ const AdminContenidos = () => {
                 <div style={{ 
                   display: 'flex', gap: '6px', background: '#F8FAFC', 
                   padding: '8px 12px', border: '1.5px solid #cbd5e1', 
-                  borderBottom: 'none', borderRadius: '8px 8px 0 0', flexWrap: 'wrap'
+                  borderBottom: 'none', borderRadius: '8px 8px 0 0', flexWrap: 'wrap',
+                  overflowX: 'auto', WebkitOverflowScrolling: 'touch'
                 }}>
                   <button type="button" onClick={() => insertarFormato('**', '**')} className="btn btn-sm btn-secondary" title="Negrita" style={{ padding: '6px 10px' }}><FiBold /></button>
                   <button type="button" onClick={() => insertarFormato('*', '*')} className="btn btn-sm btn-secondary" title="Cursiva" style={{ padding: '6px 10px' }}><FiItalic /></button>

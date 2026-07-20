@@ -56,7 +56,7 @@ const AdminDashboard = () => {
           <button onClick={exportar} className="btn btn-primary" style={{ gap: '6px' }}><FiDownload /> Exportar Excel</button>
         </motion.div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '36px' }}>
+        <div className="stats-grid">
           {tarjetas.map((t, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}
               className="card" style={{ padding: '24px' }}>
@@ -87,7 +87,7 @@ const AdminDashboard = () => {
         )}
 
         <h3 style={{ marginBottom: '16px' }}>Accesos Rapidos</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+        <div className="modules-grid">
           {[
             { to: '/admin/modulos', icon: <FiBookOpen />, label: 'Gestionar Modulos', color: '#2E6DA4' },
             { to: '/admin/estudiantes', icon: <FiUsers />, label: 'Gestionar Estudiantes', color: '#27AE60' },

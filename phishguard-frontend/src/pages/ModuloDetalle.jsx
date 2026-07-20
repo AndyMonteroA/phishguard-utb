@@ -187,7 +187,7 @@ const ModuloDetalle = () => {
     const regexUnderline = /<u>(.*?)<\/u>/g;
 
     let parsedHtml = text
-      .replace(regexBold, '<strong style="font-weight: 800; color: var(--azul-institucional)">$1</strong>')
+      .replace(regexBold, '<strong class="md-bold">$1</strong>')
       .replace(regexItalic, '<em style="font-style: italic">$1</em>')
       .replace(regexUnderline, '<u style="text-decoration: underline">$1</u>');
 
@@ -378,7 +378,7 @@ const ModuloDetalle = () => {
           <Link to="/modulos" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: 'var(--texto-terciario)', fontSize: '0.9rem', marginBottom: '20px' }}>
             <FiArrowLeft /> Volver a modulos
           </Link>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '12px', flexWrap: 'wrap' }}>
             <div style={{ width: '56px', height: '56px', borderRadius: 'var(--radio-md)', background: `${modulo.color || '#1B3A6B'}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <DynamicIcon name={modulo.icono} size={28} color={modulo.color || '#1B3A6B'} />
             </div>
@@ -403,12 +403,12 @@ const ModuloDetalle = () => {
                 {tipoIcono[contenido.tipo]} {tipoTexto[contenido.tipo] || 'Lectura'}
               </span>
             </div>
-            <h2 style={{ fontSize: '1.4rem', marginBottom: '20px', color: 'var(--azul-institucional)' }}>{contenido.titulo}</h2>
+            <h2 style={{ fontSize: '1.4rem', marginBottom: '20px', color: 'var(--texto-principal)' }}>{contenido.titulo}</h2>
             {renderContenidoEspecial(contenido.tipo, contenido.titulo, contenido.contenido)}
           </motion.div>
         )}
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
           <button onClick={anterior} className="btn btn-secondary" disabled={contenidoActual === 0}><FiArrowLeft /> Anterior</button>
           {esUltimo ? (
             <Link to={`/quiz/${id}`} className="btn btn-success btn-lg" onClick={() => contenido && marcarVisto(contenido.id)}>

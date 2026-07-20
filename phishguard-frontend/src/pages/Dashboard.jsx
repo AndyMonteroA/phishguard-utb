@@ -123,7 +123,7 @@ const Dashboard = () => {
           </p>
         </motion.div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '36px' }}>
+        <div className="stats-grid">
           {[
             { icon: <FiTrendingUp />, titulo: 'Progreso General', valor: `${progreso?.progreso_general || 0}%`, color: '#1B3A6B' },
             { icon: <FiBookOpen />, titulo: 'Modulos Completados', valor: `${progreso?.modulos_completados || 0}/${progreso?.total_modulos || 4}`, color: '#27AE60' },
@@ -158,7 +158,7 @@ const Dashboard = () => {
         </motion.div>
 
         <h2 style={{ fontSize: '1.4rem', marginBottom: '20px' }}>Modulos de Aprendizaje</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px' }}>
+        <div className="modules-grid">
           {progreso?.detalle?.map((mod, i) => (
             <motion.div key={mod.modulo_id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 + i * 0.1 }}>
               <Link to={`/modulos/${mod.modulo_id}`} style={{ textDecoration: 'none' }}>

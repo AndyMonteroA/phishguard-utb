@@ -34,7 +34,7 @@ const MiProgreso = () => {
           <p style={{ color: 'var(--texto-terciario)', fontSize: '1rem' }}>Seguimiento de tu avance en PhishGuard UTB</p>
         </motion.div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '20px', marginBottom: '36px' }}>
+        <div className="stats-grid">
           {[
             { icon: <FiTrendingUp />, label: 'Progreso General', valor: `${progreso?.progreso_general || 0}%`, color: '#1B3A6B' },
             { icon: <FiCheckCircle />, label: 'Modulos Completados', valor: `${progreso?.modulos_completados || 0}/${progreso?.total_modulos || 4}`, color: '#27AE60' },
@@ -61,7 +61,7 @@ const MiProgreso = () => {
         </div>
 
         <h2 style={{ fontSize: '1.4rem', marginBottom: '20px' }}>Detalle por Modulo</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+        <div className="modules-grid">
           {progreso?.detalle?.map((mod, i) => (
             <motion.div key={mod.modulo_id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 + i * 0.1 }}
               className="card" style={{ padding: '24px', borderTop: `4px solid ${colores[i]}` }}>
