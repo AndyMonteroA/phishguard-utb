@@ -77,6 +77,16 @@ const Navbar = () => {
               <Link to="/mi-perfil" className={isActive('/mi-perfil')}>Mi Perfil</Link>
             </>
           )}
+          {/* Botón de Salir solo visible en el menu movil */}
+          {estaAutenticado && (
+            <button
+              onClick={handleLogout}
+              className="btn btn-sm btn-secondary navbar-mobile-logout"
+              style={{ marginTop: '8px', gap: '6px', width: '100%', justifyContent: 'center' }}
+            >
+              <FiLogOut size={15} /> Cerrar Sesion
+            </button>
+          )}
         </div>
 
         <div className="navbar-actions">

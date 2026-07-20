@@ -45,7 +45,7 @@ const MiProgreso = () => {
               className="card" style={{ padding: '24px', textAlign: 'center' }}>
               <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: `${stat.color}15`, color: stat.color,
                 display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', fontSize: '1.2rem' }}>{stat.icon}</div>
-              <div style={{ fontSize: '1.8rem', fontWeight: 800, color: stat.color }}>{stat.valor}</div>
+              <div className="stat-card-valor" style={{ color: stat.color }}>{stat.valor}</div>
               <span style={{ fontSize: '0.82rem', color: 'var(--texto-terciario)' }}>{stat.label}</span>
             </motion.div>
           ))}

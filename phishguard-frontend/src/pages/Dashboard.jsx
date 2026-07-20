@@ -136,7 +136,7 @@ const Dashboard = () => {
                 <div style={{ width: '42px', height: '42px', borderRadius: 'var(--radio-md)', background: `${stat.color}15`, color: stat.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>{stat.icon}</div>
                 <span style={{ fontSize: '0.85rem', color: 'var(--texto-terciario)' }}>{stat.titulo}</span>
               </div>
-              <div style={{ fontSize: '1.8rem', fontWeight: 800, color: stat.color }}>{stat.valor}</div>
+              <div className="stat-card-valor" style={{ color: stat.color }}>{stat.valor}</div>
             </motion.div>
           ))}
         </div>

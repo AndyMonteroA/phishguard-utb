@@ -749,6 +749,26 @@ h4 { font-size: 1.25rem; }
   }
 }
 
+/* Boton de cerrar sesion - solo visible en menu movil (dentro de navbar-links) */
+.navbar-mobile-logout {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .navbar-mobile-logout {
+    display: flex;
+  }
+}
+
+/* Valores de estadísticas - clase para colores adaptativos */
+.stat-card-valor {
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+body.dark-mode .stat-card-valor {
+  filter: brightness(1.8) saturate(0.85);
+}
 
 /* ============================================================
    MODO OSCURO (MODO NOCHE) - ALTO CONTRASTE PREMIUM
@@ -796,12 +816,23 @@ body.dark-mode strong {
   color: #7eb3e8;
 }
 
-body.dark-mode a {
+body.dark-mode a:not(.btn) {
   color: #7eb3e8;
 }
 
-body.dark-mode a:hover {
+body.dark-mode a:not(.btn):hover {
   color: #a8d4f5;
+}
+
+/* Botones tipo link (Link con clase btn) - mantener color blanco */
+body.dark-mode a.btn-primary,
+body.dark-mode a.btn-success,
+body.dark-mode a.btn-danger {
+  color: #fff !important;
+}
+
+body.dark-mode a.btn-secondary {
+  color: #7eb3e8 !important;
 }
 
 body.dark-mode input,

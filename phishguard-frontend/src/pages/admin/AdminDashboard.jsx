@@ -64,7 +64,7 @@ const AdminDashboard = () => {
                 <div style={{ width: '42px', height: '42px', borderRadius: 'var(--radio-md)', background: `${t.color}15`, color: t.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>{t.icon}</div>
                 <span style={{ fontSize: '0.82rem', color: 'var(--texto-terciario)' }}>{t.titulo}</span>
               </div>
-              <div style={{ fontSize: '2rem', fontWeight: 800, color: t.color }}>{t.valor}</div>
+              <div className="stat-card-valor" style={{ color: t.color }}>{t.valor}</div>
             </motion.div>
           ))}
         </div>
