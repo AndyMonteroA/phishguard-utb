@@ -87,30 +87,14 @@ const Registro = () => {
   };
 
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      minHeight: '100vh',
-      background: 'radial-gradient(circle at 10% 20%, rgba(27, 58, 107, 0.05) 0%, rgba(46, 109, 164, 0.08) 90%)',
-      paddingTop: '100px',
-      paddingBottom: '40px'
-    }}>
+    <div className="auth-page-wrapper">
       <motion.div 
         initial={{ opacity: 0, y: 30 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 0.6, ease: 'easeOut' }}
         style={{ width: '100%', maxWidth: '520px', padding: '0 20px' }}
       >
-        <div style={{
-          background: '#ffffff',
-          borderRadius: '24px',
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.02)',
-          border: '1px solid rgba(0, 0, 0, 0.04)',
-          padding: '40px 36px',
-          position: 'relative',
-          overflow: 'hidden'
-        }}>
+        <div className="auth-card">
           {/* Adorno visual superior */}
           <div style={{
             position: 'absolute',
@@ -122,17 +106,7 @@ const Registro = () => {
           }} />
 
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <div style={{
-              width: '64px',
-              height: '64px',
-              borderRadius: '18px',
-              background: 'rgba(27, 58, 107, 0.07)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 12px',
-              boxShadow: 'inset 0 2px 4px rgba(27, 58, 107, 0.05)'
-            }}>
+            <div className="auth-icon-wrap">
               <FiShield size={32} color="var(--azul-institucional)" />
             </div>
             <h2 style={{ marginBottom: '6px', fontSize: '1.75rem', fontWeight: 800, color: 'var(--texto-principal)', letterSpacing: '-0.5px' }}>Crear Cuenta</h2>
@@ -153,13 +127,13 @@ const Registro = () => {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', margin: '24px 0' }}>
-            <div style={{ flex: 1, height: '1px', background: 'rgba(0,0,0,0.06)' }}></div>
-            <span style={{ fontSize: '0.8rem', color: 'var(--texto-terciario)', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.5px' }}>o regístrate con email</span>
-            <div style={{ flex: 1, height: '1px', background: 'rgba(0,0,0,0.06)' }}></div>
+            <div className="auth-divider-line" />
+            <span style={{ fontSize: '0.8rem', color: 'var(--texto-terciario)', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.5px', whiteSpace: 'nowrap' }}>o regístrate con email</span>
+            <div className="auth-divider-line" />
           </div>
 
           <form onSubmit={handleSubmit}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            <div className="auth-form-grid">
               <div className="form-group">
                 <label className="form-label" style={{ fontWeight: 600, color: 'var(--texto-secundario)', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}><FiUser size={13} /> Nombre</label>
                 <input 
@@ -206,7 +180,7 @@ const Registro = () => {
               {errores.email && <span className="form-error">{errores.email}</span>}
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            <div className="auth-form-grid">
               <div className="form-group">
                 <label className="form-label" style={{ fontWeight: 600, color: 'var(--texto-secundario)', marginBottom: '8px' }}>Semestre</label>
                 <select 
@@ -242,7 +216,7 @@ const Registro = () => {
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+            <div className="auth-form-grid">
               <div className="form-group">
                 <label className="form-label" style={{ fontWeight: 600, color: 'var(--texto-secundario)', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}><FiLock size={13} /> Contraseña</label>
                 <input 
@@ -310,7 +284,7 @@ const Registro = () => {
           </form>
           
           <p style={{ textAlign: 'center', marginTop: '28px', color: 'var(--texto-secundario)', fontSize: '0.9rem' }}>
-            ¿Ya tienes cuenta? <Link to="/login" style={{ fontWeight: 700, color: 'var(--azul-institucional)', textDecoration: 'none' }}>Inicia sesión aquí</Link>
+            ¿Ya tienes cuenta? <Link to="/login" className="auth-link">Inicia sesión aquí</Link>
           </p>
         </div>
       </motion.div>
