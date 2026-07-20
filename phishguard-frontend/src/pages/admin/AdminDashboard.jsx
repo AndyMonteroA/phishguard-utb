@@ -37,12 +37,12 @@ const AdminDashboard = () => {
   if (cargando) return <div className="page-wrapper"><div className="loading-screen"><div className="spinner"></div></div></div>;
 
   const tarjetas = [
-    { icon: <FiUsers />, titulo: 'Estudiantes Registrados', valor: stats?.total_estudiantes || 0, color: '#1B3A6B' },
-    { icon: <FiCheckCircle />, titulo: 'Estudiantes Activos', valor: stats?.estudiantes_activos || 0, color: '#27AE60' },
-    { icon: <FiClipboard />, titulo: 'Encuestas Completadas', valor: stats?.encuestas_completadas || 0, color: '#2E6DA4' },
-    { icon: <FiAward />, titulo: 'Certificados Emitidos', valor: stats?.certificados_emitidos || 0, color: '#F39C12' },
-    { icon: <FiBarChart2 />, titulo: 'Total Quizzes', valor: stats?.total_quizzes || 0, color: '#9B59B6' },
-    { icon: <FiTrendingUp />, titulo: 'Tasa de Aprobacion', valor: `${stats?.total_quizzes > 0 ? Math.round((stats.quizzes_aprobados / stats.total_quizzes) * 100) : 0}%`, color: '#E74C3C' },
+    { icon: <FiUsers />, titulo: 'Estudiantes Registrados', valor: stats?.total_estudiantes || 0, color: '#1B3A6B', to: '/admin/estudiantes' },
+    { icon: <FiCheckCircle />, titulo: 'Estudiantes Activos', valor: stats?.estudiantes_activos || 0, color: '#27AE60', to: '/admin/estudiantes' },
+    { icon: <FiClipboard />, titulo: 'Encuestas Completadas', valor: stats?.encuestas_completadas || 0, color: '#2E6DA4', to: '/admin/estadisticas' },
+    { icon: <FiAward />, titulo: 'Certificados Emitidos', valor: stats?.certificados_emitidos || 0, color: '#F39C12', to: '/admin/estadisticas' },
+    { icon: <FiBarChart2 />, titulo: 'Total Quizzes', valor: stats?.total_quizzes || 0, color: '#9B59B6', to: '/admin/estadisticas' },
+    { icon: <FiTrendingUp />, titulo: 'Tasa de Aprobacion', valor: `${stats?.total_quizzes > 0 ? Math.round((stats.quizzes_aprobados / stats.total_quizzes) * 100) : 0}%`, color: '#E74C3C', to: '/admin/estadisticas' },
   ];
 
   return (
@@ -58,14 +58,23 @@ const AdminDashboard = () => {
 
         <div className="stats-grid">
           {tarjetas.map((t, i) => (
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}
-              className="card" style={{ padding: '24px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                <div style={{ width: '42px', height: '42px', borderRadius: 'var(--radio-md)', background: `${t.color}15`, color: t.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>{t.icon}</div>
-                <span style={{ fontSize: '0.82rem', color: 'var(--texto-terciario)' }}>{t.titulo}</span>
-              </div>
-              <div className="stat-card-valor" style={{ color: t.color }}>{t.valor}</div>
-            </motion.div>
+            <Link key={i} to={t.to} style={{ textDecoration: 'none' }}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}
+                whileHover={{ scale: 1.03, y: -4 }}
+                className="card"
+                style={{ padding: '24px', cursor: 'pointer', transition: 'box-shadow 0.2s' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                  <div style={{ width: '42px', height: '42px', borderRadius: 'var(--radio-md)', background: `${t.color}15`, color: t.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>{t.icon}</div>
+                  <span style={{ fontSize: '0.82rem', color: 'var(--texto-terciario)' }}>{t.titulo}</span>
+                </div>
+                <div className="stat-card-valor" style={{ color: t.color }}>{t.valor}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '12px', fontSize: '0.75rem', color: 'var(--texto-terciario)', fontWeight: 500 }}>
+                  <FiArrowRight size={12} /> Ver detalle
+                </div>
+              </motion.div>
+            </Link>
           ))}
         </div>
 
