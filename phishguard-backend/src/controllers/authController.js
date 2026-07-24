@@ -3,8 +3,11 @@
 // ============================================================
 
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
 const env = require('../config/env');
 const { Usuario } = require('../models');
+const { enviarCorreoRecuperacion } = require('../services/emailService');
 
 // Generar JWT
 const generarToken = (usuario) => {
@@ -188,7 +191,6 @@ const loginGoogle = async (req, res) => {
 
     if (!usuario) {
       // Crear usuario nuevo con datos de Google
-      const bcrypt = require('bcryptjs');
       const randomPassword = await bcrypt.hash(Math.random().toString(36), 10);
 
       usuario = await Usuario.create({
@@ -229,10 +231,154 @@ const loginGoogle = async (req, res) => {
   }
 };
 
+// ============================================================
+// POST /api/auth/recuperar-password
+// Genera un token seguro y envía correo de recuperación
+// ============================================================
+const solicitarRecuperacion = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: 'El correo electrónico es requerido.',
+      });
+    }
+
+    // Buscar usuario (siempre respondemos igual para no revelar si el email existe)
+    const usuario = await Usuario.findOne({ where: { email } });
+
+    if (usuario && usuario.activo) {
+      // Generar token aleatorio seguro (32 bytes = 64 caracteres hex)
+      const tokenPlano = crypto.randomBytes(32).toString('hex');
+
+      // Hashear el token para guardarlo en BD (seguridad extra)
+      const tokenHasheado = await bcrypt.hash(tokenPlano, 10);
+
+      // Guardar token y expiración (1 hora desde ahora)
+      const expiracion = new Date(Date.now() + 60 * 60 * 1000);
+      await usuario.update({
+        reset_password_token: tokenHasheado,
+        reset_password_expires: expiracion,
+      }, { hooks: false });
+
+      // Construir el enlace de recuperación
+      const enlace = `${env.FRONTEND_URL}/nueva-password?token=${tokenPlano}&email=${encodeURIComponent(email)}`;
+
+      // Enviar correo
+      try {
+        await enviarCorreoRecuperacion(email, usuario.nombre, enlace);
+      } catch (emailError) {
+        console.error('[EMAIL ERROR]', emailError.message);
+        // Si el email falla, limpiamos el token para no dejar estado inconsistente
+        await usuario.update({
+          reset_password_token: null,
+          reset_password_expires: null,
+        }, { hooks: false });
+        return res.status(500).json({
+          success: false,
+          message: 'No se pudo enviar el correo. Verifica la configuración de email del servidor.',
+        });
+      }
+    }
+
+    // Respuesta genérica (no revela si el email existe en el sistema)
+    res.json({
+      success: true,
+      message: 'Si el correo está registrado, recibirás un enlace para restablecer tu contraseña en los próximos minutos.',
+    });
+  } catch (error) {
+    console.error('Error en recuperación de contraseña:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error interno del servidor.',
+    });
+  }
+};
+
+// ============================================================
+// POST /api/auth/restablecer-password
+// Valida el token y actualiza la contraseña
+// ============================================================
+const restablecerPassword = async (req, res) => {
+  try {
+    const { token, email, nuevaPassword } = req.body;
+
+    if (!token || !email || !nuevaPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Token, email y nueva contraseña son requeridos.',
+      });
+    }
+
+    if (nuevaPassword.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: 'La contraseña debe tener al menos 6 caracteres.',
+      });
+    }
+
+    // Buscar usuario con token válido y no expirado
+    const usuario = await Usuario.findOne({
+      where: { email },
+    });
+
+    if (!usuario || !usuario.reset_password_token || !usuario.reset_password_expires) {
+      return res.status(400).json({
+        success: false,
+        message: 'El enlace de recuperación no es válido o ya fue utilizado.',
+      });
+    }
+
+    // Verificar que el token no haya expirado
+    if (new Date() > new Date(usuario.reset_password_expires)) {
+      await usuario.update({
+        reset_password_token: null,
+        reset_password_expires: null,
+      }, { hooks: false });
+      return res.status(400).json({
+        success: false,
+        message: 'El enlace de recuperación ha expirado. Solicita uno nuevo.',
+      });
+    }
+
+    // Verificar que el token coincida con el hasheado en BD
+    const tokenValido = await bcrypt.compare(token, usuario.reset_password_token);
+    if (!tokenValido) {
+      return res.status(400).json({
+        success: false,
+        message: 'El enlace de recuperación no es válido.',
+      });
+    }
+
+    // Actualizar contraseña y limpiar token (el hook beforeUpdate hashea automáticamente)
+    await usuario.update({
+      password: nuevaPassword,
+      reset_password_token: null,
+      reset_password_expires: null,
+    });
+
+    res.json({
+      success: true,
+      message: '¡Contraseña restablecida exitosamente! Ya puedes iniciar sesión con tu nueva contraseña.',
+    });
+  } catch (error) {
+    console.error('Error al restablecer contraseña:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error interno del servidor.',
+    });
+  }
+};
+
 module.exports = {
   registro,
   login,
   obtenerPerfil,
   actualizarPerfil,
   loginGoogle,
+  solicitarRecuperacion,
+  restablecerPassword,
 };
+

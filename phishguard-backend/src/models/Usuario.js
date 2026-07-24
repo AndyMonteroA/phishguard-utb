@@ -76,6 +76,16 @@ const Usuario = sequelize.define('usuarios', {
     type: DataTypes.DATE,
     allowNull: true,
   },
+  reset_password_token: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+    comment: 'Token hasheado para recuperación de contraseña',
+  },
+  reset_password_expires: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: 'Fecha de expiración del token de recuperación (1 hora)',
+  },
 }, {
   hooks: {
     // Hashear contraseña antes de crear

@@ -14,6 +14,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Registro from './pages/Registro';
+import RecuperarPassword from './pages/RecuperarPassword';
+import NuevaPassword from './pages/NuevaPassword';
 
 // Paginas de estudiante
 import Dashboard from './pages/Dashboard';
@@ -56,6 +58,8 @@ const AppContent = () => {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
+        <Route path="/recuperar-password" element={<RecuperarPassword />} />
+        <Route path="/nueva-password" element={<NuevaPassword />} />
 
         {/* Rutas de estudiante */}
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

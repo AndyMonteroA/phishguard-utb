@@ -16,4 +16,8 @@ module.exports = {
   JWT_EXPIRATION: process.env.JWT_EXPIRATION || '24h',
   FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:5173',
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
+  // Email (nodemailer - Gmail App Password)
+  EMAIL_USER: process.env.EMAIL_USER || '',
+  EMAIL_PASS: process.env.EMAIL_PASS || '',
+  EMAIL_FROM: process.env.EMAIL_FROM || 'PhishGuard UTB <noreply@phishguard.utb>',
 };
