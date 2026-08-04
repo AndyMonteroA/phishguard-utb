@@ -168,6 +168,7 @@ const obtenerKPIs = async (req, res) => {
 // ============================================================
 const obtenerNivelConocimiento = async (req, res) => {
   try {
+    const { PREGUNTAS_ENCUESTA } = require('./encuestaController');
     const userWhere = buildUserFilter(req.query);
     const usuarios = await Usuario.findAll({
       where: userWhere,
@@ -190,16 +191,61 @@ const obtenerNivelConocimiento = async (req, res) => {
 
     const stats = calcStats(puntajes);
 
-    // Distribución por respuestas de encuesta (pregunta por pregunta)
-    const preguntaStats = {};
-    usuarios.forEach(u => {
-      if (u.encuesta?.respuestas && Array.isArray(u.encuesta.respuestas)) {
-        u.encuesta.respuestas.forEach((r, idx) => {
-          if (!preguntaStats[idx]) preguntaStats[idx] = { pregunta_num: idx + 1, respuestas: {} };
-          const resp = r.respuesta || r;
-          preguntaStats[idx].respuestas[resp] = (preguntaStats[idx].respuestas[resp] || 0) + 1;
-        });
-      }
+    // Análisis detallado por pregunta usando las preguntas reales
+    const analisisPorPregunta = PREGUNTAS_ENCUESTA.map(pregDef => {
+      const conteoOpciones = {};
+      pregDef.opciones.forEach(o => { conteoOpciones[o.id] = 0; });
+      let totalResp = 0;
+      let aciertos = 0;
+
+      // Encontrar la opción "correcta" (la de mayor puntaje)
+      const mejorOpcion = pregDef.opciones.reduce((best, o) => o.puntaje > best.puntaje ? o : best, pregDef.opciones[0]);
+
+      usuarios.forEach(u => {
+        if (u.encuesta?.respuestas && Array.isArray(u.encuesta.respuestas)) {
+          const resp = u.encuesta.respuestas.find(r => r.pregunta_id === pregDef.id);
+          if (resp) {
+            totalResp++;
+            const seleccion = resp.respuesta;
+            conteoOpciones[seleccion] = (conteoOpciones[seleccion] || 0) + 1;
+            if (seleccion === mejorOpcion.id) aciertos++;
+          }
+        }
+      });
+
+      const errores = totalResp - aciertos;
+      const tasaAcierto = totalResp > 0 ? Math.round((aciertos / totalResp) * 100) : 0;
+
+      // Respuesta incorrecta más seleccionada
+      let errorMasComun = null;
+      let maxErrores = 0;
+      Object.entries(conteoOpciones).forEach(([opId, count]) => {
+        if (opId !== mejorOpcion.id && count > maxErrores) {
+          maxErrores = count;
+          errorMasComun = pregDef.opciones.find(o => o.id === opId);
+        }
+      });
+
+      return {
+        id: pregDef.id,
+        seccion: pregDef.seccion,
+        pregunta: pregDef.pregunta,
+        respuesta_correcta: mejorOpcion.texto,
+        error_mas_comun: errorMasComun ? errorMasComun.texto : 'N/A',
+        error_mas_comun_count: maxErrores,
+        aciertos,
+        errores,
+        total: totalResp,
+        tasa_acierto: tasaAcierto,
+        tasa_error: totalResp > 0 ? 100 - tasaAcierto : 0,
+        opciones_detalle: pregDef.opciones.map(o => ({
+          id: o.id,
+          texto: o.texto,
+          seleccionada: conteoOpciones[o.id] || 0,
+          porcentaje: totalResp > 0 ? Math.round(((conteoOpciones[o.id] || 0) / totalResp) * 100) : 0,
+          es_correcta: o.id === mejorOpcion.id,
+        })),
+      };
     });
 
     res.json({
@@ -208,7 +254,7 @@ const obtenerNivelConocimiento = async (req, res) => {
         total: usuarios.length,
         distribucion: niveles,
         estadisticas: stats,
-        porPregunta: Object.values(preguntaStats),
+        analisisPorPregunta,
       },
     });
   } catch (error) {

@@ -522,6 +522,53 @@ const AdminEstadisticas = () => {
                 </div>
               </div>
             </div>
+
+            {/* Análisis por pregunta de la encuesta diagnóstica */}
+            {nivelData.analisisPorPregunta && nivelData.analisisPorPregunta.length > 0 && (
+              <div className="card" style={{ padding: '20px', marginTop: '20px' }}>
+                <SectionHeader title="Análisis por Pregunta de la Encuesta Diagnóstica" />
+                <p style={{ fontSize: '0.82rem', color: 'var(--texto-terciario)', marginBottom: 16 }}>
+                  Detalle de aciertos y errores en cada pregunta de la encuesta inicial
+                </p>
+                <div style={{ overflowX: 'auto' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem' }}>
+                    <thead>
+                      <tr style={{ borderBottom: '2px solid var(--gris-medio)' }}>
+                        <th style={{ padding: '10px', textAlign: 'left' }}>#</th>
+                        <th style={{ padding: '10px', textAlign: 'left', minWidth: 220 }}>Pregunta</th>
+                        <th style={{ padding: '10px', textAlign: 'center' }}>Aciertos</th>
+                        <th style={{ padding: '10px', textAlign: 'center' }}>Errores</th>
+                        <th style={{ padding: '10px', textAlign: 'center' }}>% Acierto</th>
+                        <th style={{ padding: '10px', textAlign: 'left', minWidth: 180 }}>Respuesta Correcta</th>
+                        <th style={{ padding: '10px', textAlign: 'left', minWidth: 180 }}>Error Más Común</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {nivelData.analisisPorPregunta.map((p, i) => (
+                        <tr key={i} style={{ borderBottom: '1px solid var(--gris-medio)' }}>
+                          <td style={{ padding: '10px', fontWeight: 600 }}>{p.id}</td>
+                          <td style={{ padding: '10px', maxWidth: 300 }}>{p.pregunta}</td>
+                          <td style={{ padding: '10px', textAlign: 'center', color: COLORS.success, fontWeight: 700 }}>{p.aciertos}</td>
+                          <td style={{ padding: '10px', textAlign: 'center', color: COLORS.danger, fontWeight: 700 }}>{p.errores}</td>
+                          <td style={{ padding: '10px', textAlign: 'center' }}>
+                            <span className={`badge ${p.tasa_acierto >= 70 ? 'badge-success' : p.tasa_acierto >= 40 ? 'badge-warning' : 'badge-danger'}`}>
+                              {p.tasa_acierto}%
+                            </span>
+                          </td>
+                          <td style={{ padding: '10px', color: COLORS.success, fontSize: '0.8rem' }}>{p.respuesta_correcta}</td>
+                          <td style={{ padding: '10px', color: COLORS.danger, fontSize: '0.8rem' }}>
+                            {p.error_mas_comun !== 'N/A' ? p.error_mas_comun : '—'}
+                            {p.error_mas_comun_count > 0 && (
+                              <span style={{ color: 'var(--texto-terciario)', marginLeft: 4 }}>({p.error_mas_comun_count})</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -593,11 +640,9 @@ const AdminEstadisticas = () => {
                       <th style={{ padding: '10px', textAlign: 'left' }}>Grupo</th>
                       {rendimientoTipo !== 'modulo' && <th style={{ padding: '10px', textAlign: 'center' }}>Estudiantes</th>}
                       <th style={{ padding: '10px', textAlign: 'center' }}>Promedio</th>
-                      <th style={{ padding: '10px', textAlign: 'center' }}>Máx</th>
-                      <th style={{ padding: '10px', textAlign: 'center' }}>Mín</th>
-                      <th style={{ padding: '10px', textAlign: 'center' }}>Mediana</th>
-                      <th style={{ padding: '10px', textAlign: 'center' }}>Desv. Est.</th>
-                      <th style={{ padding: '10px', textAlign: 'center' }}>% Aprob.</th>
+                      <th style={{ padding: '10px', textAlign: 'center' }}>Nota Máx</th>
+                      <th style={{ padding: '10px', textAlign: 'center' }}>Nota Mín</th>
+                      <th style={{ padding: '10px', textAlign: 'center' }}>% Aprobación</th>
                       <th style={{ padding: '10px', textAlign: 'center' }}>Tiempo Prom.</th>
                       <th style={{ padding: '10px', textAlign: 'center' }}>Nivel</th>
                     </tr>
@@ -610,8 +655,6 @@ const AdminEstadisticas = () => {
                         <td style={{ padding: '10px', textAlign: 'center', fontWeight: 700, color: COLORS.primary }}>{d.promedio}%</td>
                         <td style={{ padding: '10px', textAlign: 'center', color: COLORS.success }}>{d.max}%</td>
                         <td style={{ padding: '10px', textAlign: 'center', color: COLORS.danger }}>{d.min}%</td>
-                        <td style={{ padding: '10px', textAlign: 'center' }}>{d.mediana}%</td>
-                        <td style={{ padding: '10px', textAlign: 'center' }}>{d.desviacion}</td>
                         <td style={{ padding: '10px', textAlign: 'center' }}>{d.porcentaje_aprobacion}%</td>
                         <td style={{ padding: '10px', textAlign: 'center' }}>{fmtTime(d.tiempo_promedio)}</td>
                         <td style={{ padding: '10px', textAlign: 'center' }}><NivelBadge nivel={d.nivel} /></td>
@@ -924,10 +967,10 @@ const AdminEstadisticas = () => {
                 <div style={{ height: '300px' }}>
                   <Radar
                     data={{
-                      labels: ['Promedio', '% Aprobación', 'Nota Máx', 'Mediana'],
+                      labels: ['Promedio', '% Aprobación', 'Nota Máxima'],
                       datasets: comparacionData.comparaciones.slice(0, 4).map((c, i) => ({
                         label: c.grupo,
-                        data: [c.promedio, c.porcentaje_aprobacion, c.max, c.mediana],
+                        data: [c.promedio, c.porcentaje_aprobacion, c.max],
                         borderColor: CHART_COLORS[i],
                         backgroundColor: CHART_COLORS[i] + '20',
                         pointBackgroundColor: CHART_COLORS[i],
@@ -941,7 +984,7 @@ const AdminEstadisticas = () => {
 
             {/* Tabla */}
             <div className="card" style={{ padding: '20px' }}>
-              <SectionHeader title="Tabla Comparativa Detallada" />
+              <SectionHeader title="Tabla Comparativa" />
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
                   <thead>
@@ -949,8 +992,8 @@ const AdminEstadisticas = () => {
                       <th style={{ padding: '10px', textAlign: 'left' }}>Grupo</th>
                       {comparacionTipo !== 'modulo' && <th style={{ padding: '10px', textAlign: 'center' }}>Estudiantes</th>}
                       <th style={{ padding: '10px', textAlign: 'center' }}>Promedio</th>
-                      <th style={{ padding: '10px', textAlign: 'center' }}>Mediana</th>
-                      <th style={{ padding: '10px', textAlign: 'center' }}>Desv. Est.</th>
+                      <th style={{ padding: '10px', textAlign: 'center' }}>Nota Máx</th>
+                      <th style={{ padding: '10px', textAlign: 'center' }}>Nota Mín</th>
                       <th style={{ padding: '10px', textAlign: 'center' }}>% Aprobación</th>
                       <th style={{ padding: '10px', textAlign: 'center' }}>Tiempo Prom.</th>
                       <th style={{ padding: '10px', textAlign: 'center' }}>Nivel</th>
@@ -962,8 +1005,8 @@ const AdminEstadisticas = () => {
                         <td style={{ padding: '10px', fontWeight: 600 }}>{c.grupo}</td>
                         {comparacionTipo !== 'modulo' && <td style={{ padding: '10px', textAlign: 'center' }}>{c.estudiantes}</td>}
                         <td style={{ padding: '10px', textAlign: 'center', fontWeight: 700, color: COLORS.primary }}>{c.promedio}%</td>
-                        <td style={{ padding: '10px', textAlign: 'center' }}>{c.mediana}%</td>
-                        <td style={{ padding: '10px', textAlign: 'center' }}>{c.desviacion}</td>
+                        <td style={{ padding: '10px', textAlign: 'center', color: COLORS.success }}>{c.max}%</td>
+                        <td style={{ padding: '10px', textAlign: 'center', color: COLORS.danger }}>{c.min}%</td>
                         <td style={{ padding: '10px', textAlign: 'center' }}>{c.porcentaje_aprobacion}%</td>
                         <td style={{ padding: '10px', textAlign: 'center' }}>{fmtTime(c.tiempo_promedio)}</td>
                         <td style={{ padding: '10px', textAlign: 'center' }}><NivelBadge nivel={c.nivel} /></td>
