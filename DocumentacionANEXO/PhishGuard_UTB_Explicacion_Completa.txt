@@ -1,0 +1,326 @@
+================================================================================
+              PHISHGUARD UTB — DOCUMENTO EXPLICATIVO DEL APLICATIVO
+              Universidad Técnica de Babahoyo — FAFI
+              Carrera de Sistemas de Información — 6to Semestre 2026
+================================================================================
+
+
+1. ¿QUÉ ES PHISHGUARD UTB?
+================================================================================
+
+PhishGuard UTB es una plataforma web educativa de concientización sobre
+Ingeniería Social, desarrollada específicamente para los estudiantes de la
+carrera de Sistemas de Información de la Universidad Técnica de Babahoyo (UTB).
+
+El sistema funciona como un entorno de aprendizaje autónomo y progresivo donde
+el estudiante se registra, evalúa su nivel de conocimiento actual, estudia
+contenido educativo interactivo sobre las principales técnicas de ataque de
+Ingeniería Social (phishing, pretexting, vishing y baiting), se evalúa mediante
+quizzes, visualiza su progreso, desbloquea logros y obtiene un certificado
+digital al completar el programa.
+
+El nombre "PhishGuard" combina "Phish" (del phishing, la técnica de Ingeniería
+Social más conocida) con "Guard" (guardia/protección), transmitiendo la idea
+de una herramienta que protege al usuario mediante el conocimiento.
+
+
+2. ¿QUÉ PROBLEMA RESUELVE?
+================================================================================
+
+El problema central que PhishGuard UTB aborda es la vulnerabilidad de los
+estudiantes universitarios ante ataques de Ingeniería Social, a pesar de su
+formación técnica en el área de informática.
+
+Datos que respaldan la existencia de este problema:
+
+  - Según Verizon (2023), el 74% de las brechas de seguridad involucran al
+    factor humano — errores, descuidos o manipulación social.
+
+  - Tessian y Stanford University (2021) demostraron que el 88% de las brechas
+    de datos son causadas por errores humanos, sin importar el nivel de
+    formación técnica de la persona.
+
+  - Medina y Torres (2022) encontraron que en universidades ecuatorianas,
+    menos del 35% de los estudiantes podía identificar técnicas como el
+    pretexting o el vishing.
+
+  - El APWG (2023) registró más de 1.3 millones de sitios de phishing únicos
+    solo en el primer trimestre de 2023.
+
+Antes de PhishGuard UTB, la UTB no contaba con ninguna herramienta tecnológica
+dedicada a formar y evaluar a sus estudiantes en la identificación y prevención
+de ataques de Ingeniería Social. La única formación disponible eran charlas
+esporádicas o contenido académico disperso en diversas materias, sin un
+programa estructurado ni medición de resultados.
+
+
+3. ¿PARA QUIÉN ES?
+================================================================================
+
+El sistema tiene dos tipos de usuarios con roles diferenciados:
+
+ESTUDIANTES (Rol principal)
+  Son los estudiantes activos de la carrera de Sistemas de Información de la
+  FAFI-UTB. Ellos son los usuarios principales del sistema. Se registran,
+  completan la encuesta diagnóstica, estudian los módulos educativos, rinden
+  los quizzes y obtienen su certificado.
+
+  Perfil típico:
+  - Estudiante universitario de 18 a 25 años
+  - Cursando del 1er al 8vo semestre de Sistemas de Información
+  - Tiene conocimientos técnicos en informática pero no necesariamente en
+    ciberseguridad o Ingeniería Social
+  - Usa correo electrónico institucional (@utb.edu.ec) o personal
+  - Accede desde computadoras del laboratorio, laptops personales o celulares
+
+ADMINISTRADOR (Rol de gestión)
+  Es el docente, investigador o coordinador del proyecto que gestiona el
+  contenido educativo, las preguntas de evaluación y monitorea las
+  estadísticas de uso y aprendizaje del sistema.
+
+  Perfil típico:
+  - Docente de la carrera de Sistemas de Información
+  - Coordinador del proyecto de vinculación con la sociedad
+  - Necesita visualizar métricas de participación y rendimiento
+
+
+4. ¿EN QUÉ SE BASA?
+================================================================================
+
+PhishGuard UTB se fundamenta en tres pilares teóricos:
+
+4.1 Ingeniería Social y Ciberseguridad
+
+  La Ingeniería Social es "el arte de manipular personas para que realicen
+  acciones o divulguen información confidencial" (Hadnagy, 2011). A diferencia
+  de los ataques técnicos que explotan vulnerabilidades de software, la
+  Ingeniería Social explota la psicología humana.
+
+  El sistema aborda las 4 técnicas principales:
+
+  PHISHING — Comunicaciones fraudulentas (correos, SMS, sitios web) que simulan
+  ser de fuentes legítimas para robar información. Incluye variantes como spear
+  phishing (dirigido a una persona específica), smishing (por SMS) y clone
+  phishing (copia de correos reales).
+
+  PRETEXTING — Creación de una historia ficticia para ganarse la confianza de
+  la víctima. El atacante se hace pasar por alguien (técnico de TI, policía,
+  auditor) para obtener información o acceso.
+
+  VISHING — Phishing telefónico. El atacante llama haciéndose pasar por un
+  representante del banco, empresa o institución para obtener datos sensibles.
+  Usa técnicas como el caller ID spoofing (falsificación del número).
+
+  BAITING — Uso de un señuelo (cebo) para atraer a la víctima. Puede ser
+  físico (USB infectada dejada en un lugar público) o digital (software
+  pirata o descargas gratuitas con malware oculto).
+
+4.2 Principios Psicológicos de Persuasión (Cialdini, 2007)
+
+  Los ataques de Ingeniería Social explotan principios psicológicos
+  universales que PhishGuard enseña a reconocer:
+
+  - AUTORIDAD: Obedecemos a figuras de poder sin cuestionar
+  - URGENCIA/ESCASEZ: Actuamos impulsivamente cuando sentimos que algo se acaba
+  - RECIPROCIDAD: Sentimos obligación de devolver favores
+  - PRUEBA SOCIAL: Imitamos lo que hacen los demás
+  - COMPROMISO: Mantenemos coherencia con decisiones previas
+  - SIMPATÍA: Confiamos en quien nos cae bien
+
+4.3 Aprendizaje Progresivo y Gamificación
+
+  El diseño pedagógico del sistema se basa en:
+
+  - Aprendizaje progresivo: De lo más conocido (phishing) a lo menos conocido
+    (vishing, baiting), según los datos de Medina y Torres (2022)
+  - Simulaciones realistas: Los estudiantes ven ejemplos de correos, SMS y
+    llamadas fraudulentas como los verían en la vida real
+  - Retroalimentación inmediata: Cada pregunta del quiz explica por qué la
+    respuesta es correcta o incorrecta
+  - Gamificación: Logros, insignias, barras de progreso y certificado como
+    motivadores extrínsecos del aprendizaje
+  - Evaluación con estándar mínimo: Se requiere 70% (7/10) para aprobar
+    cada módulo, incentivando el estudio serio del contenido
+
+
+5. ¿QUÉ BUSCA LOGRAR?
+================================================================================
+
+PhishGuard UTB tiene tres objetivos concretos:
+
+OBJETIVO 1 — DIAGNOSTICAR
+  Medir el nivel real de conocimiento que tienen los estudiantes de la carrera
+  sobre las técnicas de Ingeniería Social ANTES de usar el sistema, mediante
+  una encuesta diagnóstica de 8 preguntas que clasifica al estudiante en
+  nivel bajo, medio o alto.
+
+  ¿Por qué importa? Porque sin un diagnóstico no se puede saber qué temas
+  reforzar ni medir si el sistema generó un impacto real.
+
+OBJETIVO 2 — EDUCAR
+  Proporcionar contenido educativo completo, interactivo y contextualizado
+  sobre las 4 técnicas principales de Ingeniería Social, con:
+  - Definiciones claras y clasificaciones
+  - Simulaciones visuales de ataques reales (correos de phishing, SMS
+    fraudulentos, llamadas de vishing)
+  - Casos reales documentados (ataque BEC de $2.3M, experimento USB de la
+    Universidad de Illinois, fraudes en universidades latinoamericanas)
+  - Señales de alerta que el estudiante debe aprender a reconocer
+  - Medidas de protección específicas y accionables
+
+OBJETIVO 3 — VALIDAR
+  Confirmar que el sistema es usable, funcional y aceptado por los estudiantes
+  mediante la aplicación de la escala SUS (System Usability Scale), un
+  instrumento estandarizado internacionalmente. Una puntuación ≥70 confirma
+  que el sistema cumple estándares de usabilidad aceptables.
+
+
+6. ¿CÓMO FUNCIONA? (FLUJO COMPLETO DEL ESTUDIANTE)
+================================================================================
+
+El recorrido de un estudiante dentro de PhishGuard UTB es el siguiente:
+
+  PASO 1 — REGISTRO
+  │  El estudiante crea su cuenta proporcionando: nombre, apellido, correo,
+  │  contraseña, semestre, género y si usa correo institucional.
+  │  También puede registrarse con su cuenta Google.
+  │
+  PASO 2 — ENCUESTA DIAGNÓSTICA
+  │  Antes de acceder al contenido, completa una encuesta de 8 preguntas
+  │  que mide su conocimiento previo sobre Ingeniería Social. El sistema
+  │  lo clasifica automáticamente en nivel bajo, medio o alto.
+  │
+  PASO 3 — DASHBOARD PERSONALIZADO
+  │  Ve su panel de inicio con: progreso general, módulos disponibles,
+  │  estadísticas personales y accesos directos.
+  │
+  PASO 4 — ESTUDIO DE MÓDULOS (4 unidades)
+  │  Estudia cada módulo en orden:
+  │  ├── Módulo 1: Phishing (7 secciones)
+  │  ├── Módulo 2: Pretexting (6 secciones)
+  │  ├── Módulo 3: Vishing (5 secciones)
+  │  └── Módulo 4: Baiting (5 secciones)
+  │  Cada sección incluye texto explicativo, simulaciones visuales,
+  │  casos reales y señales de alerta.
+  │
+  PASO 5 — QUIZ DE EVALUACIÓN (por módulo)
+  │  Al terminar cada módulo, realiza un quiz de 10 preguntas de opción
+  │  múltiple con retroalimentación inmediata. Necesita ≥7/10 (70%) para
+  │  aprobar. Si no aprueba, puede reintentar las veces que quiera.
+  │
+  PASO 6 — PROGRESO Y LOGROS
+  │  Visualiza su avance: barras de progreso por módulo, promedio general,
+  │  quizzes completados. Desbloquea logros (insignias) automáticos al
+  │  alcanzar hitos.
+  │
+  PASO 7 — CERTIFICADO DIGITAL
+     Al completar los 4 módulos con nota ≥7/10, el sistema genera
+     automáticamente un certificado personalizado con su nombre, fecha,
+     código de verificación único y logos institucionales (UTB, FAFI).
+
+
+7. ¿QUÉ PUEDE HACER EL ADMINISTRADOR?
+================================================================================
+
+El administrador accede a un panel de control separado con las siguientes
+funcionalidades:
+
+  DASHBOARD ESTADÍSTICO
+  - Total de estudiantes registrados
+  - Estudiantes activos (últimos 30 días)
+  - Encuestas diagnósticas completadas
+  - Certificados emitidos
+  - Total de quizzes realizados
+  - Tasa de aprobación general
+  Cada tarjeta es interactiva y redirige a la sección detallada.
+
+  GESTIÓN DE MÓDULOS Y CONTENIDOS
+  - Crear, editar, reordenar y eliminar módulos educativos
+  - Editor de contenido con texto enriquecido
+  - Selección de tipo: texto, video, imagen, ejemplo interactivo, caso real
+  - Inserción de enlaces y archivos multimedia
+
+  GESTIÓN DE PREGUNTAS DE QUIZ
+  - Crear, editar y eliminar preguntas por módulo
+  - Definir opciones, respuesta correcta y retroalimentación
+
+  GESTIÓN DE ESTUDIANTES
+  - Ver listado completo con datos de perfil y último acceso
+  - Activar/desactivar cuentas
+
+  PANEL DE ESTADÍSTICAS
+  - Distribución de niveles de conocimiento (encuesta diagnóstica)
+  - Progreso general de estudiantes por módulo
+  - Tasas de aprobación por unidad temática
+
+
+8. TECNOLOGÍAS UTILIZADAS
+================================================================================
+
+El sistema fue construido con un stack JavaScript full-stack:
+
+  FRONTEND (Lo que ve el usuario):
+  ├── React.js 19 — Framework de interfaces de usuario
+  ├── Vite 8 — Compilador/bundler ultrarrápido
+  ├── React Router DOM 7 — Navegación SPA con rutas protegidas
+  ├── Framer Motion — Animaciones fluidas de interfaz
+  ├── React Icons — Iconografía profesional SVG
+  ├── React Hot Toast — Notificaciones visuales
+  └── @react-oauth/google — Inicio de sesión con Google
+
+  BACKEND (El cerebro del sistema):
+  ├── Node.js 22 LTS — Runtime JavaScript del servidor
+  ├── Express 4 — Framework de API RESTful
+  ├── Sequelize 6 — ORM para interacción con la base de datos
+  ├── JWT + bcryptjs — Autenticación segura con tokens
+  ├── Nodemailer — Envío de correos de recuperación de contraseña
+  ├── Helmet — Protección de cabeceras HTTP
+  ├── express-rate-limit — Protección contra abuso de solicitudes
+  └── CORS — Control de origen de peticiones
+
+  BASE DE DATOS:
+  └── PostgreSQL 16 — 11 tablas relacionales con integridad referencial
+
+  INFRAESTRUCTURA DE PRODUCCIÓN:
+  ├── Ubuntu Server 24.04 LTS — Sistema operativo del servidor
+  ├── Nginx 1.24 — Servidor web y proxy inverso
+  ├── Let's Encrypt (Certbot) — Certificado SSL/HTTPS gratuito
+  ├── PM2 — Gestor de procesos con reinicio automático
+  └── GitHub — Repositorio de código fuente
+
+
+9. ¿CON QUÉ COINCIDE INSTITUCIONALMENTE?
+================================================================================
+
+PhishGuard UTB se articula con tres ejes institucionales de la UTB:
+
+  LÍNEA DE INVESTIGACIÓN:
+  "Sistemas de Información y Comunicación, Emprendimiento e Innovación"
+  → El sistema ES un sistema de información diseñado para comunicar
+    conocimiento sobre ciberseguridad de manera innovadora.
+
+  SUBLÍNEA DE INVESTIGACIÓN:
+  "Redes y Tecnologías Inteligentes de Software y Hardware"
+  → El proyecto aplica tecnologías modernas de software (React, Node.js,
+    PostgreSQL) para abordar un problema de seguridad en redes.
+
+  PROYECTO DE VINCULACIÓN CON LA SOCIEDAD:
+  "Protegiendo a la Provincia de Los Ríos de la Ingeniería Social"
+  → PhishGuard UTB es la herramienta tecnológica que materializa este
+    proyecto de vinculación, formando estudiantes que actuarán como agentes
+    multiplicadores de conocimiento en ciberseguridad en sus comunidades.
+
+
+10. RESUMEN EJECUTIVO
+================================================================================
+
+  QUÉ ES:       Plataforma web educativa de concientización sobre Ingeniería Social
+  PARA QUIÉN:   Estudiantes de Sistemas de Información de la UTB y docentes/administradores
+  QUÉ RESUELVE: La falta de formación estructurada en identificación y prevención de ataques de Ingeniería Social
+  CÓMO:         Módulos interactivos + simulaciones + quizzes + gamificación + certificado
+  TECNOLOGÍA:   React.js + Node.js + Express + PostgreSQL + Nginx en VPS
+  CONTENIDO:    4 módulos (Phishing, Pretexting, Vishing, Baiting) con 23 secciones totales y 40 preguntas de evaluación
+  SEGURIDAD:    JWT, bcrypt, Helmet, rate-limiting, HTTPS, Google OAuth
+  INNOVACIÓN:   Modo oscuro, recuperación de contraseña por email, notificaciones en tiempo real, logros gamificados
+  VINCULACIÓN:  Proyecto "Protegiendo a la Provincia de Los Ríos de la Ingeniería Social"
+  URL:          [Insertar URL del sistema desplegado en VPS]

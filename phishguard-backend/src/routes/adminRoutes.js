@@ -15,6 +15,15 @@ const {
   obtenerEvolucion,
   obtenerMejora,
 } = require('../controllers/adminController');
+const {
+  obtenerKPIs,
+  obtenerNivelConocimiento,
+  obtenerErroresAvanzados,
+  obtenerRendimiento,
+  obtenerEvolucionAprendizaje,
+  obtenerComparaciones,
+  exportarDatos,
+} = require('../controllers/analiticaController');
 const auth = require('../middlewares/auth');
 const autorizar = require('../middlewares/roles');
 
@@ -51,6 +60,7 @@ const upload = multer({
 
 router.use(auth, autorizar('admin'));
 
+// Rutas legacy (mantener compatibilidad)
 router.get('/estadisticas', obtenerEstadisticas);
 router.get('/estudiantes', listarEstudiantes);
 router.put('/usuarios/:id/toggle', toggleUsuario);
@@ -58,6 +68,15 @@ router.get('/exportar', exportarExcel);
 router.get('/analitica/errores', obtenerErrores);
 router.get('/analitica/evolucion', obtenerEvolucion);
 router.get('/analitica/mejora', obtenerMejora);
+
+// Rutas de analítica avanzada (nuevas)
+router.get('/analitica/kpis', obtenerKPIs);
+router.get('/analitica/nivel-conocimiento', obtenerNivelConocimiento);
+router.get('/analitica/errores-avanzados', obtenerErroresAvanzados);
+router.get('/analitica/rendimiento', obtenerRendimiento);
+router.get('/analitica/evolucion-aprendizaje', obtenerEvolucionAprendizaje);
+router.get('/analitica/comparaciones', obtenerComparaciones);
+router.get('/analitica/exportar', exportarDatos);
 
 // Endpoint de subida de archivos
 router.post('/subir', upload.single('archivo'), (req, res) => {

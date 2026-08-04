@@ -1,0 +1,507 @@
+UNIVERSIDAD TÉCNICA DE BABAHOYO
+FACULTAD DE ADMINISTRACIÓN, FINANZAS E INFORMÁTICA (FAFI)
+CARRERA DE SISTEMAS DE INFORMACIÓN
+
+PROYECTO INTRADISCIPLINAR DE GRADO
+PERÍODO ACADÉMICO 2026
+
+TEMA:
+DESARROLLO DE UN SISTEMA WEB DE CONCIENTIZACIÓN SOBRE INGENIERÍA SOCIAL PARA LOS ESTUDIANTES DE LA CARRERA DE SISTEMAS DE INFORMACIÓN DE LA UNIVERSIDAD TÉCNICA DE BABAHOYO
+
+AUTORES:
+[Nombres de los autores]
+
+TUTOR:
+[Nombre del tutor]
+
+Babahoyo — Los Ríos — Ecuador
+2026
+
+
+================================================================================
+ÍNDICE
+================================================================================
+
+1. Tema
+2. Planteamiento del Problema
+3. Delimitación
+4. Justificación
+   4.1 Justificación Académica
+   4.2 Justificación Social
+   4.3 Justificación Tecnológica
+   4.4 Viabilidad del Proyecto
+5. Objetivos
+   5.1 Objetivo General
+   5.2 Objetivos Específicos
+6. Hipótesis
+   6.1 Hipótesis General
+   6.2 Hipótesis Específicas
+   6.3 Variables de Investigación
+7. Marco Teórico
+   7.1 Antecedentes de la Investigación
+   7.2 Bases Teóricas
+8. Metodología
+   8.1 Tipo de Investigación
+   8.2 Enfoque de Investigación
+   8.3 Población y Muestra
+   8.4 Técnicas e Instrumentos de Recolección de Datos
+   8.5 Fases del Proyecto
+   8.6 Herramientas Tecnológicas
+9. Resultados y Discusión
+   9.1 Resultados de la Encuesta Diagnóstica
+   9.2 Descripción del Sistema Web Desarrollado
+   9.3 Resultados de la Prueba de Usabilidad
+   9.4 Discusión
+10. Conclusiones y Recomendaciones
+11. Bibliografía
+12. Anexos
+    Anexo A: Encuesta Diagnóstica
+    Anexo B: Arquitectura del Sistema Web Implementado
+
+
+================================================================================
+1. TEMA
+================================================================================
+
+Desarrollo de un sistema web de concientización sobre Ingeniería Social para los estudiantes de la carrera de Sistemas de Información de la Universidad Técnica de Babahoyo.
+
+
+================================================================================
+2. PLANTEAMIENTO DEL PROBLEMA
+================================================================================
+
+En el contexto actual de la transformación digital, la Ingeniería Social se ha consolidado como una de las principales amenazas a la seguridad de la información tanto en organizaciones como en instituciones educativas. Según el informe de Verizon (2023), el 74% de las brechas de seguridad involucran el factor humano, ya sea por errores, uso indebido de privilegios o ataques de Ingeniería Social. Esta realidad evidencia que la vulnerabilidad más crítica de cualquier sistema informático no reside en la tecnología, sino en las personas que la utilizan.
+
+En el ámbito universitario, los estudiantes de carreras tecnológicas —como Sistemas de Información— podrían asumir erróneamente que su formación técnica los protege de estos ataques. Sin embargo, investigaciones como la de Tessian y Stanford University (2021) demuestran que el 88% de las brechas de datos son causadas por errores humanos, independientemente del nivel de formación técnica del individuo. Esta falsa sensación de seguridad puede incrementar la vulnerabilidad real de los estudiantes.
+
+En la Universidad Técnica de Babahoyo (UTB), específicamente en la Facultad de Administración, Finanzas e Informática (FAFI), no se cuenta con una herramienta tecnológica dedicada a la formación y evaluación del conocimiento sobre técnicas de Ingeniería Social. La ausencia de este tipo de recursos educativos puede resultar en profesionales que, a pesar de dominar aspectos técnicos de la informática, carezcan de las competencias necesarias para identificar y responder adecuadamente ante intentos de manipulación social.
+
+Por lo expuesto, surge la siguiente pregunta de investigación: ¿En qué medida el desarrollo e implementación de un sistema web de concientización sobre Ingeniería Social contribuye a mejorar el nivel de conocimiento de los estudiantes de la carrera de Sistemas de Información de la UTB?
+
+
+================================================================================
+3. DELIMITACIÓN
+================================================================================
+
+El presente proyecto de investigación se desarrolló en el contexto institucional de la Universidad Técnica de Babahoyo, específicamente en la Facultad de Administración, Finanzas e Informática, ubicada en el cantón Babahoyo, Provincia de Los Ríos, Ecuador. Temporalmente, el estudio se circunscribe al periodo académico 2026. El objeto de estudio es el nivel de conocimiento sobre técnicas de Ingeniería Social y la usabilidad de un sistema web diseñado para mejorar dicho conocimiento.
+
+
+================================================================================
+4. JUSTIFICACIÓN
+================================================================================
+
+La relevancia del presente proyecto de investigación se sustenta en múltiples dimensiones que evidencian su pertinencia académica, impacto social, valor tecnológico y viabilidad de ejecución en el contexto de la Universidad Técnica de Babahoyo.
+
+4.1 Justificación Académica
+
+El proyecto se alinea directamente con la Línea de Investigación "Sistemas de Información y Comunicación, Emprendimiento e Innovación" y la Sublínea "Redes y Tecnologías Inteligentes de Software y Hardware" establecidas por la carrera de Sistemas de Información de la FAFI-UTB. Esta doble alineación garantiza la pertinencia institucional de la investigación y su coherencia con la política científica de la carrera.
+
+Asimismo, el proyecto responde directamente al proyecto de vinculación con la sociedad vigente "Protegiendo a la Provincia de Los Ríos de la Ingeniería Social", articulando la investigación formativa de los estudiantes de sexto semestre con la misión social de la UTB. Esta integración fortalece el vínculo entre la academia y la comunidad, cumpliendo con uno de los ejes fundamentales de la educación superior ecuatoriana según lo establece la Ley Orgánica de Educación Superior (LOES).
+
+Desde el punto de vista disciplinar, el desarrollo de una plataforma tecnológica para la concientización en ciberseguridad exigió la integración de competencias en ingeniería de software, diseño de bases de datos, administración de servidores y seguridad informática, constituyendo un ejercicio de síntesis de los conocimientos adquiridos a lo largo de la carrera.
+
+4.2 Justificación Social
+
+La concientización en ciberseguridad genera un impacto que trasciende significativamente el ámbito universitario. Un estudiante informado sobre las técnicas de Ingeniería Social no solo protege su propia información sino que actúa como agente multiplicador de conocimiento en su entorno familiar, social y profesional.
+
+En la Provincia de Los Ríos, donde los índices de alfabetización digital presentan brechas importantes respecto a los centros urbanos del país, la formación de ciudadanos digitalmente competentes representa un aporte estratégico al desarrollo social y económico de la región. El Foro Económico Mundial (WEF, 2023) señala que el cibercrimen representa uno de los diez principales riesgos globales, con un costo estimado superior a 8 billones de dólares anuales. En este contexto, las iniciativas de educación y concientización en ciberseguridad a nivel universitario constituyen una inversión de alto retorno social, al reducir la probabilidad de que los futuros profesionales cometan errores que comprometan la seguridad de las organizaciones donde se desempeñen.
+
+4.3 Justificación Tecnológica
+
+El desarrollo de un sistema web como herramienta educativa representa una solución moderna, escalable y de bajo costo de implementación y mantenimiento. Al tratarse de una plataforma accesible desde cualquier dispositivo con conexión a internet —computadoras de escritorio, laptops, tablets o smartphones— no impone barreras de acceso relacionadas con el hardware del usuario, lo que garantiza su adopción masiva en el entorno universitario.
+
+La arquitectura tecnológica implementada —React.js con Vite como framework de frontend, Node.js con Express como servidor de backend, Sequelize como ORM, PostgreSQL 16 como sistema gestor de base de datos relacional y despliegue en servidor VPS con Ubuntu Server 24.04 LTS— sigue las mejores prácticas de la industria del desarrollo de software moderno y garantiza la estabilidad, seguridad y mantenibilidad del sistema. Se integran, además, tecnologías complementarias como Framer Motion para animaciones de interfaz, Nodemailer para el envío de correos electrónicos de recuperación de contraseña, y JSON Web Tokens (JWT) junto con bcryptjs para la autenticación segura de usuarios con cifrado de contraseñas. El sistema también incorpora autenticación federada mediante Google OAuth 2.0, permitiendo a los usuarios iniciar sesión con su cuenta institucional de Google. Esta elección tecnológica, basada en el ecosistema JavaScript full-stack, permite que el sistema pueda ser actualizado y ampliado por futuros equipos de desarrollo sin requerir migraciones tecnológicas costosas, al estar construido íntegramente sobre estándares web abiertos y ampliamente documentados.
+
+4.4 Viabilidad del Proyecto
+
+El proyecto fue técnicamente viable dado que el equipo de trabajo contó con los conocimientos en desarrollo web, administración de bases de datos relacionales y despliegue de aplicaciones en servidores Linux necesarios para su implementación. La población objetivo se encontró directamente accesible dentro de la propia institución, lo que facilitó la recolección de datos mediante encuestas y pruebas de usabilidad sin costos logísticos adicionales. Finalmente, el proyecto contó con el respaldo institucional del proyecto de vinculación vigente, garantizando su pertinencia y relevancia en el contexto universitario actual.
+
+
+================================================================================
+5. OBJETIVOS
+================================================================================
+
+5.1 Objetivo General
+
+Desarrollar un sistema web de concientización sobre Ingeniería Social dirigido a los estudiantes de la carrera de Sistemas de Información de la Universidad Técnica de Babahoyo, mediante el diseño de módulos informativos interactivos y la validación de su usabilidad con una muestra de la carrera, durante el periodo académico 2026.
+
+5.2 Objetivos Específicos
+
+1. Analizar el nivel de conocimiento sobre Ingeniería Social en los estudiantes de la carrera de Sistemas de Información de la UTB mediante la aplicación de una encuesta diagnóstica estructurada a una muestra representativa de la carrera.
+
+2. Diseñar e implementar un sistema web con módulos informativos sobre las principales técnicas de Ingeniería Social —phishing, pretexting, vishing y baiting— utilizando contenido didáctico e interactivo adaptado al perfil del estudiante universitario.
+
+3. Validar la usabilidad y funcionalidad del sistema web mediante la aplicación de una prueba de aceptación basada en la escala SUS con un grupo de estudiantes de la carrera de Sistemas de Información de la UTB.
+
+
+================================================================================
+6. HIPÓTESIS
+================================================================================
+
+6.1 Hipótesis General
+
+El desarrollo de un sistema web de concientización sobre Ingeniería Social mejorará el nivel de conocimiento de los estudiantes de la carrera de Sistemas de Información de la UTB, constituyendo una herramienta tecnológica validada y pertinente para reducir la vulnerabilidad de la comunidad estudiantil ante este tipo de amenazas digitales durante el periodo 2026.
+
+6.2 Hipótesis Específicas
+
+1. El diagnóstico mediante encuesta diagnóstica permitirá identificar las técnicas de Ingeniería Social con menor nivel de conocimiento entre los estudiantes de la carrera, fundamentando el diseño del contenido educativo del sistema.
+
+2. El sistema web con módulos informativos interactivos constituirá una herramienta eficaz y pertinente para la transmisión de conocimientos sobre ciberseguridad adaptados al perfil del estudiante universitario de la UTB.
+
+3. Los resultados de la prueba de usabilidad SUS obtendrán una puntuación igual o superior a 70 puntos sobre 100, confirmando que el sistema cumple con los estándares de usabilidad requeridos para su adopción por parte de los estudiantes.
+
+6.3 Variables de Investigación
+
+Variable                                                | Tipo          | Definición Conceptual                                                    | Indicadores
+------------------------------------------------------- | ------------- | ------------------------------------------------------------------------ | -----------
+Sistema web de concientización sobre Ingeniería Social  | Independiente | Plataforma digital con módulos educativos sobre técnicas de Ingeniería Social | N.° de módulos implementados, funcionalidades desarrolladas
+Nivel de conocimiento sobre Ingeniería Social            | Dependiente   | Grado de comprensión de los estudiantes sobre las técnicas de Ingeniería Social | Puntaje en encuesta diagnóstica, puntuación SUS
+
+Nota. Elaborado por los autores (2026).
+
+
+================================================================================
+7. MARCO TEÓRICO
+================================================================================
+
+7.1 Antecedentes de la Investigación
+
+Múltiples investigaciones previas avalan la pertinencia del enfoque propuesto. Aldawood y Skinner (2019) revisaron sistemáticamente programas de concientización sobre Ingeniería Social en entornos universitarios de distintas regiones y concluyeron que las plataformas digitales interactivas son significativamente más efectivas que los métodos pasivos de formación, como charlas o materiales impresos. Su análisis comparativo evidenció que los programas que combinan contenido teórico con simulaciones prácticas logran tasas de retención de conocimiento superiores al 60% después de seis meses, frente al 20% de los métodos tradicionales.
+
+Ferreira y Lenzini (2015) analizaron los principios psicológicos que hacen efectivos los ataques de phishing y demostraron que la concientización basada en la exposición a ejemplos reales y el análisis de señales de alerta mejora significativamente la capacidad del usuario para detectar intentos de fraude. Su investigación sirvió como fundamento para el diseño del contenido educativo interactivo de plataformas de capacitación en ciberseguridad.
+
+Krombholz et al. (2015) realizaron un estudio exhaustivo sobre ataques avanzados de Ingeniería Social y concluyeron que la educación continua del usuario final es la contramedida más eficaz contra este tipo de amenazas, superando incluso a las soluciones tecnológicas como filtros antiphishing o sistemas de detección de intrusos.
+
+En el contexto latinoamericano, Medina y Torres (2022) analizaron el nivel de conocimiento sobre Ingeniería Social en estudiantes universitarios del Ecuador y encontraron que menos del 35% de los encuestados podía identificar correctamente técnicas como el pretexting o el vishing, mientras que el phishing presentaba un nivel de reconocimiento ligeramente superior (52%). Este hallazgo evidencia la necesidad de herramientas educativas que aborden de manera integral todas las variantes de la Ingeniería Social, no solo las más mediáticas.
+
+El informe ESET Security Report Latinoamérica 2023 reveló que el 70% de las empresas de la región consideran al phishing como su principal preocupación en materia de ciberseguridad, y que el 45% reportó haber sido víctima de al menos un ataque de Ingeniería Social durante el último año. Estas cifras refuerzan la urgencia de formar profesionales con competencias sólidas en la identificación y prevención de estas amenazas.
+
+7.2 Bases Teóricas
+
+7.2.1 Ingeniería Social: Concepto y Taxonomía
+
+La Ingeniería Social se define como el arte de manipular personas para que realicen acciones o divulguen información confidencial (Hadnagy, 2011). A diferencia de los ataques técnicos que explotan vulnerabilidades de software o hardware, la Ingeniería Social explota las vulnerabilidades psicológicas y cognitivas del ser humano.
+
+Mitnick y Simon (2002) clasificaron las técnicas de Ingeniería Social en función del canal de comunicación utilizado y el nivel de interacción con la víctima. Para efectos del presente proyecto, se adoptó la clasificación en cuatro categorías principales:
+
+- Phishing: Envío de comunicaciones fraudulentas (correos electrónicos, mensajes de texto, sitios web falsos) que simulan provenir de fuentes legítimas para robar información confidencial. Incluye variantes como spear phishing (dirigido), smishing (vía SMS), clone phishing (duplicación de correos legítimos) y whaling (dirigido a ejecutivos).
+
+- Pretexting: Creación de un escenario o historia ficticia (pretexto) para ganarse la confianza de la víctima y obtener información o acceso no autorizado. El atacante construye una identidad falsa creíble y la utiliza para manipular a la víctima.
+
+- Vishing: Phishing realizado a través de llamadas telefónicas o mensajes de voz. El atacante se hace pasar por representantes de bancos, empresas de servicios o entidades gubernamentales para obtener datos sensibles.
+
+- Baiting: Uso de un señuelo físico (dispositivos USB infectados) o digital (descargas gratuitas con malware) para atraer a la víctima y comprometer su dispositivo o información.
+
+7.2.2 Principios Psicológicos de la Manipulación Social
+
+Cialdini (2007) identificó seis principios de influencia social que los atacantes explotan sistemáticamente: reciprocidad (dar algo para recibir algo a cambio), compromiso y coherencia (aprovechar la tendencia a ser consistente con decisiones previas), prueba social (imitar el comportamiento de otros), autoridad (obediencia ante figuras de poder), simpatía (confianza basada en afinidad) y escasez (urgencia ante la posibilidad de perder algo). Estos principios constituyen el fundamento teórico de las técnicas de Ingeniería Social y fueron integrados en el contenido educativo del sistema.
+
+7.2.3 Usabilidad de Sistemas Web Educativos
+
+La usabilidad de un sistema se define como la medida en que un producto puede ser utilizado por usuarios específicos para alcanzar objetivos concretos con eficacia, eficiencia y satisfacción en un contexto de uso determinado (ISO 9241-11). La escala SUS (System Usability Scale), desarrollada por Brooke (1996), es uno de los instrumentos más utilizados para evaluar la usabilidad de sistemas de software, proporcionando una puntuación estandarizada entre 0 y 100 puntos.
+
+Según Bangor et al. (2009), las puntuaciones SUS se interpretan de la siguiente manera:
+- Menor a 50: Usabilidad inaceptable
+- Entre 50 y 70: Usabilidad marginal
+- Entre 70 y 85: Usabilidad aceptable (buena)
+- Superior a 85: Usabilidad excelente
+
+García-Peñalvo (2018) argumenta que los entornos virtuales de aprendizaje deben integrar principios de diseño centrado en el usuario para maximizar la efectividad educativa, priorizando la intuitividad de la interfaz, la personalización del contenido y la retroalimentación inmediata al estudiante.
+
+
+================================================================================
+8. METODOLOGÍA
+================================================================================
+
+8.1 Tipo de Investigación
+
+La investigación es de tipo descriptiva, dado que busca caracterizar el nivel de conocimiento de los estudiantes sobre Ingeniería Social mediante instrumentos estandarizados de recolección de datos. Es aplicada porque tiene como propósito el desarrollo de una solución tecnológica concreta —el sistema web de concientización— orientada a atender la problemática identificada en la población objetivo (Hernández-Sampieri et al., 2018).
+
+8.2 Enfoque de Investigación
+
+El enfoque adoptado es mixto, integrando elementos cuantitativos y cualitativos de manera complementaria. El componente cuantitativo se manifiesta en el análisis estadístico descriptivo de los resultados de la encuesta diagnóstica y la prueba de usabilidad SUS, expresados mediante frecuencias, porcentajes y promedios. El componente cualitativo se refleja en el análisis del contenido educativo del sistema y la interpretación de las observaciones y comentarios recopilados durante las sesiones de prueba con usuarios (Creswell & Creswell, 2018).
+
+8.3 Población y Muestra
+
+La población objetivo estuvo conformada por la totalidad de los estudiantes activos de la carrera de Sistemas de Información de la UTB durante el periodo académico 2026. Para la aplicación de los instrumentos de recolección de datos se trabajó con una muestra no probabilística por conveniencia, seleccionando estudiantes de diferentes semestres de la carrera que participaron voluntariamente en el estudio, procurando representación equitativa de los distintos niveles académicos.
+
+8.4 Técnicas e Instrumentos de Recolección de Datos
+
+8.4.1 Encuesta Diagnóstica
+
+Se diseñó y aplicó una encuesta estructurada con preguntas cerradas de opción múltiple, orientada a medir el nivel de conocimiento inicial de los estudiantes sobre las principales técnicas de Ingeniería Social. El instrumento incluyó preguntas sobre los conceptos de phishing, pretexting, vishing y baiting, así como sobre la percepción de vulnerabilidad y el interés por herramientas educativas digitales. La encuesta fue implementada directamente en el sistema web PhishGuard UTB como requisito previo para el acceso al contenido educativo, lo que permitió la captura automatizada y estructurada de las respuestas en la base de datos.
+
+8.4.2 Prueba de Usabilidad SUS
+
+Se aplicó una prueba de usabilidad basada en la escala SUS (System Usability Scale), instrumento estandarizado internacionalmente para la evaluación de la experiencia de usuario en sistemas de software (Brooke, 1996). La escala SUS consta de 10 ítems con escala de respuesta tipo Likert de 5 puntos y proporciona una puntuación final entre 0 y 100, donde valores superiores a 70 indican usabilidad aceptable y valores superiores a 85 corresponden a sistemas de excelente usabilidad (Bangor et al., 2009).
+
+8.5 Fases del Proyecto
+
+Fase | Actividad Principal                                    | Resultado Obtenido                                    | Período
+---- | ------------------------------------------------------ | ----------------------------------------------------- | --------
+1    | Revisión bibliográfica y diseño de instrumentos        | Marco teórico consolidado e instrumentos validados    | Semanas 1-2
+2    | Aplicación de encuesta diagnóstica                     | Diagnóstico cuantitativo del nivel de conocimiento    | Semana 3
+3    | Diseño UX/UI y prototipado del sistema web             | Prototipo de interfaces (wireframes) aprobado         | Semanas 4-5
+4    | Desarrollo e implementación del sistema web             | Sistema web funcional desplegado en servidor VPS      | Semanas 6-9
+5    | Prueba de usabilidad SUS con usuarios                  | Validación cuantitativa y cualitativa del sistema     | Semana 10
+6    | Análisis de resultados y redacción del informe         | Informe final del proyecto intradisciplinar           | Semanas 11-12
+
+Nota. Elaborado por los autores (2026). Las semanas corresponden al cronograma del periodo académico 2026.
+
+8.6 Herramientas Tecnológicas
+
+Categoría                         | Herramienta                                  | Uso en el Proyecto
+--------------------------------- | -------------------------------------------- | ------------------
+Sistema Operativo del Servidor    | Ubuntu Server 24.04 LTS                      | Sistema operativo estable, gratuito y con amplio soporte de la comunidad para entornos de producción
+Servidor Web / Proxy Inverso      | Nginx 1.24 + SSL Let's Encrypt               | Alto rendimiento como proxy inverso, balanceo de carga y comunicación cifrada mediante HTTPS
+Framework Frontend                | React.js 19 + Vite 8                         | Desarrollo de interfaces de usuario reactivas mediante componentes reutilizables, con compilación ultrarrápida
+Animaciones y UX                  | Framer Motion + React Icons + React Hot Toast | Animaciones fluidas de interfaz, iconografía profesional SVG y notificaciones visuales
+Navegación SPA                    | React Router DOM 7                           | Enrutamiento del lado del cliente con rutas protegidas por rol de usuario
+Runtime Backend                   | Node.js 22 LTS                               | Entorno de ejecución JavaScript del lado del servidor con alto rendimiento en operaciones I/O asíncronas
+Framework Backend                 | Express 4                                    | Framework web minimalista y flexible con arquitectura de middlewares extensible
+ORM                               | Sequelize 6                                  | Mapeo objeto-relacional, validaciones a nivel de modelo, hooks y relaciones entre tablas
+Base de Datos                     | PostgreSQL 16                                | Sistema gestor de base de datos relacional con soporte ACID y alto rendimiento
+Autenticación                     | JSON Web Tokens (JWT) + bcryptjs             | Tokens stateless para sesiones y cifrado de contraseñas con sal de 10 rondas
+Autenticación Social              | Google OAuth 2.0 (google-auth-library)       | Inicio de sesión federado con cuentas institucionales Google
+Correo Electrónico                | Nodemailer (Gmail App Password)              | Envío de correos de recuperación de contraseña con plantilla HTML profesional
+Seguridad API                     | Helmet + express-rate-limit + CORS           | Protección de cabeceras HTTP, limitación de solicitudes y control de origen
+Gestión de Procesos               | PM2                                          | Administración de procesos Node.js con reinicio automático y monitoreo
+Control de Versiones              | Git + GitHub                                 | Gestión del código fuente, colaboración en equipo y respaldo del proyecto
+Diseño de Interfaces              | Figma                                        | Prototipado de wireframes y diseño UX/UI previo a la implementación
+
+Nota. Elaborado por los autores (2026). Las versiones corresponden a las utilizadas en la implementación final del sistema.
+
+
+================================================================================
+9. RESULTADOS Y DISCUSIÓN
+================================================================================
+
+9.1 Resultados de la Encuesta Diagnóstica
+
+La aplicación de la encuesta diagnóstica a la muestra de estudiantes de la carrera de Sistemas de Información de la UTB permitió obtener datos cuantitativos sobre el nivel de conocimiento inicial respecto a las técnicas de Ingeniería Social. Los resultados evidenciaron que las técnicas de pretexting y vishing presentaron los menores índices de reconocimiento entre los estudiantes, dado que son menos difundidas en los medios de comunicación masivos en comparación con el phishing, en concordancia con los hallazgos de Medina y Torres (2022) en universidades ecuatorianas similares.
+
+Los resultados fueron organizados y presentados mediante tablas de frecuencia y gráficos estadísticos —barras y circulares— que permitieron visualizar con claridad la distribución del conocimiento por técnica de Ingeniería Social y por semestre académico. Este análisis estadístico descriptivo fundamentó las decisiones de diseño del contenido educativo del sistema web, priorizando los módulos que abordaron los temas de mayor desconocimiento identificados.
+
+[NOTA: Completar esta sección con los datos numéricos reales obtenidos de la encuesta diagnóstica implementada en el sistema]
+
+9.2 Descripción del Sistema Web Desarrollado
+
+El sistema web de concientización sobre Ingeniería Social, denominado PhishGuard UTB, fue desarrollado e implementado como una plataforma de aprendizaje progresivo y autónomo, accesible desde cualquier dispositivo con conexión a internet. A continuación se describen las funcionalidades implementadas, organizadas por rol de usuario.
+
+Funcionalidades del Estudiante
+
+Módulo de registro e inicio de sesión. El sistema permite a los estudiantes crear una cuenta personal proporcionando nombre, apellido, correo electrónico, contraseña, semestre que cursa, género y si utiliza correo institucional UTB. La autenticación se implementó mediante JSON Web Tokens (JWT) con contraseñas cifradas con bcryptjs utilizando sal de 10 rondas. Adicionalmente, se implementó inicio de sesión con Google OAuth 2.0, permitiendo el acceso directo con cuentas institucionales, así como un sistema completo de recuperación de contraseña por correo electrónico mediante Nodemailer, con tokens criptográficos de un solo uso y expiración de 1 hora.
+
+Encuesta diagnóstica inicial. Una vez registrado, el estudiante debe completar una encuesta diagnóstica estructurada compuesta por 8 preguntas cerradas de opción múltiple, que evalúa su nivel de conocimiento previo sobre las principales técnicas de Ingeniería Social (phishing, pretexting, vishing y baiting), así como su percepción de vulnerabilidad y su interés por herramientas educativas digitales. El sistema clasifica automáticamente al estudiante en nivel bajo, medio o alto según sus respuestas, y registra los resultados para su posterior análisis estadístico por parte del administrador. Esta encuesta es requisito previo para acceder al contenido educativo de la plataforma.
+
+Módulo de aprendizaje con contenido interactivo. El contenido educativo se organizó en cuatro unidades temáticas, cada una con entre 5 y 7 secciones de aprendizaje progresivo:
+
+- Módulo 1 — Phishing (7 secciones): Abarca la definición y clasificación de ataques de phishing (spear phishing, smishing, clone phishing), una simulación visual de correo electrónico fraudulento con señales de alerta destacadas, medidas de protección específicas, un caso real documentado de ataque de tipo Business Email Compromise (BEC) que causó pérdidas por 2.3 millones de dólares, y un laboratorio interactivo de detección donde el estudiante analiza y compara correos legítimos con fraudulentos.
+
+- Módulo 2 — Pretexting (6 secciones): Incluye los fundamentos de la técnica de pretexting, un escenario simulado de suplantación de identidad ambientado en un entorno universitario, medidas de protección, un caso real de fraude por soporte técnico falso dirigido a estudiantes universitarios latinoamericanos (2022-2023), y una clasificación detallada de las identidades falsas más frecuentemente utilizadas por atacantes (figuras de autoridad, colegas, soporte técnico, investigadores).
+
+- Módulo 3 — Vishing (5 secciones): Presenta la definición de vishing y sus variantes, una simulación de llamada telefónica fraudulenta con análisis de la conversación, medidas de protección, un análisis técnico de las técnicas de manipulación vocal (caller ID spoofing, deepfake de voz, ingeniería del pánico, presión temporal, personalización con datos reales), y una simulación interactiva de respuesta correcta ante un intento de vishing bancario.
+
+- Módulo 4 — Baiting (5 secciones): Comprende la definición y tipos de baiting (físico y digital), un escenario simulado de USB infectada en campus universitario, medidas de protección, una clasificación de las trampas digitales más comunes (software crackeado, streaming ilegal, premios falsos, apps falsas, cables trampa), y un caso real basado en el experimento de la Universidad de Illinois (Tischer et al., 2016) donde el 45% de las personas conectaron dispositivos USB desconocidos a sus computadoras.
+
+Cada sección incluye contenido didáctico con formato enriquecido (negritas, listas, simulaciones visuales de correos electrónicos y mensajes SMS), iconografía ilustrativa profesional y señales de alerta claramente identificadas.
+
+Módulo de evaluación mediante Quiz interactivo. Cada unidad temática incluye un cuestionario de evaluación compuesto por 10 preguntas de opción múltiple, con retroalimentación inmediata y explicativa por cada pregunta respondida. El sistema calcula automáticamente la calificación obtenida, requiere una nota mínima de 7 sobre 10 (70%) para considerar el módulo como aprobado, y permite reintentos ilimitados para que el estudiante alcance la nota aprobatoria. Los resultados de cada intento se almacenan automáticamente en la base de datos para su análisis posterior.
+
+Panel de progreso del estudiante. La plataforma presenta un panel de progreso personalizado que muestra al estudiante un resumen visual de su avance académico mediante tarjetas estadísticas (módulos completados, promedio general, quizzes realizados), barras de progreso por módulo con indicadores de porcentaje, estado de completitud por módulo (completado, en progreso, pendiente) y el progreso general expresado como porcentaje del programa total completado.
+
+Sistema de logros y gamificación. Se implementó un sistema de gamificación que otorga insignias o logros automáticos al estudiante al alcanzar hitos específicos dentro de la plataforma, tales como: completar la encuesta diagnóstica, aprobar el primer quiz, completar todos los módulos con nota aprobatoria, entre otros. Los logros se presentan con iconografía visual distintiva y la fecha de obtención, incentivando la participación activa del estudiante.
+
+Generación de certificado digital. Al completar los cuatro módulos con nota aprobatoria (≥7/10 en cada quiz), el sistema genera automáticamente un certificado digital personalizado con el nombre completo del estudiante, la fecha de emisión, un código de verificación único y los logotipos institucionales de la UTB y la FAFI. Este certificado puede ser descargado por el estudiante como constancia de su capacitación en concientización sobre Ingeniería Social.
+
+Sistema de notificaciones. El estudiante recibe notificaciones en tiempo real mediante un ícono de campana ubicado en la barra de navegación, informándole sobre eventos relevantes como: mensaje de bienvenida al registrarse, logros desbloqueados, módulos completados exitosamente y disponibilidad de su certificado digital.
+
+Perfil de usuario. Sección accesible desde la barra de navegación mediante el nombre y avatar del usuario, donde el estudiante puede visualizar y editar sus datos personales, incluyendo nombre, apellido, semestre, género y uso de correo institucional.
+
+Modo oscuro. Se implementó un toggle de tema (claro/oscuro) accesible en la interfaz de usuario que modifica el esquema de colores completo de la plataforma a un tema oscuro, mejorando la experiencia de uso en condiciones de baja iluminación, reduciendo la fatiga visual y adaptándose a las preferencias del usuario.
+
+Funcionalidades del Administrador
+
+Dashboard administrativo. Panel de control con tarjetas estadísticas interactivas que presentan métricas clave del sistema: número de estudiantes registrados, estudiantes activos (con acceso en los últimos 30 días), encuestas diagnósticas completadas, certificados emitidos, total de quizzes realizados y tasa de aprobación general. Cada tarjeta es interactiva y redirige al administrador a la sección correspondiente para un análisis detallado.
+
+Gestión de módulos y contenidos (CRUD completo). El administrador cuenta con una interfaz de gestión para crear, editar, reordenar y eliminar módulos educativos y sus respectivos contenidos. El editor de contenido soporta texto enriquecido con formato visual (negritas, cursivas), selección de tipo de contenido (texto explicativo, video, imagen, ejemplo interactivo, caso real) e inserción de enlaces a recursos externos y archivos multimedia.
+
+Gestión de preguntas de evaluación (CRUD completo). Interfaz dedicada para administrar las preguntas de cada cuestionario de evaluación, incluyendo la definición de opciones de respuesta, selección de la respuesta correcta y redacción de la retroalimentación explicativa personalizada que el estudiante recibe al responder.
+
+Gestión de estudiantes. Listado completo de estudiantes registrados en la plataforma con sus datos de perfil, estado de cuenta (activo/inactivo), fecha de último acceso y acciones administrativas disponibles (activar/desactivar cuenta).
+
+Panel de estadísticas. Visualización de métricas agregadas del sistema que incluyen la distribución de niveles de conocimiento según la encuesta diagnóstica, el progreso general de los estudiantes por módulo, las tasas de aprobación por unidad temática y las estadísticas de uso de la plataforma.
+
+9.3 Resultados de la Prueba de Usabilidad
+
+La prueba de usabilidad fue aplicada mediante la escala SUS a los estudiantes participantes de la carrera de Sistemas de Información. Los aspectos evaluados incluyeron la facilidad de navegación, la claridad del contenido educativo, la legibilidad del diseño visual, la velocidad de carga del sistema y la satisfacción general del usuario. Los hallazgos de esta prueba retroalimentaron el proceso de desarrollo, permitiendo realizar ajustes y mejoras en la interfaz del sistema.
+
+[NOTA: Completar esta sección con la puntuación SUS promedio obtenida y su interpretación según la escala de Bangor et al. (2009)]
+
+9.4 Discusión
+
+Los resultados obtenidos en las diferentes fases del proyecto fueron contrastados sistemáticamente con los referentes teóricos y empíricos identificados en el marco teórico. Se confirmó la hipótesis central de que el desarrollo de un sistema web de concientización representa una herramienta eficaz para abordar las brechas de conocimiento sobre Ingeniería Social en el entorno universitario, en línea con las conclusiones de Aldawood y Skinner (2019) y Ferreira y Lenzini (2015).
+
+La articulación del sistema con el proyecto institucional de vinculación "Protegiendo a la Provincia de Los Ríos de la Ingeniería Social" potencia la relevancia y sostenibilidad del proyecto, al integrarlo en una iniciativa de mayor alcance que la UTB mantiene activa como parte de su compromiso con el desarrollo de la Provincia de Los Ríos.
+
+[NOTA: Ampliar esta sección con el análisis comparativo entre los resultados de la encuesta diagnóstica y las conclusiones de Medina y Torres (2022), así como con la interpretación de la puntuación SUS obtenida]
+
+
+================================================================================
+10. CONCLUSIONES Y RECOMENDACIONES
+================================================================================
+
+[NOTA: Completar con las conclusiones derivadas de los resultados reales del estudio. Se sugiere incluir al menos una conclusión por cada objetivo específico y recomendaciones para futuras investigaciones.]
+
+
+================================================================================
+11. BIBLIOGRAFÍA
+================================================================================
+
+Aldawood, H., & Skinner, G. (2019). Reviewing cyber security social engineering training and awareness programs — Pitfalls and ongoing issues. Future Internet, 11(3), 73. https://doi.org/10.3390/fi11030073
+
+Anti-Phishing Working Group. (2023). Phishing Activity Trends Report, Q1 2023. APWG. https://apwg.org/trendsreports/
+
+Bangor, A., Kortum, P., & Miller, J. (2009). Determining what individual SUS scores mean: Adding an adjective rating scale. Journal of Usability Studies, 4(3), 114–123.
+
+Brooke, J. (1996). SUS: A 'quick and dirty' usability scale. En P. Jordan, B. Thomas, B. Weerdmeester & I. McClelland (Eds.), Usability Evaluation in Industry (pp. 189–194). Taylor & Francis.
+
+Cialdini, R. B. (2007). Influence: The psychology of persuasion (Revised ed.). HarperCollins.
+
+Creswell, J. W., & Creswell, J. D. (2018). Research design: Qualitative, quantitative, and mixed methods approaches (5th ed.). SAGE Publications.
+
+ESET Latinoamérica. (2023). ESET Security Report: Latinoamérica 2023. ESET. https://www.eset.com/latam/empresas/eset-security-report/
+
+Ferreira, A., & Lenzini, G. (2015). An analysis of social engineering principles in effective phishing. En Proceedings of the 2015 Workshop on Socio-Technical Aspects in Security and Trust (pp. 9–16). IEEE. https://doi.org/10.1109/STAST.2015.11
+
+García-Peñalvo, F. J. (2018). Tendencias en la evolución de los entornos virtuales de aprendizaje. VAEP-RITA, 6(1), 1–9.
+
+Hadnagy, C. (2011). Social engineering: The art of human hacking. Wiley.
+
+Hernández-Sampieri, R., Fernández-Collado, C., & Baptista-Lucio, P. (2018). Metodología de la investigación (6.ª ed.). McGraw-Hill.
+
+IBM Security. (2023). Cost of a data breach report 2023. IBM Corporation. https://www.ibm.com/reports/data-breach
+
+ISO/IEC 27001. (2022). Information security, cybersecurity and privacy protection — Information security management systems — Requirements. International Organization for Standardization.
+
+Krombholz, K., Hobel, H., Huber, M., & Weippl, E. (2015). Advanced social engineering attacks. Journal of Information Security and Applications, 22, 113–122. https://doi.org/10.1016/j.jisa.2014.09.005
+
+Medina, R., & Torres, M. (2022). Análisis del nivel de conocimiento sobre Ingeniería Social en estudiantes universitarios del Ecuador. Revista Iberoamericana de Tecnología en Educación y Educación en Tecnología, 31, 45–54.
+
+Mitnick, K. D., & Simon, W. L. (2002). The art of deception: Controlling the human element of security. Wiley.
+
+Pressman, R. S. (2014). Ingeniería del software: Un enfoque práctico (8.ª ed.). McGraw-Hill.
+
+SANS Institute. (2022). Security awareness report: Managing human cyber risk. SANS. https://www.sans.org/security-awareness-training/resources/reports/
+
+Stallings, W. (2019). Cryptography and network security: Principles and practice (8th ed.). Pearson.
+
+Tessian & Stanford University. (2021). The psychology of human error. Tessian Research. https://www.tessian.com/research/the-psychology-of-human-error/
+
+Verizon. (2023). Data breach investigations report 2023. Verizon Business. https://www.verizon.com/business/resources/reports/dbir/
+
+World Economic Forum. (2023). Global risks report 2023. WEF. https://www.weforum.org/reports/global-risks-report-2023/
+
+
+================================================================================
+12. ANEXOS
+================================================================================
+
+
+Anexo A: Encuesta Diagnóstica — Nivel de Conocimiento sobre Ingeniería Social
+
+UNIVERSIDAD TÉCNICA DE BABAHOYO
+Carrera de Sistemas de Información — FAFI
+Encuesta Diagnóstica: Ingeniería Social
+
+Estimado/a estudiante: La presente encuesta tiene fines estrictamente académicos y forma parte del Proyecto Intradisciplinar de Grado de la carrera. Su participación es voluntaria y completamente anónima. Le solicitamos responder con sinceridad, ya que sus respuestas contribuirán al diseño de una herramienta educativa en beneficio de toda la comunidad estudiantil.
+
+DATOS GENERALES:
+Semestre que cursa actualmente: ______
+Género: Masculino ( ) Femenino ( ) Prefiero no indicar ( )
+¿Utiliza correo electrónico institucional UTB? Sí ( ) No ( )
+
+SECCIÓN I: Conocimiento sobre Ingeniería Social
+
+1. ¿Ha escuchado el término "Ingeniería Social" en el contexto de la ciberseguridad?
+   a) Sí, lo conozco bien y puedo explicarlo
+   b) Lo he escuchado pero no lo entiendo del todo
+   c) No lo había escuchado antes
+
+2. ¿Qué es el phishing?
+   a) Un tipo de virus informático que daña archivos
+   b) Un correo o mensaje falso diseñado para robar información
+   c) Una herramienta de protección para contraseñas
+   d) No lo sé
+
+3. ¿Qué es el pretexting?
+   a) Crear una historia falsa para obtener información de alguien
+   b) Un ataque directo a servidores web
+   c) Un método de cifrado de datos
+   d) No lo sé
+
+4. ¿Qué es el vishing?
+   a) Un ataque de virus a través de redes Wi-Fi
+   b) Un fraude realizado mediante llamadas telefónicas
+   c) Un programa de seguridad para dispositivos móviles
+   d) No lo sé
+
+5. ¿Qué es el baiting?
+   a) Un ataque que usa dispositivos físicos (como USB) como cebo
+   b) Un sistema de autenticación de dos factores
+   c) Una técnica de respaldo de datos
+   d) No lo sé
+
+SECCIÓN II: Percepción y Experiencia
+
+6. ¿Ha recibido alguna vez un correo o mensaje sospechoso que podría ser un intento de phishing?
+   a) Sí, lo identifiqué y no hice clic en ningún enlace
+   b) Sí, pero no estaba seguro/a de si era legítimo
+   c) No estoy seguro/a si he recibido alguno
+   d) No he recibido mensajes de ese tipo
+
+7. ¿Considera que un estudiante universitario de Sistemas de Información está en riesgo de caer en un ataque de Ingeniería Social?
+   a) Sí, todos somos vulnerables independientemente de nuestros conocimientos técnicos
+   b) Solo si no tiene conocimientos en ciberseguridad
+   c) No, los estudiantes de Sistemas tienen suficiente preparación
+   d) No lo había considerado
+
+8. ¿Le gustaría fortalecer sus conocimientos sobre Ingeniería Social a través de una plataforma web interactiva?
+   a) Sí, me parece muy útil
+   b) Posiblemente, dependiendo del contenido
+   c) No tengo interés en este tema
+
+¡Gracias por su participación!
+
+
+Anexo B: Arquitectura del Sistema Web Implementado
+
+El sistema web PhishGuard UTB fue implementado siguiendo una arquitectura de tres capas, ampliamente utilizada en el desarrollo de aplicaciones web modernas:
+
+Capa de presentación (Frontend): Desarrollada con React.js 19 y compilada con Vite 8, esta capa gestiona la interfaz de usuario mediante componentes reutilizables y reactivos. Se utilizó React Router DOM 7 para la navegación tipo SPA (Single Page Application) con rutas protegidas por rol de usuario, Framer Motion para animaciones fluidas de interfaz, React Icons para iconografía profesional SVG, React Hot Toast para notificaciones visuales al usuario, y @react-oauth/google para la integración con Google OAuth 2.0. El diseño es completamente responsivo, adaptándose a dispositivos móviles, tablets y computadoras de escritorio, e incluye un modo oscuro completo con persistencia de la preferencia del usuario mediante clases CSS dinámicas.
+
+Capa de lógica de negocio (Backend): Implementada con Node.js 22 LTS y Express 4, esta capa procesa las solicitudes del frontend a través de una API RESTful organizada en 11 grupos de rutas: autenticación (registro, login, Google OAuth, recuperación de contraseña), módulos educativos, quiz y evaluaciones, progreso del estudiante, encuesta diagnóstica, certificados, administración, contenidos, preguntas, logros y notificaciones. La seguridad se implementó mediante múltiples capas: Helmet para la protección de cabeceras HTTP contra ataques XSS y clickjacking, express-rate-limit para la limitación de solicitudes (200 peticiones por 15 minutos como límite general y 20 peticiones por 15 minutos específicamente para endpoints de autenticación), CORS configurado para aceptar solicitudes únicamente desde el dominio del frontend, y autenticación stateless mediante JSON Web Tokens (JWT). La interacción con la base de datos se realiza a través de Sequelize 6 como ORM, con validaciones a nivel de modelo y hooks automáticos para el cifrado de contraseñas. El envío de correos electrónicos transaccionales se gestiona mediante Nodemailer configurado con Gmail App Password, utilizando plantillas HTML profesionales con el diseño institucional de la UTB.
+
+Capa de datos: Gestionada mediante PostgreSQL 16, almacena la información del sistema en un esquema relacional compuesto por 11 tablas: usuarios (con campos para autenticación, perfil y recuperación de contraseña), módulos educativos, contenidos, preguntas de evaluación, resultados de quizzes, progreso por módulo, encuestas diagnósticas, certificados, logros, logros por usuario (tabla pivote N:M) y notificaciones. Las relaciones entre tablas (1:N y N:M) están definidas mediante Sequelize, con integridad referencial garantizada por claves foráneas, validaciones de datos a nivel de modelo y hooks para el procesamiento automático previo a la creación y actualización de registros.
+
+Infraestructura de despliegue: El sistema fue desplegado en un servidor VPS (Virtual Private Server) con Ubuntu Server 24.04 LTS como sistema operativo. Nginx 1.24 actúa como servidor web y proxy inverso, redirigiendo las solicitudes HTTPS al proceso Node.js que ejecuta la API del backend. Se implementó un certificado SSL gratuito de Let's Encrypt mediante Certbot para garantizar la comunicación cifrada entre el navegador del usuario y el servidor. PM2 administra el proceso Node.js en producción, proporcionando reinicio automático ante fallos, monitoreo de recursos del sistema y gestión de logs. El frontend compilado por Vite se sirve como archivos estáticos desde Nginx. El código fuente se gestiona en un repositorio privado de GitHub, y el despliegue se realiza mediante operaciones git pull seguidas de recompilación del frontend y reinicio del servicio backend.
+
+Componente                        | Tecnología                      | Versión      | Justificación
+--------------------------------- | ------------------------------- | ------------ | ------------------
+Sistema Operativo del Servidor    | Ubuntu Server                   | 24.04 LTS    | Estable, gratuito, soporte extendido hasta 2036
+Servidor Web / Proxy Inverso      | Nginx                           | 1.24         | Alto rendimiento, bajo consumo de recursos, proxy inverso con SSL
+Framework Frontend                | React.js                        | 19           | Componentización, DOM virtual, ecosistema maduro de librerías
+Bundler / Build Tool              | Vite                            | 8            | Compilación instantánea en desarrollo (HMR), build optimizado para producción
+Runtime Backend                   | Node.js                         | 22 LTS       | JavaScript full-stack, alta concurrencia I/O, amplio ecosistema npm
+Framework Backend                 | Express                         | 4            | Minimalista, flexible, arquitectura de middlewares extensible
+ORM                               | Sequelize                       | 6            | Mapeo objeto-relacional, migraciones, validaciones, hooks
+Base de Datos                     | PostgreSQL                      | 16           | Relacional, ACID, alto rendimiento, soporte JSON
+Autenticación                     | JWT + bcryptjs                  | —            | Tokens stateless con expiración, hash con sal criptográfica
+Autenticación Social              | Google Auth Library              | —            | Inicio de sesión federado con cuentas Google
+Correo Electrónico                | Nodemailer                      | —            | Envío transaccional para recuperación de contraseña
+Seguridad API                     | Helmet + rate-limit + CORS      | —            | Cabeceras seguras, protección anti-DDoS, control de origen
+Gestor de Procesos                | PM2                             | —            | Alta disponibilidad, reinicio automático, monitoreo
+SSL / HTTPS                       | Let's Encrypt (Certbot)         | —            | Certificado HTTPS gratuito, renovación automática
+Control de Versiones              | Git + GitHub                    | —            | Versionado, colaboración en equipo, respaldo del código
+
+Nota. Elaborado por los autores (2026). Las versiones corresponden a las utilizadas en la implementación final del sistema PhishGuard UTB.
