@@ -54,25 +54,55 @@ const fmtTime = (seg) => {
 // COMPONENTES AUXILIARES
 // ============================================================
 
-/** Tarjeta KPI */
-const KPICard = ({ icon: Icon, label, value, sub, color = COLORS.primary, delay = 0 }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay }}
-    className="card" style={{ padding: '18px 20px', display: 'flex', alignItems: 'center', gap: '14px' }}
-  >
-    <div style={{
-      width: 44, height: 44, borderRadius: 10, background: color + '15',
-      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-    }}>
-      <Icon size={20} color={color} />
-    </div>
-    <div style={{ minWidth: 0 }}>
-      <div style={{ fontSize: '0.78rem', color: 'var(--texto-terciario)', whiteSpace: 'nowrap' }}>{label}</div>
-      <div style={{ fontSize: '1.5rem', fontWeight: 800, color, lineHeight: 1.2 }}>{value}</div>
-      {sub && <div style={{ fontSize: '0.72rem', color: 'var(--texto-terciario)', marginTop: 2 }}>{sub}</div>}
-    </div>
-  </motion.div>
-);
+/** Hook: contador animado */
+const useAnimatedCount = (target, duration = 1200) => {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    if (target === undefined || target === null) return;
+    const num = typeof target === 'string' ? parseFloat(target.replace(/[^0-9.-]/g, '')) : target;
+    if (isNaN(num) || num === 0) { setCount(0); return; }
+    const start = performance.now();
+    const step = (now) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+      setCount(Math.round(eased * num));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [target, duration]);
+  return count;
+};
+
+/** Tarjeta KPI con contador animado */
+const KPICard = ({ icon: Icon, label, value, sub, color = COLORS.primary, delay = 0 }) => {
+  const isStr = typeof value === 'string';
+  const numericVal = isStr ? parseFloat(value.replace(/[^0-9.-]/g, '')) : value;
+  const suffix = isStr ? value.replace(/[0-9.-]/g, '') : '';
+  const animated = useAnimatedCount(numericVal);
+  const displayVal = isNaN(numericVal) ? value : `${animated}${suffix}`;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ delay, type: 'spring', stiffness: 200, damping: 20 }}
+      whileHover={{ y: -3, boxShadow: '0 8px 25px rgba(0,0,0,0.1)' }}
+      className="card" style={{ padding: '18px 20px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'default', transition: 'box-shadow 0.2s' }}
+    >
+      <div style={{
+        width: 46, height: 46, borderRadius: 12, background: `linear-gradient(135deg, ${color}20, ${color}10)`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+        border: `1px solid ${color}20`,
+      }}>
+        <Icon size={20} color={color} />
+      </div>
+      <div style={{ minWidth: 0 }}>
+        <div style={{ fontSize: '0.78rem', color: 'var(--texto-terciario)', whiteSpace: 'nowrap' }}>{label}</div>
+        <div style={{ fontSize: '1.6rem', fontWeight: 800, color, lineHeight: 1.2 }}>{displayVal}</div>
+        {sub && <div style={{ fontSize: '0.72rem', color: 'var(--texto-terciario)', marginTop: 2 }}>{sub}</div>}
+      </div>
+    </motion.div>
+  );
+};
 
 /** Barra de filtros */
 const FilterBar = ({ filters, values, onChange }) => (
@@ -293,12 +323,12 @@ const AdminEstadisticas = () => {
   };
 
   const tabs = [
-    { id: 'dashboard', label: 'Dashboard', icon: <FiActivity /> },
-    { id: 'nivel', label: 'Nivel de Conocimiento', icon: <FiTarget /> },
-    { id: 'rendimiento', label: 'Reportes Avanzados', icon: <FiBarChart2 /> },
-    { id: 'errores', label: 'Errores Frecuentes', icon: <FiAlertTriangle /> },
-    { id: 'evolucion', label: 'Evolución', icon: <FiTrendingUp /> },
-    { id: 'comparaciones', label: 'Comparaciones', icon: <FiLayers /> },
+    { id: 'dashboard', label: 'Resumen General', icon: <FiActivity /> },
+    { id: 'nivel', label: 'Nivel Inicial', icon: <FiTarget /> },
+    { id: 'rendimiento', label: 'Rendimiento', icon: <FiBarChart2 /> },
+    { id: 'errores', label: 'Errores', icon: <FiAlertTriangle /> },
+    { id: 'evolucion', label: 'Progreso', icon: <FiTrendingUp /> },
+    { id: 'comparaciones', label: 'Comparar', icon: <FiLayers /> },
   ];
 
   // Filtro options
@@ -337,17 +367,11 @@ const AdminEstadisticas = () => {
 
     const kpiCards = [
       { icon: FiUsers, label: 'Total Estudiantes', value: kpis.totalEstudiantes, color: COLORS.primary },
-      { icon: FiCheckCircle, label: 'Estudiantes Activos', value: kpis.estudiantesActivos, color: COLORS.success },
-      { icon: FiXCircle, label: 'Estudiantes Inactivos', value: kpis.estudiantesInactivos, color: COLORS.danger },
-      { icon: FiBookOpen, label: 'Total Evaluaciones', value: kpis.totalEvaluaciones, color: COLORS.secondary },
-      { icon: FiPercent, label: '% Aprobación', value: `${kpis.tasaAprobacion}%`, color: kpis.tasaAprobacion >= 70 ? COLORS.success : COLORS.warning },
-      { icon: FiTarget, label: 'Promedio General', value: `${kpis.promedioGeneral}%`, sub: kpis.nivelPromedio, color: COLORS.primary },
-      { icon: FiClock, label: 'Tiempo Promedio', value: fmtTime(kpis.tiempoPromedio), color: COLORS.purple },
-      { icon: FiHash, label: 'Intentos Promedio', value: kpis.intentosPromedio, color: COLORS.orange },
-      { icon: FiAward, label: 'Certificados', value: kpis.certificadosEmitidos, color: COLORS.teal },
-      { icon: FiActivity, label: 'Progreso del Curso', value: `${kpis.progresoCurso}%`, color: COLORS.indigo },
-      { icon: FiArrowUp, label: 'Mejor Módulo', value: kpis.mejorModulo?.titulo?.split(' ')[0] || 'N/A', sub: kpis.mejorModulo ? `${kpis.mejorModulo.promedio}%` : '', color: COLORS.success },
-      { icon: FiArrowDown, label: 'Peor Módulo', value: kpis.peorModulo?.titulo?.split(' ')[0] || 'N/A', sub: kpis.peorModulo ? `${kpis.peorModulo.promedio}%` : '', color: COLORS.danger },
+      { icon: FiCheckCircle, label: 'Aprobación General', value: `${kpis.tasaAprobacion}%`, color: kpis.tasaAprobacion >= 70 ? COLORS.success : COLORS.warning },
+      { icon: FiTarget, label: 'Promedio General', value: `${kpis.promedioGeneral}%`, sub: `Nivel: ${kpis.nivelPromedio}`, color: COLORS.primary },
+      { icon: FiBookOpen, label: 'Evaluaciones Realizadas', value: kpis.totalEvaluaciones, color: COLORS.secondary },
+      { icon: FiAward, label: 'Certificados Emitidos', value: kpis.certificadosEmitidos, color: COLORS.teal },
+      { icon: FiActivity, label: 'Avance del Curso', value: `${kpis.progresoCurso}%`, color: COLORS.indigo },
     ];
 
     // Charts data
@@ -964,10 +988,10 @@ const AdminEstadisticas = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: '24px' }}>
           <h1 style={{ marginBottom: '6px' }}>
             <FiBarChart2 size={24} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
-            Estadísticas Avanzadas
+            Estadísticas y Reportes
           </h1>
           <p style={{ color: 'var(--texto-terciario)', fontSize: '0.9rem' }}>
-            Panel de inteligencia académica — Learning Analytics & Business Intelligence
+            Analiza el rendimiento y progreso de los estudiantes en la plataforma
           </p>
         </motion.div>
 
