@@ -28,6 +28,7 @@ import Certificado from './pages/Certificado';
 import Logros from './pages/Logros';
 import MiPerfil from './pages/MiPerfil';
 import EvaluacionFinal from './pages/EvaluacionFinal';
+import Simulador from './pages/Simulador';
 
 // Paginas de admin
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -73,6 +74,7 @@ const AppContent = () => {
         <Route path="/logros" element={<ProtectedRoute><Logros /></ProtectedRoute>} />
         <Route path="/mi-perfil" element={<ProtectedRoute><MiPerfil /></ProtectedRoute>} />
         <Route path="/evaluacion-final" element={<ProtectedRoute><EvaluacionFinal /></ProtectedRoute>} />
+        <Route path="/simulador" element={<ProtectedRoute><Simulador /></ProtectedRoute>} />
 
         {/* Rutas de admin */}
         <Route path="/admin" element={<ProtectedRoute requiereAdmin><AdminDashboard /></ProtectedRoute>} />

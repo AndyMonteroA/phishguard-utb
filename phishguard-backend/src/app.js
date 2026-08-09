@@ -71,6 +71,7 @@ app.use('/api/preguntas', require('./routes/preguntaRoutes'));
 app.use('/api/logros', require('./routes/logroRoutes'));
 app.use('/api/notificaciones', require('./routes/notificacionRoutes'));
 app.use('/api/evaluacion-final', require('./routes/evaluacionFinalRoutes'));
+app.use('/api/simulador', require('./routes/simuladorRoutes'));
 
 app.get('/api/health', (req, res) => {
   res.json({
