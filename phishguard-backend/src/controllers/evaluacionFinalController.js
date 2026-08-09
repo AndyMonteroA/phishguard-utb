@@ -49,7 +49,6 @@ const obtenerEvaluacionFinal = async (req, res) => {
     }
 
     // 1. Buscar si hay preguntas exclusivas para "Evaluación Final"
-    const moduloEvaluacion = await Modulo.findOne({ where: { titulo: 'Evaluación Final' } });
     let preguntasSeleccionadas = [];
     
     if (moduloEvaluacion) {
