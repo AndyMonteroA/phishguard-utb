@@ -526,9 +526,10 @@ const AdminEstadisticas = () => {
             {/* Análisis por pregunta de la encuesta diagnóstica */}
             {nivelData.analisisPorPregunta && nivelData.analisisPorPregunta.length > 0 && (
               <div className="card" style={{ padding: '20px', marginTop: '20px' }}>
-                <SectionHeader title="Análisis por Pregunta de la Encuesta Diagnóstica" />
+                <SectionHeader title="Resultados por Pregunta — Prueba Diagnóstica" />
                 <p style={{ fontSize: '0.82rem', color: 'var(--texto-terciario)', marginBottom: 16 }}>
-                  Detalle de aciertos y errores en cada pregunta de la encuesta inicial
+                  Muestra cuántos estudiantes respondieron correcta o incorrectamente cada pregunta de la encuesta inicial, 
+                  junto con la respuesta esperada y la respuesta incorrecta que más seleccionaron.
                 </p>
                 <div style={{ overflowX: 'auto' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem' }}>
@@ -536,11 +537,11 @@ const AdminEstadisticas = () => {
                       <tr style={{ borderBottom: '2px solid var(--gris-medio)' }}>
                         <th style={{ padding: '10px', textAlign: 'left' }}>#</th>
                         <th style={{ padding: '10px', textAlign: 'left', minWidth: 220 }}>Pregunta</th>
-                        <th style={{ padding: '10px', textAlign: 'center' }}>Aciertos</th>
-                        <th style={{ padding: '10px', textAlign: 'center' }}>Errores</th>
-                        <th style={{ padding: '10px', textAlign: 'center' }}>% Acierto</th>
-                        <th style={{ padding: '10px', textAlign: 'left', minWidth: 180 }}>Respuesta Correcta</th>
-                        <th style={{ padding: '10px', textAlign: 'left', minWidth: 180 }}>Error Más Común</th>
+                        <th style={{ padding: '10px', textAlign: 'center' }}>Correctas</th>
+                        <th style={{ padding: '10px', textAlign: 'center' }}>Incorrectas</th>
+                        <th style={{ padding: '10px', textAlign: 'center' }}>% Correctas</th>
+                        <th style={{ padding: '10px', textAlign: 'left', minWidth: 180 }}>Respuesta Esperada</th>
+                        <th style={{ padding: '10px', textAlign: 'left', minWidth: 180 }}>Respuesta Incorrecta Más Frecuente</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -559,7 +560,7 @@ const AdminEstadisticas = () => {
                           <td style={{ padding: '10px', color: COLORS.danger, fontSize: '0.8rem' }}>
                             {p.error_mas_comun !== 'N/A' ? p.error_mas_comun : '—'}
                             {p.error_mas_comun_count > 0 && (
-                              <span style={{ color: 'var(--texto-terciario)', marginLeft: 4 }}>({p.error_mas_comun_count})</span>
+                              <span style={{ color: 'var(--texto-terciario)', marginLeft: 4 }}>({p.error_mas_comun_count} estudiantes)</span>
                             )}
                           </td>
                         </tr>
