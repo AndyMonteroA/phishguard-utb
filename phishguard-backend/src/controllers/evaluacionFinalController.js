@@ -149,7 +149,7 @@ const enviarEvaluacionFinal = async (req, res) => {
     // Guardar resultado de evaluación final
     await ResultadoQuiz.create({
       usuario_id: usuarioId,
-      modulo_id: 0, // Mantenemos 0 para reportes globales si se quiere, o usamos moduloIdFinal
+      modulo_id: moduloIdFinal, // Usar el ID real del módulo en lugar de 0 para evitar errores de Foreign Key
       puntaje,
       total_preguntas: totalPreguntas,
       respuestas: resultadosDetallados,
