@@ -82,7 +82,7 @@ const Registro = () => {
       toast.success('Cuenta creada con Google');
       window.location.href = usuario.encuesta_completada ? '/dashboard' : '/encuesta';
     } catch (error) {
-      toast.error('Error al registrar con Google');
+      toast.error(error.response?.data?.message || 'Error al registrar con Google');
     }
   };
 

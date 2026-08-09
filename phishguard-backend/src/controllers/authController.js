@@ -226,7 +226,7 @@ const loginGoogle = async (req, res) => {
     console.error('Error en login Google:', error);
     res.status(401).json({
       success: false,
-      message: 'Error al verificar credenciales de Google.',
+      message: 'Error al verificar credenciales de Google: ' + (error.message || 'Error desconocido'),
     });
   }
 };

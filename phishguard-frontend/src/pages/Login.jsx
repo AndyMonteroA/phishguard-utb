@@ -52,7 +52,7 @@ const Login = () => {
       toast.success('Sesion iniciada con Google');
       window.location.href = usuario.encuesta_completada ? '/dashboard' : '/encuesta';
     } catch (error) {
-      toast.error('Error al iniciar con Google');
+      toast.error(error.response?.data?.message || 'Error al iniciar con Google');
     }
   };
 
