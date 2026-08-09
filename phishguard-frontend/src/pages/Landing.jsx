@@ -2,9 +2,11 @@
 // PhishGuard UTB - Pagina: Landing (Inicio)
 // ============================================================
 
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiShield, FiAward, FiBarChart2, FiBookOpen, FiCheckCircle, FiMail, FiUsers, FiPhone, FiHardDrive } from 'react-icons/fi';
+import { FiShield, FiAward, FiBarChart2, FiBookOpen, FiCheckCircle, FiMail, FiUsers, FiPhone, FiHardDrive, FiClipboard } from 'react-icons/fi';
+import api from '../services/api';
 
 const stats = [
   { valor: '95%', desc: 'de ciberataques inician por error humano', fuente: 'IBM, 2023' },
@@ -28,6 +30,19 @@ const features = [
 ];
 
 const Landing = () => {
+  const [platformStats, setPlatformStats] = useState(null);
+
+  useEffect(() => {
+    document.title = 'PhishGuard UTB — Plataforma de Concientización sobre Ingeniería Social';
+    const cargar = async () => {
+      try {
+        const res = await api.get('/public/stats');
+        setPlatformStats(res.data.data);
+      } catch (e) { /* silently fail */ }
+    };
+    cargar();
+  }, []);
+
   return (
     <div>
       {/* HERO */}
@@ -185,6 +200,35 @@ const Landing = () => {
           </div>
         </div>
       </section>
+
+      {/* ESTADÍSTICAS DE LA PLATAFORMA */}
+      {platformStats && (platformStats.estudiantes > 0 || platformStats.certificados > 0) && (
+        <section style={{ background: 'var(--gradiente-hero)', padding: '60px 0' }}>
+          <div className="container">
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+              style={{ textAlign: 'center', marginBottom: '36px' }}>
+              <h2 style={{ color: '#fff', marginBottom: '8px' }}>Nuestra Comunidad</h2>
+              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.95rem' }}>Estudiantes capacitándose en ciberseguridad</p>
+            </motion.div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '20px', maxWidth: '700px', margin: '0 auto' }}>
+              {[
+                { icon: <FiUsers />, valor: platformStats.estudiantes, label: 'Estudiantes Activos' },
+                { icon: <FiClipboard />, valor: platformStats.encuestas, label: 'Encuestas Realizadas' },
+                { icon: <FiCheckCircle />, valor: platformStats.quizzes, label: 'Quizzes Completados' },
+                { icon: <FiAward />, valor: platformStats.certificados, label: 'Certificados Emitidos' },
+              ].map((s, i) => (
+                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  style={{ textAlign: 'center', padding: '24px', background: 'rgba(255,255,255,0.08)', borderRadius: 'var(--radio-lg)', backdropFilter: 'blur(10px)' }}>
+                  <div style={{ color: '#5BA4E6', fontSize: '1.3rem', marginBottom: '8px' }}>{s.icon}</div>
+                  <div style={{ fontSize: '2rem', fontWeight: 800, color: '#fff', marginBottom: '4px' }}>{s.valor}</div>
+                  <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)' }}>{s.label}</div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CTA */}
       <section style={{ background: 'var(--gradiente-azul)', padding: '80px 0', textAlign: 'center' }}>

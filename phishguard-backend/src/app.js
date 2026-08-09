@@ -81,6 +81,23 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Estadísticas públicas para Landing (sin autenticación)
+app.get('/api/public/stats', async (req, res) => {
+  try {
+    const { Usuario, Certificado, ResultadoQuiz, EncuestaDiagnostica } = require('./models');
+    const totalEstudiantes = await Usuario.count({ where: { rol: 'estudiante', activo: true } });
+    const certificados = await Certificado.count();
+    const quizzesCompletados = await ResultadoQuiz.count();
+    const encuestas = await EncuestaDiagnostica.count();
+    res.json({
+      success: true,
+      data: { estudiantes: totalEstudiantes, certificados, quizzes: quizzesCompletados, encuestas },
+    });
+  } catch (err) {
+    res.json({ success: true, data: { estudiantes: 0, certificados: 0, quizzes: 0, encuestas: 0 } });
+  }
+});
+
 // ============================================================
 // MANEJO DE ERRORES
 // ============================================================
