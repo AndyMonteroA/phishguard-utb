@@ -27,8 +27,10 @@ const obtenerEvaluacionFinal = async (req, res) => {
     }
 
     // Verificar si ya aprobó la evaluación final
+    const moduloEvaluacion = await Modulo.findOne({ where: { titulo: 'Evaluación Final' } });
+    const moduloIdFinal = moduloEvaluacion ? moduloEvaluacion.id : 0;
     const yaAprobada = await ResultadoQuiz.findOne({
-      where: { usuario_id: usuarioId, modulo_id: 0, aprobado: true },
+      where: { usuario_id: usuarioId, modulo_id: { [Op.in]: [0, moduloIdFinal] }, aprobado: true },
     });
 
     if (yaAprobada) {

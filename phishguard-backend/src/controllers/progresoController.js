@@ -10,7 +10,7 @@ const obtenerProgreso = async (req, res) => {
     const usuarioId = req.usuarioId;
 
     const modulos = await Modulo.findAll({
-      where: { activo: true },
+      where: { activo: true, titulo: { [require('sequelize').Op.ne]: 'Evaluación Final' } },
       order: [['orden', 'ASC']],
       include: [
         {

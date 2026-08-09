@@ -24,8 +24,14 @@ const generarCertificado = async (req, res) => {
       });
     }
 
-    // Verificar que completó todos los módulos
-    const totalModulos = await Modulo.count({ where: { activo: true } });
+    // Verificar que completó todos los módulos de aprendizaje (excluyendo Evaluación Final)
+    const moduloEvaluacion = await Modulo.findOne({ where: { titulo: 'Evaluación Final' } });
+    const excludeIds = moduloEvaluacion ? [moduloEvaluacion.id] : [];
+    
+    const { Op } = require('sequelize');
+    const totalModulos = await Modulo.count({ 
+      where: { activo: true, id: { [Op.notIn]: excludeIds } } 
+    });
     const modulosCompletados = await ProgresoModulo.count({
       where: { usuario_id: usuarioId, completado: true },
     });
@@ -34,6 +40,19 @@ const generarCertificado = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: `Debes completar todos los módulos. Progreso: ${modulosCompletados}/${totalModulos}`,
+      });
+    }
+
+    // Verificar que aprobó la evaluación final
+    const moduloIdFinal = moduloEvaluacion ? moduloEvaluacion.id : 0;
+    const evaluacionAprobada = await ResultadoQuiz.findOne({
+      where: { usuario_id: usuarioId, modulo_id: { [Op.in]: [0, moduloIdFinal] }, aprobado: true }
+    });
+
+    if (!evaluacionAprobada) {
+      return res.status(400).json({
+        success: false,
+        message: 'Debes aprobar la evaluación final antes de generar tu certificado.',
       });
     }
 
