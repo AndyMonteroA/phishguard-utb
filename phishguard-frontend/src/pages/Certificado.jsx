@@ -12,7 +12,6 @@ import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import utbLogo from '../assets/utb-logo.png';
 import fafiLogo from '../assets/fafi-logo.png';
-import csiLogo from '../assets/csi-logo.jpg';
 
 const Certificado = () => {
   const { usuario } = useAuth();
@@ -141,7 +140,28 @@ const Certificado = () => {
                     </div>
 
                     <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      <img src={csiLogo} alt="CSI" style={{ height: '60px', marginBottom: '10px', objectFit: 'contain' }} />
+                      {/* Sello de Excelencia Dorado */}
+                      <div style={{
+                        width: '75px', height: '75px',
+                        background: 'linear-gradient(135deg, #F1C40F, #E67E22)',
+                        borderRadius: '50%',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        border: '3px solid #FFF',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.15), inset 0 0 10px rgba(255,255,255,0.4)',
+                        position: 'relative',
+                        marginBottom: '12px'
+                      }}>
+                        <div style={{
+                          position: 'absolute', width: '85%', height: '85%',
+                          border: '1.5px dashed rgba(255,255,255,0.6)',
+                          borderRadius: '50%'
+                        }}></div>
+                        <div style={{ color: 'white', fontFamily: 'Georgia, serif', textAlign: 'center', lineHeight: '1', zIndex: 1, textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>
+                          <span style={{ fontSize: '1.2rem', fontWeight: '900' }}>100%</span>
+                          <br />
+                          <span style={{ fontSize: '0.55rem', fontWeight: 'bold', letterSpacing: '1px' }}>APROBADO</span>
+                        </div>
+                      </div>
                       <div style={{ background: 'rgba(243, 156, 18, 0.1)', padding: '5px 15px', borderRadius: '20px', border: '1px solid #F39C12' }}>
                         <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#F39C12', letterSpacing: '1px' }}>APROBADO</span>
                       </div>
