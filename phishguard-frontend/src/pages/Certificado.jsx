@@ -117,11 +117,11 @@ const Certificado = () => {
                     <img src={fafiLogo} alt="FAFI" style={{ height: '70px', objectFit: 'contain' }} />
                   </div>
 
-                  <p style={{ fontSize: '1.2rem', color: '#555', marginBottom: '25px', fontFamily: 'Arial, sans-serif' }}>
+                  <p style={{ fontSize: '1.2rem', color: '#555', marginBottom: '35px', fontFamily: 'Arial, sans-serif' }}>
                     La plataforma educativa PhishGuard UTB certifica que
                   </p>
 
-                  <h2 style={{ fontSize: '2.8rem', color: '#222', marginBottom: '10px', fontFamily: 'Georgia, serif', borderBottom: '2px solid #222', display: 'inline-block', paddingBottom: '5px' }}>
+                  <h2 style={{ fontSize: '3.2rem', color: '#222', marginBottom: '15px', fontFamily: '"Brush Script MT", cursive', borderBottom: '2px solid #222', display: 'inline-block', paddingBottom: '10px' }}>
                     {usuario?.nombre} {usuario?.apellido}
                   </h2>
 
