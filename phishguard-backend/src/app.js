@@ -139,6 +139,25 @@ const startServer = async () => {
     });
     console.log('[OK] Banco de Evaluación Final garantizado en DB');
 
+    // Asegurar que existan los logros predefinidos
+    const { Logro } = require('./models');
+    const logrosBase = [
+      { titulo: 'Primer Paso', descripcion: 'Completaste la encuesta diagnóstica', icono: 'FiClipboard', color: '#3498DB', condicion: 'encuesta_completada', valor_requerido: 1 },
+      { titulo: 'Aprendiz', descripcion: 'Completaste tu primer módulo de aprendizaje', icono: 'FiBookOpen', color: '#27AE60', condicion: 'primer_modulo', valor_requerido: 1 },
+      { titulo: 'Evaluador', descripcion: 'Aprobaste tu primer quiz de evaluación', icono: 'FiCheckCircle', color: '#2ECC71', condicion: 'primer_quiz', valor_requerido: 1 },
+      { titulo: 'Perfeccionista', descripcion: 'Obtuviste puntaje perfecto en un quiz', icono: 'FiStar', color: '#F39C12', condicion: 'quiz_perfecto', valor_requerido: 1 },
+      { titulo: 'Experto en Seguridad', descripcion: 'Completaste todos los módulos del curso', icono: 'FiShield', color: '#9B59B6', condicion: 'todos_modulos', valor_requerido: 1 },
+      { titulo: 'Certificado', descripcion: 'Obtuviste tu certificado de concientización', icono: 'FiAward', color: '#E67E22', condicion: 'certificado', valor_requerido: 1 },
+      { titulo: 'Maestro Anti-Phishing', descripcion: 'Aprobaste todos los quizzes con 90% o más', icono: 'FiZap', color: '#E74C3C', condicion: 'quizzes_90', valor_requerido: 1 },
+    ];
+    for (const logro of logrosBase) {
+      await Logro.findOrCreate({
+        where: { condicion: logro.condicion },
+        defaults: logro,
+      });
+    }
+    console.log('[OK] Logros predefinidos garantizados en DB');
+
     app.listen(env.PORT, () => {
       console.log(`
 ========================================

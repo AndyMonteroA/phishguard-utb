@@ -7,7 +7,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { FiAward, FiDownload, FiCheckCircle, FiBookOpen, FiLock } from 'react-icons/fi';
+import { FiAward, FiDownload, FiCheckCircle, FiBookOpen, FiLock, FiShield } from 'react-icons/fi';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
@@ -22,7 +22,7 @@ const Certificado = () => {
   useEffect(() => {
     const cargar = async () => {
       try {
-        const [certRes, progRes] = await Promise.all([api.get('/certificado').catch(() => null), api.get('/progreso')]);
+        const [certRes, progRes] = await Promise.all([api.get('/certificado/mi-certificado').catch(() => null), api.get('/progreso')]);
         if (certRes?.data?.data?.certificado) setCertificado(certRes.data.data.certificado);
         setProgreso(progRes.data.data);
       } catch (err) { console.error(err); }

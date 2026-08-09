@@ -17,7 +17,7 @@ const Notificacion = sequelize.define('notificaciones', {
     references: { model: 'usuarios', key: 'id' },
   },
   tipo: {
-    type: DataTypes.ENUM('logro', 'quiz', 'modulo', 'sistema'),
+    type: DataTypes.ENUM('logro', 'quiz', 'modulo', 'sistema', 'evaluacion'),
     defaultValue: 'sistema',
     allowNull: false,
   },
