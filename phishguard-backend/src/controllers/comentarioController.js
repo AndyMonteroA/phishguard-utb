@@ -2,7 +2,8 @@
 // PhishGuard UTB - Controlador: Comentarios (Foro)
 // ============================================================
 
-const { Comentario, Usuario } = require('../models');
+const { Comentario, Usuario, Notificacion, Modulo } = require('../models');
+const { crearNotificacion } = require('./notificacionController');
 
 // GET /api/modulos/:moduloId/comentarios
 const listarComentarios = async (req, res) => {
@@ -46,6 +47,23 @@ const crearComentario = async (req, res) => {
         { model: Usuario, as: 'usuario', attributes: ['id', 'nombre', 'rol'] }
       ]
     });
+
+    // Notificar a los administradores si el que comenta es un estudiante
+    if (comentarioConUsuario.usuario.rol === 'estudiante') {
+      const admins = await Usuario.findAll({ where: { rol: 'admin', activo: true } });
+      const modulo = await Modulo.findByPk(moduloId);
+      const tituloModulo = modulo ? modulo.titulo : `Módulo ${moduloId}`;
+      
+      for (const admin of admins) {
+        await crearNotificacion(
+          admin.id,
+          'sistema',
+          'Nuevo comentario en Foro',
+          `${comentarioConUsuario.usuario.nombre} ha publicado una duda/comentario en el módulo: ${tituloModulo}.`,
+          `/modulos/${moduloId}`
+        );
+      }
+    }
 
     res.status(201).json({ success: true, message: 'Comentario agregado con éxito.', data: comentarioConUsuario });
   } catch (error) {
