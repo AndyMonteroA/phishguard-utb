@@ -71,7 +71,6 @@ const Navbar = () => {
             <>
               <Link to="/dashboard" className={isActive('/dashboard')}>Dashboard</Link>
               <Link to="/modulos" className={isActive('/modulos')}>Modulos</Link>
-              <Link to="/simulador" className={isActive('/simulador')}>Simulador</Link>
               <Link to="/mi-progreso" className={isActive('/mi-progreso')}>Mi Progreso</Link>
               <Link to="/logros" className={isActive('/logros')}>Logros</Link>
               <Link to="/evaluacion-final" className={isActive('/evaluacion-final')}>Evaluación Final</Link>

@@ -200,25 +200,6 @@ const Dashboard = () => {
           ))}
         </div>
 
-        {/* CTA Simulador */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
-          className="card" style={{ padding: '28px', marginTop: '24px', borderLeft: '5px solid #F39C12', background: 'rgba(243,156,18,0.03)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
-            <div>
-              <h3 style={{ fontSize: '1.1rem', marginBottom: '6px', color: '#F39C12' }}>
-                <FiShield style={{ verticalAlign: 'middle', marginRight: '6px' }} />
-                Simulador Práctico de Phishing
-              </h3>
-              <p style={{ fontSize: '0.88rem', color: 'var(--texto-terciario)', margin: 0 }}>
-                Pon a prueba tus habilidades identificando correos legítimos y fraudulentos en un entorno seguro
-              </p>
-            </div>
-            <Link to="/simulador" className="btn btn-secondary" style={{ gap: '6px', border: '1px solid #F39C12', color: '#F39C12' }}>
-              <FiArrowRight /> Iniciar Simulador
-            </Link>
-          </div>
-        </motion.div>
-
         {/* CTA Evaluación Final */}
         {progreso?.modulos_completados === progreso?.total_modulos && progreso?.total_modulos > 0 && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
