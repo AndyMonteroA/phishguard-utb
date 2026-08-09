@@ -186,12 +186,12 @@ const Dashboard = () => {
                   </div>
                   {/* Alerta de Quiz No Aprobado */}
                   {!mod.completado && mod.intentos_quiz > 0 && (
-                    <div style={{ 
-                      marginTop: '8px', padding: '6px 10px', background: 'rgba(231,76,60,0.08)', 
+                    <div style={{
+                      marginTop: '8px', padding: '6px 10px', background: 'rgba(231,76,60,0.08)',
                       borderRadius: '6px', border: '1px solid rgba(231,76,60,0.15)',
                       fontSize: '0.75rem', color: '#E74C3C', fontWeight: 500
                     }}>
-                      ⚠️ Quiz reprobado (Mejor nota: {mod.mejor_puntaje || 0}%). Requiere 70% para aprobar.
+                      Quiz reprobado (Mejor nota: {mod.mejor_puntaje || 0}%). Requiere 70% para aprobar.
                     </div>
                   )}
                 </div>
@@ -199,6 +199,27 @@ const Dashboard = () => {
             </motion.div>
           ))}
         </div>
+
+        {/* CTA Evaluación Final */}
+        {progreso?.modulos_completados === progreso?.total_modulos && progreso?.total_modulos > 0 && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
+            className="card" style={{ padding: '28px', marginTop: '24px', borderLeft: '5px solid #27AE60', background: 'rgba(39,174,96,0.03)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+              <div>
+                <h3 style={{ fontSize: '1.1rem', marginBottom: '6px', color: '#27AE60' }}>
+                  <FiAward style={{ verticalAlign: 'middle', marginRight: '6px' }} />
+                  Todos los módulos completados
+                </h3>
+                <p style={{ fontSize: '0.88rem', color: 'var(--texto-terciario)', margin: 0 }}>
+                  Ya puedes presentar la evaluación final para obtener tu certificado de concientización
+                </p>
+              </div>
+              <Link to="/evaluacion-final" className="btn btn-success" style={{ gap: '6px' }}>
+                <FiArrowRight /> Presentar Evaluación Final
+              </Link>
+            </div>
+          </motion.div>
+        )}
       </div>
     </div>
   );

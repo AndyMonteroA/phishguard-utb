@@ -14,6 +14,7 @@ const {
   obtenerErrores,
   obtenerEvolucion,
   obtenerMejora,
+  detalleEstudiante,
 } = require('../controllers/adminController');
 const {
   obtenerKPIs,
@@ -64,6 +65,7 @@ router.use(auth, autorizar('admin'));
 router.get('/estadisticas', obtenerEstadisticas);
 router.get('/estudiantes', listarEstudiantes);
 router.put('/usuarios/:id/toggle', toggleUsuario);
+router.get('/estudiantes/:id/detalle', detalleEstudiante);
 router.get('/exportar', exportarExcel);
 router.get('/analitica/errores', obtenerErrores);
 router.get('/analitica/evolucion', obtenerEvolucion);

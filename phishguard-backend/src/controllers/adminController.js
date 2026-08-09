@@ -376,6 +376,59 @@ const obtenerMejora = async (req, res) => {
   }
 };
 
+// GET /api/admin/estudiantes/:id/detalle - Detalle de un estudiante
+const detalleEstudiante = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const usuario = await Usuario.findByPk(id, {
+      attributes: ['id', 'nombre', 'apellido', 'email', 'semestre', 'genero', 'activo'],
+    });
+    if (!usuario) return res.status(404).json({ success: false, message: 'Estudiante no encontrado.' });
+
+    // Resultados de quizzes
+    const resultados = await ResultadoQuiz.findAll({
+      where: { usuario_id: id },
+      include: [{ model: Modulo, as: 'modulo', attributes: ['titulo'] }],
+      order: [['created_at', 'DESC']],
+    });
+
+    const resultadosFormateados = resultados.map(r => ({
+      modulo: r.modulo_id === 0 ? 'Evaluación Final' : (r.modulo?.titulo || `Módulo ${r.modulo_id}`),
+      puntaje: r.puntaje,
+      total: r.total_preguntas,
+      porcentaje: Math.round((r.puntaje / r.total_preguntas) * 100),
+      aprobado: r.aprobado,
+      tiempo: r.tiempo_empleado,
+      fecha: r.created_at,
+    }));
+
+    // Módulos completados
+    const modulosCompletados = await ProgresoModulo.count({ where: { usuario_id: id, completado: true } });
+
+    // Promedio
+    const promedio = resultados.length > 0
+      ? Math.round(resultados.reduce((acc, r) => acc + (r.puntaje / r.total_preguntas) * 100, 0) / resultados.length)
+      : 0;
+
+    // Encuesta
+    const encuesta = await EncuestaDiagnostica.findOne({ where: { usuario_id: id } });
+
+    res.json({
+      success: true,
+      data: {
+        resultados: resultadosFormateados,
+        modulos_completados: modulosCompletados,
+        promedio,
+        encuesta_completada: !!encuesta,
+        total_intentos: resultados.length,
+      },
+    });
+  } catch (error) {
+    console.error('Error detalle estudiante:', error);
+    res.status(500).json({ success: false, message: 'Error al obtener detalle.' });
+  }
+};
+
 module.exports = {
   obtenerEstadisticas,
   listarEstudiantes,
@@ -384,4 +437,5 @@ module.exports = {
   obtenerErrores,
   obtenerEvolucion,
   obtenerMejora,
+  detalleEstudiante,
 };
