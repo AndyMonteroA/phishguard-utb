@@ -59,6 +59,18 @@ const AdminPreguntas = () => {
     } catch (err) { toast.error(err.response?.data?.message || 'Error al guardar'); }
   };
 
+  const importarPreguntas = async () => {
+    try {
+      setCargando(true);
+      const res = await api.post(`/preguntas/${moduloId}/importar`);
+      toast.success(res.data.message || 'Preguntas importadas');
+      cargar();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Error al importar preguntas');
+      setCargando(false);
+    }
+  };
+
   const eliminar = async (id) => {
     if (!window.confirm('Eliminar esta pregunta?')) return;
     try { await api.delete(`/preguntas/${id}`); toast.success('Eliminada'); cargar(); }
@@ -155,7 +167,14 @@ const AdminPreguntas = () => {
           </form>
         </div>
 
-        <h2 style={{ fontSize: '1.2rem', marginBottom: '16px' }}>Preguntas Existentes</h2>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <h2 style={{ fontSize: '1.2rem', margin: 0 }}>Preguntas Existentes</h2>
+          {modulo?.titulo === 'Evaluación Final' && (
+            <button onClick={importarPreguntas} className="btn btn-secondary btn-sm" disabled={cargando}>
+              <FiPlus /> Importar Preguntas de Otros Módulos
+            </button>
+          )}
+        </div>
         {preguntas.map((p, i) => (
           <motion.div key={p.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
             className="card" style={{ padding: '20px', marginBottom: '12px' }}>
