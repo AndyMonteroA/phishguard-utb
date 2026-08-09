@@ -1054,6 +1054,47 @@ body.dark-mode .footer {
   background: linear-gradient(135deg, #060810 0%, #0e1828 100%);
 }
 
+body.dark-mode table {
+  color: #cbd5e1;
+}
+
+body.dark-mode table thead tr {
+  background: #1a2744 !important;
+}
+
+body.dark-mode table tbody tr {
+  border-color: #1f293d !important;
+}
+
+body.dark-mode table tbody tr:hover {
+  background: #151d30 !important;
+}
+
+body.dark-mode table th,
+body.dark-mode table td {
+  color: #cbd5e1;
+}
+
+body.dark-mode .badge-default {
+  background: rgba(148, 163, 184, 0.15);
+  color: #94a3b8;
+}
+
+body.dark-mode select option {
+  background: #1a2744;
+  color: #cbd5e1;
+}
+
+body.dark-mode .form-select {
+  background-color: #151d30;
+  color: #cbd5e1;
+  border-color: #2a3a54;
+}
+
+body.dark-mode .loading-screen p {
+  color: #94a3b8 !important;
+}
+
 /* ============================================================
    RESPONSIVO COMPLETO - TABLET (≤ 1024px)
    ============================================================ */
