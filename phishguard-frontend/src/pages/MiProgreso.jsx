@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 import { motion } from 'framer-motion';
-import { FiBarChart2, FiCheckCircle, FiTrendingUp, FiClock, FiAward, FiArrowUp, FiArrowDown } from 'react-icons/fi';
+import { FiBarChart2, FiCheckCircle, FiTrendingUp, FiClock, FiAward, FiBookOpen, FiList, FiFileText } from 'react-icons/fi';
 import { DynamicIcon } from '../components/IconMap';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend, Filler } from 'chart.js';
@@ -49,7 +49,6 @@ const MiProgreso = () => {
 
   if (cargando) return <div className="page-wrapper"><div className="loading-screen"><div className="spinner"></div></div></div>;
 
-  const diff = historial?.diferencia || 0;
 
   return (
     <div className="page-wrapper">
@@ -66,7 +65,6 @@ const MiProgreso = () => {
             { icon: <FiCheckCircle />, label: 'Módulos Completados', valor: `${progreso?.modulos_completados || 0}/${progreso?.total_modulos || 4}`, color: '#27AE60' },
             { icon: <FiBarChart2 />, label: 'Mi Promedio', valor: `${historial?.promedio_estudiante || 0}%`, color: '#2E6DA4' },
             { icon: <FiAward />, label: 'Quizzes Aprobados', valor: historial?.quizzes_aprobados || 0, color: '#F39C12' },
-            { icon: diff >= 0 ? <FiArrowUp /> : <FiArrowDown />, label: 'vs Promedio del Grupo', valor: `${diff >= 0 ? '+' : ''}${diff}%`, color: diff >= 0 ? '#27AE60' : '#E74C3C' },
             { icon: <FiClock />, label: 'Total Intentos', valor: historial?.total_intentos || 0, color: '#9B59B6' },
           ].map((stat, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}
@@ -83,7 +81,7 @@ const MiProgreso = () => {
         {progreso?.detalle && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
             className="card" style={{ padding: '28px', marginBottom: '28px' }}>
-            <h3 style={{ marginBottom: '20px' }}>📚 Progreso por Módulo</h3>
+            <h3 style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}><FiBookOpen color="var(--azul-institucional)" /> Progreso por Módulo</h3>
             {progreso.detalle.map((mod, i) => (
               <div key={mod.modulo_id} style={{ marginBottom: '18px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.9rem', marginBottom: '6px' }}>
@@ -113,9 +111,9 @@ const MiProgreso = () => {
         {historial?.historial?.length > 1 && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
             className="card" style={{ padding: '28px', marginBottom: '28px' }}>
-            <h3 style={{ marginBottom: '20px' }}>📈 Evolución de tus Notas</h3>
+            <h3 style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}><FiTrendingUp color="var(--azul-institucional)" /> Evolución de tus Notas</h3>
             <p style={{ fontSize: '0.82rem', color: 'var(--texto-terciario)', marginBottom: '16px' }}>
-              Tu rendimiento en cada intento de quiz comparado con el promedio del grupo
+              Tu rendimiento en cada intento de quiz a lo largo del tiempo
             </p>
             <div style={{ height: '300px' }}>
               <Line
@@ -136,16 +134,6 @@ const MiProgreso = () => {
                       tension: 0.3,
                       fill: true,
                     },
-                    {
-                      label: 'Promedio del grupo',
-                      data: historial.historial.map(() => historial.promedio_grupo),
-                      borderColor: '#F39C12',
-                      borderWidth: 2,
-                      borderDash: [8, 4],
-                      pointRadius: 0,
-                      tension: 0,
-                      fill: false,
-                    },
                   ],
                 }}
                 options={{
@@ -158,7 +146,7 @@ const MiProgreso = () => {
                         afterLabel: (ctx) => {
                           if (ctx.datasetIndex === 0) {
                             const h = historial.historial[ctx.dataIndex];
-                            return `${h.modulo} • ${h.aprobado ? '✅ Aprobado' : '❌ Reprobado'}`;
+                            return `${h.modulo} • ${h.aprobado ? 'Aprobado' : 'Reprobado'}`;
                           }
                           return '';
                         },
@@ -178,7 +166,7 @@ const MiProgreso = () => {
         {historial?.historial?.length > 0 && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
             className="card" style={{ padding: '28px', marginBottom: '28px' }}>
-            <h3 style={{ marginBottom: '20px' }}>📋 Historial de Evaluaciones</h3>
+            <h3 style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}><FiList color="var(--azul-institucional)" /> Historial de Evaluaciones</h3>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
                 <thead>
@@ -212,9 +200,9 @@ const MiProgreso = () => {
 
         {/* Botones */}
         <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', marginTop: '16px' }}>
-          <Link to="/modulos" className="btn btn-primary">📚 Continuar Aprendiendo</Link>
-          <Link to="/logros" className="btn btn-secondary">🏆 Ver Logros</Link>
-          <Link to="/certificado" className="btn btn-secondary">📜 Mi Certificado</Link>
+          <Link to="/modulos" className="btn btn-primary" style={{ gap: '6px' }}><FiBookOpen /> Continuar Aprendiendo</Link>
+          <Link to="/logros" className="btn btn-secondary" style={{ gap: '6px' }}><FiAward /> Ver Logros</Link>
+          <Link to="/certificado" className="btn btn-secondary" style={{ gap: '6px' }}><FiFileText /> Mi Certificado</Link>
         </div>
       </div>
     </div>
