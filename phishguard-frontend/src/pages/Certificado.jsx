@@ -151,7 +151,7 @@ import csiLogo from '../assets/csi-logo.png';
 
                     <div style={{ textAlign: 'center', width: '200px' }}>
                       <div style={{ borderBottom: '1px solid #333', width: '200px', margin: '0 auto 10px', height: '40px', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
-                        <span style={{ fontSize: '1.1rem', color: '#333', fontWeight: 600 }}>{new Date(certificado.fecha_emision || certificado.created_at).toLocaleDateString('es-EC')}</span>
+                        <span style={{ fontSize: '1.1rem', color: '#333', fontWeight: 600 }}>{new Date(certificado.fecha_emision || certificado.createdAt || new Date()).toLocaleDateString('es-EC')}</span>
                       </div>
                       <p style={{ margin: 0, fontSize: '0.9rem', color: '#666', textTransform: 'uppercase', letterSpacing: '1px' }}>Fecha de Emisión</p>
                     </div>
@@ -159,7 +159,7 @@ import csiLogo from '../assets/csi-logo.png';
 
                   {/* ID Verificación */}
                   <div style={{ textAlign: 'center', fontSize: '0.75rem', color: '#999', marginTop: '10px' }}>
-                    Código de Verificación: {certificado.codigo_verificacion}
+                    Código de Verificación: {certificado.codigo_unico}
                   </div>
                 </div>
               </div>

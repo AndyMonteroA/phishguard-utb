@@ -225,7 +225,7 @@ const Dashboard = () => {
         </div>
 
         {/* CTA Evaluación Final */}
-        {progreso?.modulos_completados === progreso?.total_modulos && progreso?.total_modulos > 0 && (
+        {progreso?.modulos_completados === progreso?.total_modulos && progreso?.total_modulos > 0 && !progreso?.evaluacion_final_aprobada && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
             className="card" style={{ padding: '28px', marginTop: '24px', borderLeft: '5px solid #27AE60', background: 'rgba(39,174,96,0.03)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
