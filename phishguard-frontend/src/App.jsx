@@ -28,7 +28,7 @@ import Certificado from './pages/Certificado';
 import Logros from './pages/Logros';
 import MiPerfil from './pages/MiPerfil';
 import EvaluacionFinal from './pages/EvaluacionFinal';
-import Simulador from './pages/Simulador';
+
 
 // Paginas de admin
 import AdminDashboard from './pages/admin/AdminDashboard';
