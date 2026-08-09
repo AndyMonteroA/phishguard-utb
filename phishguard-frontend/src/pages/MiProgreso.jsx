@@ -108,7 +108,7 @@ const MiProgreso = () => {
         )}
 
         {/* Gráfico de evolución */}
-        {historial?.historial?.length > 1 && (
+        {historial?.historial?.length > 0 && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
             className="card" style={{ padding: '28px', marginBottom: '28px' }}>
             <h3 style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}><FiTrendingUp color="var(--azul-institucional)" /> Evolución de tus Notas</h3>

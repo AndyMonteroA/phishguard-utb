@@ -93,6 +93,18 @@ const obtenerProgreso = async (req, res) => {
       where: { usuario_id: usuarioId, modulo_id: 0, aprobado: true }
     });
 
+    // Preparar el historial de intentos para la gráfica
+    const historialIntentos = resultados.map(r => {
+      const modulo = modulos.find(m => m.id === r.modulo_id);
+      return {
+        id: r.id,
+        modulo: modulo ? modulo.titulo : (r.modulo_id === 0 || r.modulo_id > 998 ? 'Evaluación Final' : 'Módulo ' + r.modulo_id),
+        fecha: r.created_at,
+        puntaje: Math.round((r.puntaje / r.total_preguntas) * 100),
+        aprobado: r.aprobado
+      };
+    }).reverse(); // Revertir para orden cronológico en la gráfica
+
     res.json({
       success: true,
       data: {
@@ -103,6 +115,7 @@ const obtenerProgreso = async (req, res) => {
         total_quizzes: resultados.length,
         evaluacion_final_aprobada: !!evaluacionFinal,
         detalle: detalleModulos,
+        historial_intentos: historialIntentos,
       },
     });
   } catch (error) {

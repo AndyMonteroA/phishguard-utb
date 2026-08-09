@@ -20,11 +20,32 @@ const obtenerPreguntas = async (req, res) => {
       });
     }
 
-    const preguntas = await Pregunta.findAll({
+    let preguntas = await Pregunta.findAll({
       where: { modulo_id: moduloId },
-      order: [['orden', 'ASC']],
       attributes: ['id', 'pregunta', 'opciones', 'orden'],
       // NO enviamos respuesta_correcta ni retroalimentacion al frontend
+    });
+
+    // Función auxiliar para mezclar arreglos (Fisher-Yates)
+    const shuffleArray = (array) => {
+      let currentIndex = array.length, randomIndex;
+      while (currentIndex > 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+      }
+      return array;
+    };
+
+    // Aleatorizar el orden de las preguntas
+    preguntas = shuffleArray(preguntas.map(p => p.toJSON()));
+
+    // Aleatorizar el orden de las opciones dentro de cada pregunta
+    preguntas = preguntas.map(pregunta => {
+      return {
+        ...pregunta,
+        opciones: shuffleArray([...pregunta.opciones])
+      };
     });
 
     res.json({

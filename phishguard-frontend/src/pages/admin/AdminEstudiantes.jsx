@@ -22,7 +22,7 @@ const AdminEstudiantes = () => {
   useEffect(() => { cargar(); }, []);
 
   const cargar = async () => {
-    try { const res = await api.get('/admin/estudiantes'); setEstudiantes(res.data.data.estudiantes); }
+    try { const res = await api.get('/admin/estudiantes?limit=1000'); setEstudiantes(res.data.data.estudiantes); }
     catch (err) { console.error(err); }
     finally { setCargando(false); }
   };
@@ -86,33 +86,37 @@ const AdminEstudiantes = () => {
         </motion.div>
 
         {/* Barra de búsqueda y filtros */}
-        <div className="card" style={{ padding: '16px 20px', marginBottom: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-            <FiSearch size={18} color="var(--texto-terciario)" />
+        <div className="card" style={{ padding: '20px', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'var(--gris-claro)', padding: '10px 16px', borderRadius: 'var(--radio-md)', marginBottom: '16px' }}>
+            <FiSearch size={20} color="var(--texto-terciario)" />
             <input type="text" className="form-input" placeholder="Buscar por nombre, apellido o email..."
               value={busqueda} onChange={(e) => setBusqueda(e.target.value)}
-              style={{ border: 'none', boxShadow: 'none', padding: '8px 0', flex: 1 }} />
+              style={{ border: 'none', background: 'transparent', padding: '0', flex: 1, fontSize: '0.95rem', outline: 'none' }} />
           </div>
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
-            <FiFilter size={14} color="var(--texto-terciario)" />
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--texto-secundario)', fontWeight: 600, fontSize: '0.85rem' }}>
+              <FiFilter size={16} /> Filtros:
+            </div>
             <select value={filtroSemestre} onChange={e => setFiltroSemestre(e.target.value)}
-              className="form-input" style={{ padding: '6px 10px', fontSize: '0.82rem', minWidth: 120 }}>
+              className="form-input" style={{ padding: '8px 12px', fontSize: '0.85rem', minWidth: 150, background: '#fff', border: '1px solid var(--gris-medio)' }}>
               <option value="todos">Semestre: Todos</option>
               {semestres.map(s => <option key={s} value={s}>Semestre {s}</option>)}
             </select>
             <select value={filtroGenero} onChange={e => setFiltroGenero(e.target.value)}
-              className="form-input" style={{ padding: '6px 10px', fontSize: '0.82rem', minWidth: 120 }}>
+              className="form-input" style={{ padding: '8px 12px', fontSize: '0.85rem', minWidth: 150, background: '#fff', border: '1px solid var(--gris-medio)' }}>
               <option value="todos">Género: Todos</option>
               {generos.map(g => <option key={g} value={g}>{g}</option>)}
             </select>
             <select value={filtroEstado} onChange={e => setFiltroEstado(e.target.value)}
-              className="form-input" style={{ padding: '6px 10px', fontSize: '0.82rem', minWidth: 140 }}>
+              className="form-input" style={{ padding: '8px 12px', fontSize: '0.85rem', minWidth: 160, background: '#fff', border: '1px solid var(--gris-medio)' }}>
               <option value="todos">Estado: Todos</option>
               <option value="activo">Activos</option>
               <option value="inactivo">Inactivos</option>
               <option value="encuesta_si">Encuesta completada</option>
               <option value="encuesta_no">Sin encuesta</option>
             </select>
+          </div>
+        </div>
             {hayFiltros && (
               <button onClick={() => { setFiltroSemestre('todos'); setFiltroGenero('todos'); setFiltroEstado('todos'); }}
                 className="btn btn-sm btn-secondary" style={{ gap: '4px', fontSize: '0.78rem' }}>

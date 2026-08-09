@@ -27,7 +27,7 @@ const Modulo = sequelize.define('modulos', {
   icono: {
     type: DataTypes.STRING(50),
     allowNull: true,
-    defaultValue: '🛡️',
+    defaultValue: 'FiShield',
   },
   color: {
     type: DataTypes.STRING(7),

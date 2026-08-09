@@ -7,8 +7,9 @@ const { Modulo, Contenido, Pregunta, ProgresoModulo } = require('../models');
 // GET /api/modulos - Listar todos los módulos
 const listarModulos = async (req, res) => {
   try {
+    const isUsuarioAdmin = req.usuario && req.usuario.rol === 'admin';
     const modulos = await Modulo.findAll({
-      where: { activo: true },
+      where: isUsuarioAdmin ? {} : { activo: true },
       order: [['orden', 'ASC']],
       include: [
         {

@@ -209,7 +209,7 @@ const Dashboard = () => {
                     {mod.mejor_puntaje !== null && <span>Quiz: {mod.mejor_puntaje}%</span>}
                   </div>
                   {/* Alerta de Quiz No Aprobado */}
-                  {!mod.completado && mod.intentos_quiz > 0 && (
+                  {mod.mejor_puntaje !== null && mod.mejor_puntaje < 70 && (
                     <div style={{
                       marginTop: '8px', padding: '6px 10px', background: 'rgba(231,76,60,0.08)',
                       borderRadius: '6px', border: '1px solid rgba(231,76,60,0.15)',
