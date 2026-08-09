@@ -117,11 +117,11 @@ const Certificado = () => {
                     <img src={fafiLogo} alt="FAFI" style={{ height: '70px', objectFit: 'contain' }} />
                   </div>
 
-                  <p style={{ fontSize: '1.2rem', color: '#555', marginBottom: '35px', fontFamily: 'Arial, sans-serif' }}>
+                  <p style={{ fontSize: '1.2rem', color: '#555', marginBottom: '20px', fontFamily: 'Arial, sans-serif' }}>
                     La plataforma educativa PhishGuard UTB certifica que
                   </p>
 
-                  <h2 style={{ fontSize: '3.2rem', color: '#222', marginBottom: '15px', fontFamily: '"Brush Script MT", cursive', borderBottom: '2px solid #222', display: 'inline-block', paddingBottom: '10px' }}>
+                  <h2 style={{ fontSize: '2.8rem', color: '#27AE60', marginTop: '10px', marginBottom: '10px', fontFamily: 'Georgia, serif', borderBottom: '2px solid #27AE60', display: 'inline-block', paddingBottom: '5px' }}>
                     {usuario?.nombre} {usuario?.apellido}
                   </h2>
 
@@ -136,6 +136,12 @@ const Certificado = () => {
                         <span style={{ fontFamily: '"Brush Script MT", cursive', fontSize: '1.8rem', color: '#1B3A6B' }}>Admin PhishGuard</span>
                       </div>
                       <p style={{ margin: 0, fontSize: '0.9rem', color: '#666', textTransform: 'uppercase', letterSpacing: '1px' }}>Instructor UTB</p>
+                    </div>
+
+                    <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                      <div style={{ background: 'rgba(243, 156, 18, 0.1)', padding: '5px 15px', borderRadius: '20px', border: '1px solid #F39C12' }}>
+                        <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#F39C12', letterSpacing: '1px' }}>APROBADO</span>
+                      </div>
                     </div>
 
                     <div style={{ textAlign: 'center', width: '200px' }}>
