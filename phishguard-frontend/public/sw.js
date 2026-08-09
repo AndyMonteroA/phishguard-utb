@@ -1,4 +1,4 @@
-const CACHE_NAME = 'phishguard-v1';
+const CACHE_NAME = 'phishguard-v2';
 const urlsToCache = [
   '/',
   '/index.html',
