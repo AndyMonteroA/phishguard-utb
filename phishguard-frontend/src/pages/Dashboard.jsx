@@ -9,6 +9,8 @@ import { motion } from 'framer-motion';
 import api from '../services/api';
 import { FiBookOpen, FiAward, FiTrendingUp, FiCheckCircle, FiArrowRight, FiShield } from 'react-icons/fi';
 import { DynamicIcon } from '../components/IconMap';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const { usuario, actualizarUsuario } = useAuth();
@@ -19,6 +21,7 @@ const Dashboard = () => {
   const [mostrarModalCompletar, setMostrarModalCompletar] = useState(false);
   const [formCompletar, setFormCompletar] = useState({ semestre: '', genero: '', usa_correo_institucional: false });
   const [cargandoCompletar, setCargandoCompletar] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Si no tiene semestre configurado, mostramos el modal para completarlo obligatoriamente
@@ -27,7 +30,28 @@ const Dashboard = () => {
     }
 
     const cargar = async () => {
-      try { const res = await api.get('/progreso'); setProgreso(res.data.data); }
+      try { 
+        const res = await api.get('/progreso'); 
+        setProgreso(res.data.data); 
+        
+        // Disparar redirección a evaluación final si corresponde
+        const p = res.data.data;
+        if (p && p.modulos_completados === p.total_modulos && p.total_modulos > 0 && !p.evaluacion_final_aprobada) {
+          Swal.fire({
+            title: '¡Felicidades!',
+            text: 'Has completado todos los módulos. ¡Es hora de tu Evaluación Final para obtener el certificado!',
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonText: 'Ir a la Evaluación',
+            cancelButtonText: 'Más tarde',
+            confirmButtonColor: '#27AE60'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              navigate('/evaluacion-final');
+            }
+          });
+        }
+      }
       catch (err) { console.error(err); }
       finally { setCargando(false); }
     };

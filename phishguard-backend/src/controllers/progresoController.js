@@ -81,13 +81,17 @@ const obtenerProgreso = async (req, res) => {
       ? Math.round(sumaPorcentajes / totalModulos)
       : 0;
 
-    // Calcular puntaje promedio de todos los intentos del usuario
     const puntajePromedio = resultados.length > 0
       ? Math.round(
           resultados.reduce((acc, r) => acc + (r.puntaje / r.total_preguntas) * 100, 0) /
           resultados.length
         )
       : 0;
+
+    // Verificar si ya aprobó la evaluación final
+    const evaluacionFinal = await ResultadoQuiz.findOne({
+      where: { usuario_id: usuarioId, modulo_id: 0, aprobado: true }
+    });
 
     res.json({
       success: true,
@@ -97,6 +101,7 @@ const obtenerProgreso = async (req, res) => {
         total_modulos: totalModulos,
         puntaje_promedio: puntajePromedio,
         total_quizzes: resultados.length,
+        evaluacion_final_aprobada: !!evaluacionFinal,
         detalle: detalleModulos,
       },
     });

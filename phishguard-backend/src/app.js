@@ -125,6 +125,20 @@ const startServer = async () => {
     await sequelize.sync();
     console.log('[OK] Modelos sincronizados con la base de datos');
 
+    // Asegurar que exista el módulo contenedor para el Banco de Evaluación Final
+    const { Modulo } = require('./models');
+    await Modulo.findOrCreate({
+      where: { titulo: 'Evaluación Final' },
+      defaults: {
+        descripcion: 'Banco de preguntas para la Evaluación Final',
+        orden: 999,
+        activo: false,
+        icono: 'award',
+        color: '#27AE60'
+      }
+    });
+    console.log('[OK] Banco de Evaluación Final garantizado en DB');
+
     app.listen(env.PORT, () => {
       console.log(`
 ========================================

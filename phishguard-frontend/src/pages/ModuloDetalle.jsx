@@ -409,7 +409,9 @@ const ModuloDetalle = () => {
           </motion.div>
         )}
 
-        <ComentariosModulo moduloId={id} />
+        {modulo.progreso?.completado && (
+          <ComentariosModulo moduloId={id} />
+        )}
 
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
           <button onClick={anterior} className="btn btn-secondary" disabled={contenidoActual === 0}><FiArrowLeft /> Anterior</button>

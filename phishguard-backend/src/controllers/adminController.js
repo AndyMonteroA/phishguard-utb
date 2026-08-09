@@ -45,6 +45,7 @@ const obtenerEstadisticas = async (req, res) => {
           icono: modulo.icono,
           completados,
           en_progreso: enProgreso,
+          total_estudiantes: totalEstudiantes,
         };
       })
     );

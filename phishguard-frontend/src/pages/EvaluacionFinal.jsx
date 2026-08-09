@@ -24,6 +24,16 @@ const EvaluacionFinal = () => {
   const timer = useRef(null);
   const autoSubmitted = useRef(false);
 
+  // Función para mezclar arreglos (algoritmo Fisher-Yates)
+  const shuffleArray = (array) => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+  };
+
   useEffect(() => {
     const cargar = async () => {
       try {
@@ -31,7 +41,13 @@ const EvaluacionFinal = () => {
         if (res.data.data.ya_aprobada) {
           setYaAprobada(res.data.data.resultado);
         } else {
-          setPreguntas(res.data.data.preguntas);
+          // Mezclar opciones de respuesta para cada pregunta
+          const preguntasConOpcionesMezcladas = res.data.data.preguntas.map(p => ({
+            ...p,
+            opciones: shuffleArray(p.opciones || [])
+          }));
+          
+          setPreguntas(preguntasConOpcionesMezcladas);
           const limite = res.data.data.tiempo_limite || 1800;
           setTiempoLimite(limite);
           setTiempo(limite);

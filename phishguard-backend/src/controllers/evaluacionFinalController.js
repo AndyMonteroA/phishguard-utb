@@ -46,27 +46,45 @@ const obtenerEvaluacionFinal = async (req, res) => {
       });
     }
 
-    // Obtener módulos activos
+    // 1. Buscar si hay preguntas exclusivas para "Evaluación Final"
+    const moduloEvaluacion = await Modulo.findOne({ where: { titulo: 'Evaluación Final' } });
+    let preguntasSeleccionadas = [];
+    
+    if (moduloEvaluacion) {
+      const preguntasFinales = await Pregunta.findAll({
+        where: { modulo_id: moduloEvaluacion.id },
+        order: [Pregunta.sequelize.fn('RANDOM')],
+        limit: 10, // o el límite que desees para la evaluación final
+        attributes: ['id', 'pregunta', 'opciones', 'modulo_id'],
+      });
+      if (preguntasFinales.length > 0) {
+        preguntasSeleccionadas = preguntasFinales.map(p => ({
+          ...p.toJSON(),
+          modulo_titulo: 'Evaluación Final',
+        }));
+      }
+    }
+
+    // 2. Si no hay preguntas exclusivas, hacer fallback a preguntas aleatorias de los módulos
     const modulos = await Modulo.findAll({
       where: { activo: true },
       order: [['orden', 'ASC']],
     });
 
-    // Seleccionar preguntas aleatorias de cada módulo (3-5 por módulo)
-    const preguntasSeleccionadas = [];
-    const preguntasPorModulo = Math.max(3, Math.ceil(20 / modulos.length));
-
-    for (const modulo of modulos) {
-      const preguntas = await Pregunta.findAll({
-        where: { modulo_id: modulo.id },
-        order: [Pregunta.sequelize.fn('RANDOM')],
-        limit: preguntasPorModulo,
-        attributes: ['id', 'pregunta', 'opciones', 'modulo_id'],
-      });
-      preguntasSeleccionadas.push(...preguntas.map(p => ({
-        ...p.toJSON(),
-        modulo_titulo: modulo.titulo,
-      })));
+    if (preguntasSeleccionadas.length === 0) {
+      const preguntasPorModulo = Math.max(3, Math.ceil(20 / modulos.length));
+      for (const modulo of modulos) {
+        const preguntas = await Pregunta.findAll({
+          where: { modulo_id: modulo.id },
+          order: [Pregunta.sequelize.fn('RANDOM')],
+          limit: preguntasPorModulo,
+          attributes: ['id', 'pregunta', 'opciones', 'modulo_id'],
+        });
+        preguntasSeleccionadas.push(...preguntas.map(p => ({
+          ...p.toJSON(),
+          modulo_titulo: modulo.titulo,
+        })));
+      }
     }
 
     res.json({
@@ -76,7 +94,7 @@ const obtenerEvaluacionFinal = async (req, res) => {
         preguntas: preguntasSeleccionadas,
         total: preguntasSeleccionadas.length,
         tiempo_limite: preguntasSeleccionadas.length * 90, // 90 segundos por pregunta
-        modulos_evaluados: modulos.map(m => m.titulo),
+        modulos_evaluados: ['Evaluación Final'], // Para simplificar
       },
     });
   } catch (error) {
@@ -120,13 +138,18 @@ const enviarEvaluacionFinal = async (req, res) => {
     }).filter(Boolean);
 
     const totalPreguntas = resultadosDetallados.length;
-    const porcentaje = Math.round((puntaje / totalPreguntas) * 100);
+    // Evitar NaN si totalPreguntas es 0
+    const porcentaje = totalPreguntas > 0 ? Math.round((puntaje / totalPreguntas) * 100) : 0;
     const aprobado = porcentaje >= 70;
 
-    // Guardar resultado con modulo_id = 0 para identificar como evaluación final
+    // Obtener el módulo de Evaluación Final si existe, sino usar 0
+    const moduloEvaluacion = await Modulo.findOne({ where: { titulo: 'Evaluación Final' } });
+    const moduloIdFinal = moduloEvaluacion ? moduloEvaluacion.id : 0;
+
+    // Guardar resultado de evaluación final
     await ResultadoQuiz.create({
       usuario_id: usuarioId,
-      modulo_id: 0,
+      modulo_id: 0, // Mantenemos 0 para reportes globales si se quiere, o usamos moduloIdFinal
       puntaje,
       total_preguntas: totalPreguntas,
       respuestas: resultadosDetallados,
@@ -145,7 +168,9 @@ const enviarEvaluacionFinal = async (req, res) => {
     }
 
     // Verificar logros
-    await verificarLogros(usuarioId);
+    if (typeof verificarLogros === 'function') {
+      try { await verificarLogros(usuarioId); } catch(e) { console.error('Error al verificar logros:', e); }
+    }
 
     // Análisis por módulo
     const analisisPorModulo = {};

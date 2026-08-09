@@ -15,6 +15,7 @@ const ComentariosModulo = ({ moduloId }) => {
   const [nuevoComentario, setNuevoComentario] = useState('');
   const [cargando, setCargando] = useState(true);
   const [enviando, setEnviando] = useState(false);
+  const [abierto, setAbierto] = useState(false);
 
   useEffect(() => {
     const cargarComentarios = async () => {
@@ -68,13 +69,27 @@ const ComentariosModulo = ({ moduloId }) => {
 
   return (
     <div className="card" style={{ padding: '28px', marginTop: '32px', marginBottom: '24px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+      <div 
+        style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
+        onClick={() => setAbierto(!abierto)}
+      >
         <FiMessageSquare size={20} color="var(--azul-institucional)" />
         <h3 style={{ margin: 0, fontSize: '1.2rem' }}>Foro del Módulo</h3>
-        <span className="badge badge-info" style={{ marginLeft: 'auto' }}>{comentarios.length} comentarios</span>
+        <span className="badge badge-info" style={{ marginLeft: '12px' }}>{comentarios.length} comentarios</span>
+        <div style={{ marginLeft: 'auto', color: 'var(--texto-terciario)', fontSize: '0.9rem' }}>
+          {abierto ? 'Ocultar Foro ▲' : 'Ver Foro ▼'}
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} style={{ marginBottom: '24px' }}>
+      <AnimatePresence>
+        {abierto && (
+          <motion.div
+            initial={{ height: 0, opacity: 0, overflow: 'hidden' }}
+            animate={{ height: 'auto', opacity: 1, marginTop: '20px' }}
+            exit={{ height: 0, opacity: 0, marginTop: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <form onSubmit={handleSubmit} style={{ marginBottom: '24px' }}>
         <div style={{ display: 'flex', gap: '12px' }}>
           <div style={{ 
             width: '40px', height: '40px', borderRadius: '50%', background: 'var(--azul-institucional)', 
@@ -163,9 +178,12 @@ const ComentariosModulo = ({ moduloId }) => {
                 )}
               </motion.div>
             ))}
-          </AnimatePresence>
-        </div>
+              </AnimatePresence>
+            </div>
+          )}
+        </motion.div>
       )}
+      </AnimatePresence>
     </div>
   );
 };
