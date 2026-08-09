@@ -30,7 +30,7 @@ const obtenerPreguntas = async (req, res) => {
     res.json({
       success: true,
       data: {
-        modulo: { id: modulo.id, titulo: modulo.titulo },
+        modulo: { id: modulo.id, titulo: modulo.titulo, tiempo_limite: modulo.tiempo_limite_quiz || 900 },
         preguntas,
         total: preguntas.length,
       },

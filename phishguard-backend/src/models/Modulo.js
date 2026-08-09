@@ -43,6 +43,11 @@ const Modulo = sequelize.define('modulos', {
     type: DataTypes.STRING(500),
     allowNull: true,
   },
+  tiempo_limite_quiz: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: 900, // 15 minutos en segundos
+  },
   activo: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,

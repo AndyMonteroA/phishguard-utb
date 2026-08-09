@@ -179,7 +179,63 @@ const marcarContenidoVisto = async (req, res) => {
   }
 };
 
+// GET /api/progreso/historial - Historial detallado de quizzes + comparación con grupo
+const obtenerHistorial = async (req, res) => {
+  try {
+    const usuarioId = req.usuarioId;
+
+    // Historial del estudiante
+    const resultados = await ResultadoQuiz.findAll({
+      where: { usuario_id: usuarioId },
+      include: [{ model: Modulo, as: 'modulo', attributes: ['titulo', 'color', 'icono'] }],
+      order: [['created_at', 'ASC']],
+    });
+
+    const historial = resultados.map(r => ({
+      id: r.id,
+      modulo: r.modulo?.titulo || `Módulo ${r.modulo_id}`,
+      color: r.modulo?.color || '#1B3A6B',
+      puntaje: r.puntaje,
+      total: r.total_preguntas,
+      porcentaje: Math.round((r.puntaje / r.total_preguntas) * 100),
+      aprobado: r.aprobado,
+      tiempo: r.tiempo_empleado,
+      fecha: r.created_at,
+    }));
+
+    // Promedio del grupo (todos los estudiantes)
+    const todosResultados = await ResultadoQuiz.findAll();
+    const promedioGrupo = todosResultados.length > 0
+      ? Math.round(todosResultados.reduce((acc, r) => acc + (r.puntaje / r.total_preguntas) * 100, 0) / todosResultados.length)
+      : 0;
+
+    // Promedio del estudiante
+    const promedioEstudiante = resultados.length > 0
+      ? Math.round(resultados.reduce((acc, r) => acc + (r.puntaje / r.total_preguntas) * 100, 0) / resultados.length)
+      : 0;
+
+    // Quizzes aprobados
+    const quizzesAprobados = resultados.filter(r => r.aprobado).length;
+
+    res.json({
+      success: true,
+      data: {
+        historial,
+        quizzes_aprobados: quizzesAprobados,
+        total_intentos: resultados.length,
+        promedio_estudiante: promedioEstudiante,
+        promedio_grupo: promedioGrupo,
+        diferencia: promedioEstudiante - promedioGrupo,
+      },
+    });
+  } catch (error) {
+    console.error('Error historial:', error);
+    res.status(500).json({ success: false, message: 'Error al obtener historial.' });
+  }
+};
+
 module.exports = {
   obtenerProgreso,
   marcarContenidoVisto,
+  obtenerHistorial,
 };

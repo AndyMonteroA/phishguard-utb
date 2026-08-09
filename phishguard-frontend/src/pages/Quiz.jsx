@@ -20,7 +20,9 @@ const Quiz = () => {
   const [cargando, setCargando] = useState(true);
   const [enviando, setEnviando] = useState(false);
   const [tiempo, setTiempo] = useState(0);
+  const [tiempoLimite, setTiempoLimite] = useState(900);
   const timer = useRef(null);
+  const autoSubmitted = useRef(false);
 
   useEffect(() => {
     const cargar = async () => {
@@ -28,7 +30,13 @@ const Quiz = () => {
         const res = await api.get(`/quiz/${moduloId}`);
         setPreguntas(res.data.data.preguntas);
         setModulo(res.data.data.modulo);
-        timer.current = setInterval(() => setTiempo(t => t + 1), 1000);
+        const limite = res.data.data.modulo.tiempo_limite || 900;
+        setTiempoLimite(limite);
+        setTiempo(limite);
+        timer.current = setInterval(() => setTiempo(t => {
+          if (t <= 1) { clearInterval(timer.current); return 0; }
+          return t - 1;
+        }), 1000);
       } catch (err) { toast.error('Error al cargar quiz'); }
       finally { setCargando(false); }
     };
@@ -40,18 +48,28 @@ const Quiz = () => {
     setRespuestas({ ...respuestas, [preguntaId]: opcionId });
   };
 
-  const enviar = async () => {
-    if (Object.keys(respuestas).length < preguntas.length) { toast.error('Responde todas las preguntas'); return; }
+  const enviar = async (autoSubmit = false) => {
+    if (!autoSubmit && Object.keys(respuestas).length < preguntas.length) { toast.error('Responde todas las preguntas'); return; }
     setEnviando(true);
     clearInterval(timer.current);
+    const tiempoUsado = tiempoLimite - tiempo;
     try {
-      const data = preguntas.map(p => ({ pregunta_id: p.id, respuesta: respuestas[p.id] }));
-      const res = await api.post(`/quiz/${moduloId}/submit`, { respuestas: data, tiempo_empleado: tiempo });
+      const data = preguntas.map(p => ({ pregunta_id: p.id, respuesta: respuestas[p.id] || null }));
+      const res = await api.post(`/quiz/${moduloId}/submit`, { respuestas: data, tiempo_empleado: tiempoUsado });
       setResultado(res.data.data);
-      toast.success(res.data.message);
+      if (autoSubmit) toast('⏰ Se acabó el tiempo. Respuestas enviadas automáticamente.', { icon: '⏰', duration: 5000 });
+      else toast.success(res.data.message);
     } catch (err) { toast.error('Error al enviar'); }
     finally { setEnviando(false); }
   };
+
+  // Auto-submit cuando se acaba el tiempo
+  useEffect(() => {
+    if (tiempo === 0 && preguntas.length > 0 && !resultado && !autoSubmitted.current) {
+      autoSubmitted.current = true;
+      enviar(true);
+    }
+  }, [tiempo, preguntas.length, resultado]);
 
   const formatTiempo = (s) => `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
 
@@ -125,9 +143,11 @@ const Quiz = () => {
             </div>
             <p style={{ color: 'var(--texto-terciario)', fontSize: '0.88rem' }}>Pregunta {preguntaActual + 1} de {preguntas.length}</p>
           </div>
-          <div className="card" style={{ padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <FiClock size={16} color="var(--azul-institucional)" />
-            <span style={{ fontWeight: 600, fontSize: '1.1rem', fontFamily: 'monospace' }}>{formatTiempo(tiempo)}</span>
+          <div className="card" style={{ padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '6px',
+            background: tiempo <= 60 ? 'rgba(231,76,60,0.1)' : '', border: tiempo <= 60 ? '2px solid #E74C3C' : '',
+            animation: tiempo <= 30 && tiempo > 0 ? 'pulse 1s infinite' : 'none' }}>
+            <FiClock size={16} color={tiempo <= 60 ? '#E74C3C' : 'var(--azul-institucional)'} />
+            <span style={{ fontWeight: 600, fontSize: '1.1rem', fontFamily: 'monospace', color: tiempo <= 60 ? '#E74C3C' : 'inherit' }}>{formatTiempo(tiempo)}</span>
           </div>
         </div>
         <div className="progress-bar-container" style={{ marginBottom: '24px' }}>
@@ -158,7 +178,7 @@ const Quiz = () => {
           {preguntaActual < preguntas.length - 1 ? (
             <button onClick={() => setPreguntaActual(preguntaActual + 1)} className="btn btn-primary" disabled={!respuestas[pregunta.id]}>Siguiente <FiArrowRight /></button>
           ) : (
-            <button onClick={enviar} className="btn btn-success btn-lg" disabled={enviando || Object.keys(respuestas).length < preguntas.length}>
+            <button onClick={() => enviar(false)} className="btn btn-success btn-lg" disabled={enviando || Object.keys(respuestas).length < preguntas.length}>
               {enviando ? 'Evaluando...' : 'Enviar Respuestas'}
             </button>
           )}

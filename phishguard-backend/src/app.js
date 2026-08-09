@@ -70,6 +70,7 @@ app.use('/api/contenidos', require('./routes/contenidoRoutes'));
 app.use('/api/preguntas', require('./routes/preguntaRoutes'));
 app.use('/api/logros', require('./routes/logroRoutes'));
 app.use('/api/notificaciones', require('./routes/notificacionRoutes'));
+app.use('/api/evaluacion-final', require('./routes/evaluacionFinalRoutes'));
 
 app.get('/api/health', (req, res) => {
   res.json({

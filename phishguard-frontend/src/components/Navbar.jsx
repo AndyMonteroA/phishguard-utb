@@ -73,6 +73,7 @@ const Navbar = () => {
               <Link to="/modulos" className={isActive('/modulos')}>Modulos</Link>
               <Link to="/mi-progreso" className={isActive('/mi-progreso')}>Mi Progreso</Link>
               <Link to="/logros" className={isActive('/logros')}>Logros</Link>
+              <Link to="/evaluacion-final" className={isActive('/evaluacion-final')}>Evaluación Final</Link>
               <Link to="/certificado" className={isActive('/certificado')}>Certificado</Link>
               <Link to="/mi-perfil" className={isActive('/mi-perfil')}>Mi Perfil</Link>
             </>
