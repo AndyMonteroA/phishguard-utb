@@ -6,8 +6,9 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../services/api';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiArrowRight, FiEdit3, FiBookOpen, FiAlertTriangle, FiZap, FiFileText, FiDownload, FiPlay } from 'react-icons/fi';
+import { FiArrowLeft, FiArrowRight, FiCheckCircle, FiPlayCircle, FiFileText, FiAlertCircle, FiDownload, FiEdit3, FiPlay, FiBookOpen, FiAlertTriangle, FiZap } from 'react-icons/fi';
 import { DynamicIcon } from '../components/IconMap';
+import ComentariosModulo from '../components/ComentariosModulo';
 
 const ModuloDetalle = () => {
   const { id } = useParams();
@@ -407,6 +408,8 @@ const ModuloDetalle = () => {
             {renderContenidoEspecial(contenido.tipo, contenido.titulo, contenido.contenido)}
           </motion.div>
         )}
+
+        <ComentariosModulo moduloId={id} />
 
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
           <button onClick={anterior} className="btn btn-secondary" disabled={contenidoActual === 0}><FiArrowLeft /> Anterior</button>

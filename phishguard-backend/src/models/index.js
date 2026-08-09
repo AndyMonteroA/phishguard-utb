@@ -14,6 +14,7 @@ const Certificado = require('./Certificado');
 const Logro = require('./Logro');
 const LogroUsuario = require('./LogroUsuario');
 const Notificacion = require('./Notificacion');
+const Comentario = require('./Comentario');
 
 // ============================================================
 // RELACIONES
@@ -58,6 +59,14 @@ Usuario.hasMany(LogroUsuario, { foreignKey: 'usuario_id', as: 'logrosObtenidos' 
 LogroUsuario.belongsTo(Usuario, { foreignKey: 'usuario_id', as: 'usuario' });
 LogroUsuario.belongsTo(Logro, { foreignKey: 'logro_id', as: 'logro' });
 
+// Usuario -> Comentario (1:N)
+Usuario.hasMany(Comentario, { foreignKey: 'usuario_id', as: 'comentarios' });
+Comentario.belongsTo(Usuario, { foreignKey: 'usuario_id', as: 'usuario' });
+
+// Modulo -> Comentario (1:N)
+Modulo.hasMany(Comentario, { foreignKey: 'modulo_id', as: 'comentarios' });
+Comentario.belongsTo(Modulo, { foreignKey: 'modulo_id', as: 'modulo' });
+
 // Usuario -> Notificaciones (1:N)
 Usuario.hasMany(Notificacion, { foreignKey: 'usuario_id', as: 'notificaciones' });
 Notificacion.belongsTo(Usuario, { foreignKey: 'usuario_id', as: 'usuario' });
@@ -75,4 +84,5 @@ module.exports = {
   Logro,
   LogroUsuario,
   Notificacion,
+  Comentario
 };
