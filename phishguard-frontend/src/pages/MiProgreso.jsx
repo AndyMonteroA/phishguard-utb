@@ -49,8 +49,46 @@ const MiProgreso = () => {
 
   if (cargando) return <div className="page-wrapper"><div className="loading-screen"><div className="spinner"></div></div></div>;
 
+  let chartData = { labels: [], datasets: [] };
+  if (historial?.historial?.length > 0) {
+    const records = historial.historial;
+    const moduleGroups = {};
+    
+    records.forEach(r => {
+      if (!moduleGroups[r.modulo]) moduleGroups[r.modulo] = [];
+      moduleGroups[r.modulo].push(r);
+    });
 
-  return (
+    let maxAttempts = 0;
+    Object.values(moduleGroups).forEach(group => {
+      if (group.length > maxAttempts) maxAttempts = group.length;
+    });
+
+    chartData.labels = Array.from({ length: maxAttempts }, (_, i) => `Intento ${i + 1}`);
+    chartData.datasets = Object.keys(moduleGroups).map((moduloName, index) => {
+      const color = colores[index % colores.length];
+      const data = Array.from({ length: maxAttempts }, () => null);
+      
+      moduleGroups[moduloName].forEach((r, i) => {
+        data[i] = r.porcentaje;
+      });
+
+      return {
+        label: moduloName,
+        data: data,
+        borderColor: color,
+        backgroundColor: color + '15',
+        borderWidth: 3,
+        pointRadius: 6,
+        pointBackgroundColor: color,
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        tension: 0.3,
+        fill: false,
+        spanGaps: true
+      };
+    });
+  }  return (
     <div className="page-wrapper">
       <div className="container">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ textAlign: 'center', marginBottom: '40px' }}>
@@ -86,7 +124,7 @@ const MiProgreso = () => {
               <div key={mod.modulo_id} style={{ marginBottom: '18px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.9rem', marginBottom: '6px' }}>
                   <span style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span style={{ fontSize: '1.1rem' }}>{mod.icono || '📖'}</span>
+                    <DynamicIcon name={mod.icono || 'FiBookOpen'} size={20} />
                     {mod.titulo}
                   </span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -118,24 +156,7 @@ const MiProgreso = () => {
             <div style={{ height: '300px' }}>
               <Line
                 ref={chartRef}
-                data={{
-                  labels: historial.historial.map((h, i) => `Intento ${i + 1}`),
-                  datasets: [
-                    {
-                      label: 'Tu nota',
-                      data: historial.historial.map(h => h.porcentaje),
-                      borderColor: '#1B3A6B',
-                      backgroundColor: 'rgba(27,58,107,0.1)',
-                      borderWidth: 3,
-                      pointRadius: 6,
-                      pointBackgroundColor: historial.historial.map(h => h.aprobado ? '#27AE60' : '#E74C3C'),
-                      pointBorderColor: '#fff',
-                      pointBorderWidth: 2,
-                      tension: 0.3,
-                      fill: true,
-                    },
-                  ],
-                }}
+                data={chartData}
                 options={{
                   responsive: true,
                   maintainAspectRatio: false,
@@ -144,11 +165,8 @@ const MiProgreso = () => {
                     tooltip: {
                       callbacks: {
                         afterLabel: (ctx) => {
-                          if (ctx.datasetIndex === 0) {
-                            const h = historial.historial[ctx.dataIndex];
-                            return `${h.modulo} • ${h.aprobado ? 'Aprobado' : 'Reprobado'}`;
-                          }
-                          return '';
+                          const val = ctx.raw;
+                          return val >= 70 ? 'Aprobado' : 'Reprobado';
                         },
                       },
                     },

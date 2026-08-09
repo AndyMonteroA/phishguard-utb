@@ -89,8 +89,15 @@ const obtenerProgreso = async (req, res) => {
       : 0;
 
     // Verificar si ya aprobó la evaluación final
+    const moduloEvaluacion = modulos.find(m => m.titulo === 'Evaluación Final');
+    const moduloIdFinal = moduloEvaluacion ? moduloEvaluacion.id : 0;
+    
     const evaluacionFinal = await ResultadoQuiz.findOne({
-      where: { usuario_id: usuarioId, modulo_id: 0, aprobado: true }
+      where: { 
+        usuario_id: usuarioId, 
+        modulo_id: { [require('sequelize').Op.in]: [0, moduloIdFinal] }, 
+        aprobado: true 
+      }
     });
 
     // Preparar el historial de intentos para la gráfica
