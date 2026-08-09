@@ -278,7 +278,7 @@ const ModuloDetalle = () => {
             <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#EF4444' }} />
             <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#F59E0B' }} />
             <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10B981' }} />
-            <span style={{ marginLeft: '12px', fontSize: '0.8rem', fontWeight: 600, color: 'var(--texto-terciario)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Simulador de Correo Seguro</span>
+            <span style={{ marginLeft: '12px', fontSize: '0.8rem', fontWeight: 600, color: 'var(--texto-terciario)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Ejemplo de Correo</span>
           </div>
           {/* Cabecera del correo */}
           <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)', background: '#fff' }}>

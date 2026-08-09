@@ -74,7 +74,7 @@ const AppContent = () => {
         <Route path="/logros" element={<ProtectedRoute><Logros /></ProtectedRoute>} />
         <Route path="/mi-perfil" element={<ProtectedRoute><MiPerfil /></ProtectedRoute>} />
         <Route path="/evaluacion-final" element={<ProtectedRoute><EvaluacionFinal /></ProtectedRoute>} />
-        <Route path="/simulador" element={<ProtectedRoute><Simulador /></ProtectedRoute>} />
+
 
         {/* Rutas de admin */}
         <Route path="/admin" element={<ProtectedRoute requiereAdmin><AdminDashboard /></ProtectedRoute>} />

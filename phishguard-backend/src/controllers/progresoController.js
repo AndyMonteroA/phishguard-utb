@@ -53,12 +53,12 @@ const obtenerProgreso = async (req, res) => {
         ? Math.round((lecturasVistas / totalLecturas) * 80)
         : 0;
 
-      // El quiz aprobado representa el 20% restante del módulo
+      // El quiz aprobado significa que el módulo está completado
       const tieneQuizAprobado = mejorResultado ? true : false;
-      const porcentajeAvance = porcentajeLecturas + (tieneQuizAprobado ? 20 : 0);
-      const completado = tieneQuizAprobado && porcentajeLecturas >= 78; // 78% o más (equivale a haber leído todo)
+      const completado = tieneQuizAprobado || (progreso && progreso.completado) ? true : false;
+      const porcentajeAvance = completado ? 100 : porcentajeLecturas;
 
-      sumaPorcentajes += completado ? 100 : porcentajeAvance;
+      sumaPorcentajes += porcentajeAvance;
       if (completado) modulosCompletadosCount++;
 
       return {

@@ -241,7 +241,7 @@ const AdminContenidos = () => {
             <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#EF4444' }} />
             <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#F59E0B' }} />
             <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10B981' }} />
-            <span style={{ marginLeft: '12px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Simulador de Correo Seguro</span>
+            <span style={{ marginLeft: '12px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Ejemplo de Correo</span>
           </div>
           <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)', background: '#fff', fontSize: '0.88rem' }}>
             <div style={{ marginBottom: '8px' }}><strong>De:</strong> <span style={{ color: '#E74C3C', fontWeight: 600 }}>{de}</span></div>
