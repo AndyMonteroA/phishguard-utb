@@ -10,6 +10,9 @@ import toast from 'react-hot-toast';
 import { FiAward, FiDownload, FiCheckCircle, FiBookOpen, FiLock, FiShield } from 'react-icons/fi';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
+import utbLogo from '../assets/utb-logo.png';
+import fafiLogo from '../assets/fafi-logo.png';
+import csiLogo from '../assets/csi-logo.png';
 
 const Certificado = () => {
   const { usuario } = useAuth();
@@ -107,11 +110,7 @@ const Certificado = () => {
                 <div style={{ position: 'absolute', top: '0', left: '0', width: '100px', height: '100px', background: 'linear-gradient(135deg, #27AE60 50%, transparent 50%)' }}></div>
                 <div style={{ position: 'absolute', bottom: '0', right: '0', width: '100px', height: '100px', background: 'linear-gradient(-45deg, #1B3A6B 50%, transparent 50%)' }}></div>
 
-import utbLogo from '../assets/utb-logo.png';
-import fafiLogo from '../assets/fafi-logo.png';
-import csiLogo from '../assets/csi-logo.png';
 
-// ... (in the render section) ...
                 {/* Contenido Central */}
                 <div style={{ textAlign: 'center', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', zIndex: 10, position: 'relative' }}>
                   
