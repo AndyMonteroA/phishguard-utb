@@ -12,7 +12,7 @@ import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import utbLogo from '../assets/utb-logo.png';
 import fafiLogo from '../assets/fafi-logo.png';
-import csiLogo from '../assets/csi-logo.png';
+import csiLogo from '../assets/csi-logo.jpg';
 
 const Certificado = () => {
   const { usuario } = useAuth();
@@ -98,7 +98,7 @@ const Certificado = () => {
                   padding: '40px',
                   boxSizing: 'border-box',
                   boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-                  borderRadius: '12px',
+                  borderRadius: '0',
                   overflow: 'hidden'
                 }}
               >
@@ -110,30 +110,29 @@ const Certificado = () => {
                 <div style={{ position: 'absolute', top: '0', left: '0', width: '100px', height: '100px', background: 'linear-gradient(135deg, #27AE60 50%, transparent 50%)' }}></div>
                 <div style={{ position: 'absolute', bottom: '0', right: '0', width: '100px', height: '100px', background: 'linear-gradient(-45deg, #1B3A6B 50%, transparent 50%)' }}></div>
 
-
                 {/* Contenido Central */}
                 <div style={{ textAlign: 'center', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', zIndex: 10, position: 'relative' }}>
                   
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                    <img src={utbLogo} alt="UTB" style={{ height: '80px', objectFit: 'contain' }} />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+                    <img src={utbLogo} alt="UTB" style={{ height: '70px', objectFit: 'contain' }} />
                     <h1 style={{ fontSize: '2.5rem', color: '#1B3A6B', margin: 0, fontFamily: 'Georgia, serif', textTransform: 'uppercase', letterSpacing: '2px', textAlign: 'center', flex: 1 }}>Certificado de Aprobación</h1>
-                    <img src={fafiLogo} alt="FAFI" style={{ height: '80px', objectFit: 'contain' }} />
+                    <img src={fafiLogo} alt="FAFI" style={{ height: '70px', objectFit: 'contain' }} />
                   </div>
 
-                  <p style={{ fontSize: '1.2rem', color: '#555', marginBottom: '15px', fontFamily: 'Arial, sans-serif' }}>
+                  <p style={{ fontSize: '1.2rem', color: '#555', marginBottom: '10px', fontFamily: 'Arial, sans-serif' }}>
                     La plataforma educativa PhishGuard UTB certifica que
                   </p>
 
-                  <h2 style={{ fontSize: '3rem', color: '#27AE60', marginBottom: '15px', fontFamily: 'Georgia, serif', borderBottom: '2px solid #27AE60', display: 'inline-block', paddingBottom: '10px' }}>
+                  <h2 style={{ fontSize: '2.8rem', color: '#27AE60', marginBottom: '10px', fontFamily: 'Georgia, serif', borderBottom: '2px solid #27AE60', display: 'inline-block', paddingBottom: '5px' }}>
                     {usuario?.nombre} {usuario?.apellido}
                   </h2>
 
-                  <p style={{ fontSize: '1.2rem', color: '#555', maxWidth: '700px', margin: '0 auto 30px', lineHeight: '1.6' }}>
+                  <p style={{ fontSize: '1.2rem', color: '#555', maxWidth: '700px', margin: '0 auto 20px', lineHeight: '1.6' }}>
                     Ha completado satisfactoriamente el programa de entrenamiento, demostrando habilidades destacadas en la detección y prevención de amenazas de <strong>Ingeniería Social y Phishing</strong>.
                   </p>
 
                   {/* Firmas y sellos */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 'auto', padding: '0 40px', paddingBottom: '20px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 'auto', padding: '0 40px', paddingBottom: '15px' }}>
                     <div style={{ textAlign: 'center', width: '200px' }}>
                       <div style={{ borderBottom: '1px solid #333', width: '200px', margin: '0 auto 10px', height: '40px', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
                         <span style={{ fontFamily: '"Brush Script MT", cursive', fontSize: '1.8rem', color: '#1B3A6B' }}>Admin PhishGuard</span>
@@ -142,7 +141,7 @@ const Certificado = () => {
                     </div>
 
                     <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      <img src={csiLogo} alt="CSI" style={{ height: '70px', marginBottom: '10px', objectFit: 'contain' }} />
+                      <img src={csiLogo} alt="CSI" style={{ height: '60px', marginBottom: '10px', objectFit: 'contain' }} />
                       <div style={{ background: 'rgba(243, 156, 18, 0.1)', padding: '5px 15px', borderRadius: '20px', border: '1px solid #F39C12' }}>
                         <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#F39C12', letterSpacing: '1px' }}>APROBADO</span>
                       </div>

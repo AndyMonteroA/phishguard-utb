@@ -89,7 +89,7 @@ const obtenerProgreso = async (req, res) => {
       : 0;
 
     // Verificar si ya aprobó la evaluación final
-    const moduloEvaluacion = modulos.find(m => m.titulo === 'Evaluación Final');
+    const moduloEvaluacion = await Modulo.findOne({ where: { titulo: 'Evaluación Final' } });
     const moduloIdFinal = moduloEvaluacion ? moduloEvaluacion.id : 0;
     
     const evaluacionFinal = await ResultadoQuiz.findOne({
