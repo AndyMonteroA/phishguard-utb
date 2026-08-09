@@ -80,6 +80,12 @@ const generarCertificado = async (req, res) => {
       puntaje_promedio: puntajePromedio,
     });
 
+    // Verificar logros al obtener el certificado
+    const { verificarLogros } = require('./logroController');
+    if (typeof verificarLogros === 'function') {
+      try { await verificarLogros(usuarioId); } catch(e) { console.error('Error al verificar logros:', e); }
+    }
+
     res.status(201).json({
       success: true,
       message: '¡Certificado generado exitosamente!',

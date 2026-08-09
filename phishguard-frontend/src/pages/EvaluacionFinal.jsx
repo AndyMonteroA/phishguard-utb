@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import api from '../services/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { FiEdit3, FiCheckCircle, FiXCircle, FiAward, FiArrowRight, FiBarChart2, FiClock, FiLock, FiAlertTriangle } from 'react-icons/fi';
+import { FiEdit3, FiCheckCircle, FiXCircle, FiAward, FiArrowRight, FiBarChart2, FiClock, FiLock, FiAlertTriangle, FiFileText, FiRefreshCw } from 'react-icons/fi';
 
 const EvaluacionFinal = () => {
   const [preguntas, setPreguntas] = useState([]);
@@ -146,15 +146,19 @@ const EvaluacionFinal = () => {
               display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
               <FiAward size={36} color="#27AE60" />
             </div>
-            <h2 style={{ marginBottom: '12px', color: '#27AE60' }}>🎓 Evaluación Final Aprobada</h2>
+            <h2 style={{ marginBottom: '12px', color: '#27AE60', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              <FiAward /> Evaluación Final Aprobada
+            </h2>
             <div style={{ fontSize: '3rem', fontWeight: 800, color: '#27AE60', marginBottom: '12px' }}>{yaAprobada.porcentaje}%</div>
             <p style={{ color: 'var(--texto-terciario)', marginBottom: '24px' }}>
               Aprobaste con {yaAprobada.puntaje} de {yaAprobada.total_preguntas} preguntas correctas
             </p>
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
-              <Link to="/certificado" className="btn btn-primary">📜 Ver mi Certificado</Link>
-              <Link to="/mi-progreso" className="btn btn-secondary">📊 Mi Progreso</Link>
-            </div>
+              <Link to="/certificado" className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <FiFileText /> Ver mi Certificado
+              </Link>
+              <Link to="/mi-progreso" className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <FiBarChart2 /> Mi Progreso
+              </Link>
           </motion.div>
         </div>
       </div>
@@ -175,8 +179,8 @@ const EvaluacionFinal = () => {
                 display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
                 {res.aprobado ? <FiAward size={36} color="#27AE60" /> : <FiAlertTriangle size={36} color="#E74C3C" />}
               </div>
-              <h2 style={{ marginBottom: '8px' }}>
-                {res.aprobado ? '🎓 ¡Felicidades! Evaluación Aprobada' : 'Evaluación No Aprobada'}
+              <h2 style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                {res.aprobado ? <><FiAward /> ¡Felicidades! Evaluación Aprobada</> : 'Evaluación No Aprobada'}
               </h2>
               <div style={{ fontSize: '3.5rem', fontWeight: 800, color: res.aprobado ? '#27AE60' : '#E74C3C', marginBottom: '12px' }}>
                 {res.porcentaje}%
@@ -194,7 +198,9 @@ const EvaluacionFinal = () => {
             {/* Resumen por módulo */}
             {resumen_modulos && resumen_modulos.length > 0 && (
               <div className="card" style={{ padding: '24px', marginBottom: '24px' }}>
-                <h3 style={{ marginBottom: '16px' }}>📊 Rendimiento por Módulo</h3>
+                <h3 style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <FiBarChart2 /> Rendimiento por Módulo
+                </h3>
                 {resumen_modulos.map((m, i) => (
                   <div key={i} style={{ marginBottom: '14px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem', marginBottom: '4px' }}>
@@ -244,15 +250,15 @@ const EvaluacionFinal = () => {
 
             <div style={{ display: 'flex', gap: '16px', marginTop: '24px', justifyContent: 'center' }}>
               {res.aprobado ? (
-                <Link to="/certificado" className="btn btn-primary" style={{ gap: '6px' }}>
-                  <FiAward /> Generar Certificado
-                </Link>
+                <>
+                  <Link to="/certificado" className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><FiFileText /> Generar Certificado</Link>
+                  <Link to="/mi-progreso" className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><FiBarChart2 /> Ver Progreso</Link>
+                </>
               ) : (
-                <button onClick={() => window.location.reload()} className="btn btn-primary">
-                  🔄 Intentar de nuevo
+                <button onClick={() => window.location.reload()} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <FiRefreshCw /> Intentar de nuevo
                 </button>
               )}
-              <Link to="/mi-progreso" className="btn btn-secondary"><FiBarChart2 /> Mi Progreso</Link>
             </div>
           </motion.div>
         </div>
