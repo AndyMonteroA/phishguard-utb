@@ -105,10 +105,9 @@ const Certificado = () => {
                 <div style={{ position: 'absolute', top: '15px', left: '15px', right: '15px', bottom: '15px', border: '3px solid #1B3A6B' }}></div>
                 <div style={{ position: 'absolute', top: '22px', left: '22px', right: '22px', bottom: '22px', border: '1px solid #1B3A6B' }}></div>
                 
-                {/* Esquinas decorativas */}
-                <div style={{ position: 'absolute', top: '0', left: '0', width: '100px', height: '100px', background: 'linear-gradient(135deg, #27AE60 50%, transparent 50%)' }}></div>
-                <div style={{ position: 'absolute', bottom: '0', right: '0', width: '100px', height: '100px', background: 'linear-gradient(-45deg, #1B3A6B 50%, transparent 50%)' }}></div>
-
+                {/* Esquinas decorativas sin error en html2canvas */}
+                <div style={{ position: 'absolute', top: '0', left: '0', width: '0', height: '0', borderTop: '100px solid #27AE60', borderRight: '100px solid transparent' }}></div>
+                <div style={{ position: 'absolute', bottom: '0', right: '0', width: '0', height: '0', borderBottom: '100px solid #1B3A6B', borderLeft: '100px solid transparent' }}></div>
                 {/* Contenido Central */}
                 <div style={{ textAlign: 'center', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', zIndex: 10, position: 'relative' }}>
                   
@@ -118,11 +117,11 @@ const Certificado = () => {
                     <img src={fafiLogo} alt="FAFI" style={{ height: '70px', objectFit: 'contain' }} />
                   </div>
 
-                  <p style={{ fontSize: '1.2rem', color: '#555', marginBottom: '10px', fontFamily: 'Arial, sans-serif' }}>
+                  <p style={{ fontSize: '1.2rem', color: '#555', marginBottom: '25px', fontFamily: 'Arial, sans-serif' }}>
                     La plataforma educativa PhishGuard UTB certifica que
                   </p>
 
-                  <h2 style={{ fontSize: '2.8rem', color: '#27AE60', marginBottom: '10px', fontFamily: 'Georgia, serif', borderBottom: '2px solid #27AE60', display: 'inline-block', paddingBottom: '5px' }}>
+                  <h2 style={{ fontSize: '2.8rem', color: '#222', marginBottom: '10px', fontFamily: 'Georgia, serif', borderBottom: '2px solid #222', display: 'inline-block', paddingBottom: '5px' }}>
                     {usuario?.nombre} {usuario?.apellido}
                   </h2>
 
@@ -137,34 +136,6 @@ const Certificado = () => {
                         <span style={{ fontFamily: '"Brush Script MT", cursive', fontSize: '1.8rem', color: '#1B3A6B' }}>Admin PhishGuard</span>
                       </div>
                       <p style={{ margin: 0, fontSize: '0.9rem', color: '#666', textTransform: 'uppercase', letterSpacing: '1px' }}>Instructor UTB</p>
-                    </div>
-
-                    <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      {/* Sello de Excelencia Dorado */}
-                      <div style={{
-                        width: '75px', height: '75px',
-                        background: 'linear-gradient(135deg, #F1C40F, #E67E22)',
-                        borderRadius: '50%',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        border: '3px solid #FFF',
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.15), inset 0 0 10px rgba(255,255,255,0.4)',
-                        position: 'relative',
-                        marginBottom: '12px'
-                      }}>
-                        <div style={{
-                          position: 'absolute', width: '85%', height: '85%',
-                          border: '1.5px dashed rgba(255,255,255,0.6)',
-                          borderRadius: '50%'
-                        }}></div>
-                        <div style={{ color: 'white', fontFamily: 'Georgia, serif', textAlign: 'center', lineHeight: '1', zIndex: 1, textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>
-                          <span style={{ fontSize: '1.2rem', fontWeight: '900' }}>100%</span>
-                          <br />
-                          <span style={{ fontSize: '0.55rem', fontWeight: 'bold', letterSpacing: '1px' }}>APROBADO</span>
-                        </div>
-                      </div>
-                      <div style={{ background: 'rgba(243, 156, 18, 0.1)', padding: '5px 15px', borderRadius: '20px', border: '1px solid #F39C12' }}>
-                        <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#F39C12', letterSpacing: '1px' }}>APROBADO</span>
-                      </div>
                     </div>
 
                     <div style={{ textAlign: 'center', width: '200px' }}>
