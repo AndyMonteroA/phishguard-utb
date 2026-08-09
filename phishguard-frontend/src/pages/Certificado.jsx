@@ -75,7 +75,7 @@ const Certificado = () => {
 
   if (cargando) return <div className="page-wrapper"><div className="loading-screen"><div className="spinner"></div></div></div>;
 
-  const puedeGenerar = progreso?.progreso_general === 100;
+  const puedeGenerar = progreso?.evaluacion_final_aprobada;
 
   return (
     <div className="page-wrapper" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -170,7 +170,7 @@ const Certificado = () => {
               </div>
               <h2 style={{ marginBottom: '8px' }}>Felicidades!</h2>
               <p style={{ color: 'var(--texto-terciario)', marginBottom: '28px' }}>
-                Has completado todos los modulos. Ya puedes generar tu certificado digital.
+                Has aprobado la evaluación final. Ya puedes generar tu certificado digital.
               </p>
               <button onClick={generar} className="btn btn-success btn-lg" disabled={generando} style={{ gap: '8px' }}>
                 {generando ? <><div className="spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }}></div> Generando...</> : <><FiAward size={20} /> Generar Certificado</>}
@@ -184,7 +184,7 @@ const Certificado = () => {
               </div>
               <h2 style={{ marginBottom: '8px' }}>Certificado Bloqueado</h2>
               <p style={{ color: 'var(--texto-terciario)', marginBottom: '20px' }}>
-                Completa todos los modulos y aprueba los quizzes para obtener tu certificado.
+                Completa todos los módulos y aprueba la evaluación final para obtener tu certificado.
               </p>
               <div style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--azul-institucional)', marginBottom: '16px' }}>
                 {progreso?.progreso_general || 0}%

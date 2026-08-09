@@ -174,7 +174,7 @@ const Dashboard = () => {
           <div className="progress-bar-container" style={{ height: '14px' }}>
             <div className="progress-bar-fill" style={{ width: `${progreso?.progreso_general || 0}%` }}></div>
           </div>
-          {progreso?.progreso_general === 100 && (
+          {progreso?.evaluacion_final_aprobada && (
             <Link to="/certificado" className="btn btn-success" style={{ marginTop: '16px' }}>
               <FiAward /> Obten tu Certificado
             </Link>
