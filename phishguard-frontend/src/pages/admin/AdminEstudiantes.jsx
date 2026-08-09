@@ -115,8 +115,6 @@ const AdminEstudiantes = () => {
               <option value="encuesta_si">Encuesta completada</option>
               <option value="encuesta_no">Sin encuesta</option>
             </select>
-          </div>
-        </div>
             {hayFiltros && (
               <button onClick={() => { setFiltroSemestre('todos'); setFiltroGenero('todos'); setFiltroEstado('todos'); }}
                 className="btn btn-sm btn-secondary" style={{ gap: '4px', fontSize: '0.78rem' }}>
