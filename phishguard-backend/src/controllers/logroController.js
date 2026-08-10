@@ -87,6 +87,9 @@ const verificarLogros = async (usuarioId) => {
 // GET /api/logros - Logros del usuario
 const obtenerLogros = async (req, res) => {
   try {
+    // Sincronizar/Verificar logros pendientes (retroactivo)
+    await verificarLogros(req.usuarioId);
+
     const todosLogros = await Logro.findAll({ where: { activo: true }, order: [['id', 'ASC']] });
     const obtenidos = await LogroUsuario.findAll({
       where: { usuario_id: req.usuarioId },
