@@ -16,6 +16,7 @@ const ModuloDetalle = () => {
   const [contenidoActual, setContenidoActual] = useState(0);
   const [maxIndexVisitado, setMaxIndexVisitado] = useState(0); // Rastrear el slide maximo visitado
   const [cargando, setCargando] = useState(true);
+  const [imagenZoom, setImagenZoom] = useState(null); // Nuevo estado para el zoom de imagenes
 
   useEffect(() => {
     const cargar = async () => {
@@ -163,7 +164,19 @@ const ModuloDetalle = () => {
       const url = matchImg[1];
       return (
         <div style={{ marginTop: '16px', marginBottom: '16px', textAlign: 'center' }}>
-          <img src={url} alt="Recurso educativo" style={{ maxWidth: '100%', height: 'auto', borderRadius: '12px', boxShadow: 'var(--sombra-md)', border: '1px solid var(--border)' }} />
+          <img 
+            src={url} 
+            alt="Recurso educativo" 
+            onClick={() => setImagenZoom(url)}
+            title="Haz clic para ampliar"
+            style={{ 
+              maxWidth: '100%', height: 'auto', borderRadius: '12px', 
+              boxShadow: 'var(--sombra-md)', border: '1px solid var(--border)', 
+              cursor: 'zoom-in', transition: 'transform 0.2s ease' 
+            }} 
+            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+          />
         </div>
       );
     }
@@ -423,7 +436,32 @@ const ModuloDetalle = () => {
             <button onClick={siguiente} className="btn btn-primary">Siguiente <FiArrowRight /></button>
           )}
         </div>
+        </div>
       </div>
+
+      {/* Modal de Zoom para Imagenes */}
+      {imagenZoom && (
+        <div 
+          onClick={() => setImagenZoom(null)}
+          style={{
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 99999,
+            display: 'flex', justifyContent: 'center', alignItems: 'center',
+            cursor: 'zoom-out', padding: '20px'
+          }}
+          title="Haz clic en cualquier parte para cerrar"
+        >
+          <img 
+            src={imagenZoom} 
+            alt="Zoom ampliado" 
+            style={{ 
+              maxWidth: '90vw', maxHeight: '90vh', 
+              objectFit: 'contain', borderRadius: '8px', 
+              boxShadow: '0 10px 50px rgba(0,0,0,0.8)' 
+            }} 
+          />
+        </div>
+      )}
     </div>
   );
 };
