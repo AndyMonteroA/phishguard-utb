@@ -568,6 +568,69 @@ const AdminEstadisticas = () => {
                     </tbody>
                   </table>
                 </div>
+
+                {/* Gráficos por pregunta */}
+                <h4 style={{ marginTop: '30px', marginBottom: '15px', fontSize: '0.95rem' }}>Distribución de Respuestas por Pregunta</h4>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+                  {nivelData.analisisPorPregunta.map((p, i) => {
+                    const labels = p.opciones_detalle.map((o, idx) => String.fromCharCode(65 + idx)); 
+                    
+                    const chartData = {
+                      labels,
+                      datasets: [
+                        {
+                          label: 'Selecciones',
+                          data: p.opciones_detalle.map(o => o.seleccionada),
+                          backgroundColor: p.opciones_detalle.map(o => o.es_correcta ? COLORS.success : COLORS.danger),
+                          borderRadius: 4,
+                        }
+                      ]
+                    };
+
+                    const options = {
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                          backgroundColor: 'rgba(0,0,0,0.8)', padding: 10, cornerRadius: 8,
+                          callbacks: {
+                            title: (context) => {
+                              const label = context[0].label;
+                              const idx = label.charCodeAt(0) - 65;
+                              const opt = p.opciones_detalle[idx];
+                              // Si el texto es muy largo lo cortamos un poco para el tooltip
+                              let texto = opt.texto;
+                              if (texto.length > 50) texto = texto.substring(0, 50) + '...';
+                              return `Opción ${label}: ${texto}`;
+                            },
+                            label: (context) => {
+                              const val = context.raw;
+                              const idx = context.dataIndex;
+                              const pct = p.opciones_detalle[idx].porcentaje;
+                              return `${val} estudiante(s) (${pct}%)`;
+                            }
+                          }
+                        }
+                      },
+                      scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { stepSize: 1 } },
+                        x: { grid: { display: false } },
+                      },
+                    };
+
+                    return (
+                      <div key={i} style={{ padding: '15px', border: '1px solid var(--gris-medio)', borderRadius: '8px', background: 'var(--fondo-secundario)' }}>
+                        <h5 style={{ fontSize: '0.85rem', marginBottom: '15px', minHeight: '35px', color: 'var(--texto-principal)' }}>
+                          {p.id}. {p.pregunta.length > 80 ? p.pregunta.substring(0, 80) + '...' : p.pregunta}
+                        </h5>
+                        <div style={{ height: '180px' }}>
+                          <Bar data={chartData} options={options} />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             )}
           </div>
