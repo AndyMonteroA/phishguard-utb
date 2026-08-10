@@ -436,7 +436,6 @@ const ModuloDetalle = () => {
             <button onClick={siguiente} className="btn btn-primary">Siguiente <FiArrowRight /></button>
           )}
         </div>
-        </div>
       </div>
 
       {/* Modal de Zoom para Imagenes */}
