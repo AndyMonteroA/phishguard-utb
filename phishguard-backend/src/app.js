@@ -53,7 +53,7 @@ if (env.NODE_ENV === 'development') {
 
 // Servir archivos estáticos subidos (Imágenes, PDFs, etc.)
 const path = require('path');
-app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
+app.use('/api/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
 // ============================================================
 // RUTAS API

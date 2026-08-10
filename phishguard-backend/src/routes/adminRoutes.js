@@ -93,7 +93,7 @@ router.post('/subir', (req, res) => {
         return res.status(400).json({ success: false, message: 'No se subió ningún archivo.' });
       }
       // Generar URL pública para retornar al cliente
-      const fileUrl = `/uploads/${req.file.filename}`;
+      const fileUrl = `/api/uploads/${req.file.filename}`;
       
       res.json({
         success: true,
